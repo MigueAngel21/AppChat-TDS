@@ -49,6 +49,7 @@ public class VentanaPrincipal {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 849, 585);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setTitle("Prueba");
 		GridBagLayout gridBagLayout = new GridBagLayout();
 		gridBagLayout.columnWidths = new int[]{10, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{10, 0, 0, 0, 0, 0};
