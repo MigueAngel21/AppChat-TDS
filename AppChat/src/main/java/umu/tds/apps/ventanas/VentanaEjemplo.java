@@ -1,4 +1,4 @@
-package umu.tds.apps.AppChat;
+package umu.tds.apps.ventanas;
 
 import java.awt.EventQueue;
 
@@ -22,6 +22,7 @@ import javax.swing.JPanel;
 import javax.swing.JMenuBar;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -32,9 +33,12 @@ import javax.swing.JToggleButton;
 import javax.swing.JSlider;
 import java.awt.Dimension;
 import javax.swing.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 
-public class VentanaPrincipal {
+
+public class VentanaEjemplo {
 
 	private JFrame frame;
 	private JTextField textField;
@@ -49,7 +53,7 @@ public class VentanaPrincipal {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					VentanaPrincipal window = new VentanaPrincipal();
+					VentanaEjemplo window = new VentanaEjemplo();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -61,7 +65,7 @@ public class VentanaPrincipal {
 	/**
 	 * Create the application.
 	 */
-	public VentanaPrincipal() {
+	public VentanaEjemplo() {
 		initialize();
 	}
 
@@ -81,17 +85,23 @@ public class VentanaPrincipal {
 		frame.setBounds(100, 100, 849, 585);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setTitle("UNICORNCHAT");
+		//cambiar icono de la ventana
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		
+		JPopupMenu popupMenu = new JPopupMenu();
+		popupMenu.setPopupSize(new Dimension(14, 14));
+		addPopup(frame.getContentPane(), popupMenu);
 		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{10, 0, 0, 0, 0, 0};
+		gridBagLayout.columnWidths = new int[]{10, 0, 0, 0, 0, 0, 0};
 		gridBagLayout.rowHeights = new int[]{0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		frame.getContentPane().setLayout(gridBagLayout);
 		
 		JLabel lblNewLabel_5 = new JLabel("imagen principal");
 		lblNewLabel_5.setForeground(new Color(255, 20, 147));
 		GridBagConstraints gbc_lblNewLabel_5 = new GridBagConstraints();
-		gbc_lblNewLabel_5.gridwidth = 2;
+		gbc_lblNewLabel_5.gridwidth = 3;
 		gbc_lblNewLabel_5.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_5.gridx = 2;
 		gbc_lblNewLabel_5.gridy = 0;
@@ -108,8 +118,8 @@ public class VentanaPrincipal {
 		
 		textField = new JTextField();
 		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.gridwidth = 3;
+		gbc_textField.anchor = GridBagConstraints.WEST;
+		gbc_textField.gridwidth = 4;
 		gbc_textField.insets = new Insets(0, 0, 5, 0);
 		gbc_textField.gridx = 2;
 		gbc_textField.gridy = 2;
@@ -127,8 +137,8 @@ public class VentanaPrincipal {
 		
 		textField_1 = new JTextField();
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.gridwidth = 3;
+		gbc_textField_1.anchor = GridBagConstraints.WEST;
+		gbc_textField_1.gridwidth = 4;
 		gbc_textField_1.insets = new Insets(0, 0, 5, 0);
 		gbc_textField_1.gridx = 2;
 		gbc_textField_1.gridy = 3;
@@ -176,7 +186,7 @@ public class VentanaPrincipal {
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
 		gbc_lblNewLabel_3.insets = new Insets(0, 0, 5, 5);
 		gbc_lblNewLabel_3.anchor = GridBagConstraints.EAST;
-		gbc_lblNewLabel_3.gridx = 3;
+		gbc_lblNewLabel_3.gridx = 4;
 		gbc_lblNewLabel_3.gridy = 4;
 		frame.getContentPane().add(lblNewLabel_3, gbc_lblNewLabel_3);
 		
@@ -185,7 +195,7 @@ public class VentanaPrincipal {
 		GridBagConstraints gbc_passwordField = new GridBagConstraints();
 		gbc_passwordField.anchor = GridBagConstraints.WEST;
 		gbc_passwordField.insets = new Insets(0, 0, 5, 0);
-		gbc_passwordField.gridx = 4;
+		gbc_passwordField.gridx = 5;
 		gbc_passwordField.gridy = 4;
 		frame.getContentPane().add(passwordField, gbc_passwordField);
 		
@@ -204,39 +214,36 @@ public class VentanaPrincipal {
 		GridBagConstraints gbc_lblNewLabel_6 = new GridBagConstraints();
 		gbc_lblNewLabel_6.anchor = GridBagConstraints.EAST;
 		gbc_lblNewLabel_6.insets = new Insets(0, 0, 5, 5);
-		gbc_lblNewLabel_6.gridx = 3;
+		gbc_lblNewLabel_6.gridx = 4;
 		gbc_lblNewLabel_6.gridy = 5;
 		frame.getContentPane().add(lblNewLabel_6, gbc_lblNewLabel_6);
 		
 		JDateChooser dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString("dd-MMM-yy");
 		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
-		gbc_dateChooser.fill = GridBagConstraints.BOTH;
+		gbc_dateChooser.anchor = GridBagConstraints.WEST;
+		gbc_dateChooser.fill = GridBagConstraints.VERTICAL;
 		gbc_dateChooser.insets = new Insets(0, 0, 5, 0);
-		gbc_dateChooser.gridx = 4;
+		gbc_dateChooser.gridx = 5;
 		gbc_dateChooser.gridy = 5;
 		frame.getContentPane().add(dateChooser, gbc_dateChooser);
 		
 		JButton btnNewButton = new JButton("Login");
 		btnNewButton.setForeground(new Color(0, 0, 0));
 		btnNewButton.setBackground(new Color(255, 20, 147));
-		String path1 =  "https://cdn.icon-icons.com/icons2/3106/PNG/512/in_door_communication_enter_log_in_login_icon_191647.png"; 
-		URL url1 = null;
-		try {
-			url1 = new URL(path1);
-		} catch (MalformedURLException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		} 
-		BufferedImage image1= null;
-		try {
-			image1 = ImageIO.read(url1);
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		//PONER UNA IMAGEN DESDE UNA CARPETA LOCAL
+		URL url4 = getClass().getResource("/umu/tds/apps/resources/flecha login.png");
+		if (url4 != null) {
+			Image fotoImage = null;
+			try {
+				fotoImage = ImageIO.read(url4).getScaledInstance(20, 20, Image.SCALE_DEFAULT);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			btnNewButton.setIcon(new ImageIcon(fotoImage));
 		}
-		Image scaledImage1 = image1.getScaledInstance(20, 20, Image.SCALE_SMOOTH);
-		btnNewButton.setIcon(new ImageIcon(scaledImage1));
+		
 		
 		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
 		gbc_btnNewButton.insets = new Insets(0, 0, 5, 5);
@@ -246,6 +253,7 @@ public class VentanaPrincipal {
 		
 		
 		// CODIGO PARA VER COMO METER UNA IMAGEN DE INTERNET Y COMO REDIMENSIONARLA AL TAMAÑO QUE QUIERAS
+		//para el icono del usuario, hay que meter para que lea por comandos la URL que le meta el usuario (cin)
 		String path =  "https://static.wikia.nocookie.net/envyrp/images/6/65/VU_LOGO_OFFICIAL.png"; 
 		URL url = null;
 		try {
@@ -262,21 +270,28 @@ public class VentanaPrincipal {
 			e1.printStackTrace();
 		}
 		Image scaledImage = image.getScaledInstance(180, 180, Image.SCALE_SMOOTH);
-		JLabel label = new JLabel(new ImageIcon(scaledImage));
+		
+		JLabel lblNewLabel_7 = new JLabel("POPUP  DE EJEMPLO");
+		GridBagConstraints gbc_lblNewLabel_7 = new GridBagConstraints();
+		gbc_lblNewLabel_7.insets = new Insets(0, 0, 5, 5);
+		gbc_lblNewLabel_7.gridx = 2;
+		gbc_lblNewLabel_7.gridy = 8;
+		frame.getContentPane().add(lblNewLabel_7, gbc_lblNewLabel_7);
 		
 		
-		
+	
+		JLabel label = new JLabel(new ImageIcon(scaledImage));	
 		GridBagConstraints gbc_label = new GridBagConstraints();
 		gbc_label.anchor = GridBagConstraints.SOUTH;
 		gbc_label.insets = new Insets(0, 0, 5, 5);
-		gbc_label.gridx = 3;
+		gbc_label.gridx = 4;
 		gbc_label.gridy = 8;
 		frame.getContentPane().add(label, gbc_label);
 		
 		JPanel panel = new JPanel();
 		GridBagConstraints gbc_panel = new GridBagConstraints();
 		gbc_panel.anchor = GridBagConstraints.EAST;
-		gbc_panel.gridwidth = 2;
+		gbc_panel.gridwidth = 3;
 		gbc_panel.insets = new Insets(0, 0, 5, 5);
 		gbc_panel.fill = GridBagConstraints.VERTICAL;
 		gbc_panel.gridx = 2;
@@ -312,11 +327,29 @@ public class VentanaPrincipal {
 		slider.setPaintTicks(true);
 		GridBagConstraints gbc_slider = new GridBagConstraints();
 		gbc_slider.insets = new Insets(0, 0, 5, 5);
-		gbc_slider.gridx = 3;
+		gbc_slider.gridx = 4;
 		gbc_slider.gridy = 11;
 		frame.getContentPane().add(slider, gbc_slider);
 		
 		
 	}
 
+	private static void addPopup(Component component, final JPopupMenu popup) {
+		component.addMouseListener(new MouseAdapter() {
+			public void mousePressed(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			public void mouseReleased(MouseEvent e) {
+				if (e.isPopupTrigger()) {
+					showMenu(e);
+				}
+			}
+			private void showMenu(MouseEvent e) {
+				popup.show(e.getComponent(), e.getX(), e.getY());
+			}
+		});
+	}
 }
+
