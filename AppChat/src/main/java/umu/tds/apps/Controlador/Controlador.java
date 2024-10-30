@@ -14,12 +14,20 @@ public class Controlador {
 		repositorioUsuarios = RepositorioUsuarios.getInstancia();
 	}
 	
+	/* Aplicamos el patrón Singleton.
+	 * Consiguiendo de esta forma que exista una única instancia de la clase Controlador,
+	 * que es accesible globalmente.
+	 */
 	public static Controlador getInstancia() {
 		if (controlador == null)
 			controlador = new Controlador();
 		return controlador;
 	}	
 	
-	
+	public boolean login(String usuario, String contraseña) {
+		//usuarioActual = repositorioUsuarios.getUsuario(usuario, contraseña);
+		//return usuarioActual != null;
+		return true;
+	}
 	
 }
