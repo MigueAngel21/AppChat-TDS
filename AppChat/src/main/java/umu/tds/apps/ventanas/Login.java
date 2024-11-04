@@ -40,8 +40,9 @@ import javax.swing.JPasswordField;
 public class Login {
 
 	JFrame frame;
-	private JTextField textUsuario;
+	private JLabel telefono;
 	private JPasswordField textContraseña;
+	private JTextField textTelefono;
 
 	/**
 	 * Launch the application.
@@ -101,8 +102,8 @@ public class Login {
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
 		frame.getContentPane().add(titulo, BorderLayout.NORTH);
 		
-		JPanel panel = new JPanel();
-		frame.getContentPane().add(panel, BorderLayout.SOUTH);
+		JPanel panelSur = new JPanel();
+		frame.getContentPane().add(panelSur, BorderLayout.SOUTH);
 		
 		JButton botonLogin = new JButton("Iniciar Sesion");
 		botonLogin.setBackground(new Color(255, 20, 147));
@@ -122,7 +123,7 @@ public class Login {
 		botonLogin.addActionListener(e -> {
 			// implementar la accion de login
 			//leer datos de la pantalla
-			String usuario = textUsuario.getText();
+			String usuario = textTelefono.getText();
 			String contraseña = new String(textContraseña.getPassword());
 			
 			//comprobar si el usuario y la contraseña son correctos
@@ -139,17 +140,17 @@ public class Login {
 				frame.setVisible(false);
 			}
 		});
-		panel.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
-		panel.add(botonLogin);
+		panelSur.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
+		panelSur.add(botonLogin);
 		
 		JLabel lblNewLabel_1 = new JLabel("       ");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel.add(lblNewLabel_1);
+		panelSur.add(lblNewLabel_1);
 		
 		JLabel pregunta = new JLabel("¿No tienes cuenta?");
 		pregunta.setForeground(new Color(255, 255, 255));
-		panel.add(pregunta);
+		panelSur.add(pregunta);
 		
 		
 		JButton botonRegistro = new JButton("Registrarse");
@@ -157,7 +158,7 @@ public class Login {
 		botonRegistro.setBackground(new Color(255, 20, 147));
 		botonRegistro.setForeground(new Color(255, 255, 255));
 		botonRegistro.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		panel.add(botonRegistro);
+		panelSur.add(botonRegistro);
 		//creame un evento para el boton de registro, que cuando lo pulses se abra la ventana de registro haciendose visible y se oculte la de login implementadolo con una expresion lambda
 		botonRegistro.addActionListener(e -> {
 			Registro registro = new Registro();
@@ -166,15 +167,43 @@ public class Login {
 		});
 		
 		
-		JPanel panel_1 = new JPanel();
-		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Login", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(255, 255, 255)));
-		frame.getContentPane().add(panel_1, BorderLayout.CENTER);
-		GridBagLayout gbl_panel_1 = new GridBagLayout();
-		gbl_panel_1.columnWidths = new int[]{10, 0, 0, 0, 0, 0};
-		gbl_panel_1.rowHeights = new int[]{20, 0, 32, 20, 0, 0, 0, 0, 0, 0};
-		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		panel_1.setLayout(gbl_panel_1);
+		JPanel panelCentro = new JPanel();
+		panelCentro.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Login", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(255, 255, 255)));
+		frame.getContentPane().add(panelCentro, BorderLayout.CENTER);
+		GridBagLayout gbl_panelCentro = new GridBagLayout();
+		gbl_panelCentro.columnWidths = new int[]{10, 0, 0, 0, 0, 0};
+		gbl_panelCentro.rowHeights = new int[]{20, 0, 32, 20, 0, 0, 0, 0, 0, 0};
+		gbl_panelCentro.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 1.0, Double.MIN_VALUE};
+		gbl_panelCentro.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		panelCentro.setLayout(gbl_panelCentro);
+		
+		
+		telefono = new JLabel("Telefono");
+		telefono.setForeground(new Color(255, 20, 147));
+		telefono.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		GridBagConstraints gbc_telefono = new GridBagConstraints();
+		gbc_telefono.anchor = GridBagConstraints.EAST;
+		gbc_telefono.fill = GridBagConstraints.VERTICAL;
+		gbc_telefono.insets = new Insets(0, 0, 5, 5);
+		gbc_telefono.gridx = 3;
+		gbc_telefono.gridy = 5;
+		panelCentro.add(telefono, gbc_telefono);
+		
+		textTelefono = new JTextField();
+		GridBagConstraints gbc_textTelefono = new GridBagConstraints();
+		gbc_textTelefono.anchor = GridBagConstraints.WEST;
+		gbc_textTelefono.insets = new Insets(0, 0, 5, 0);
+		gbc_textTelefono.gridx = 4;
+		gbc_textTelefono.gridy = 5;
+		panelCentro.add(textTelefono, gbc_textTelefono);
+		textTelefono.setColumns(15);
+		
+		JLabel lblNewLabel = new JLabel("\r\n");
+		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
+		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
+		gbc_lblNewLabel.gridx = 4;
+		gbc_lblNewLabel.gridy = 6;
+		panelCentro.add(lblNewLabel, gbc_lblNewLabel);
 		
 		JLabel contraseña = new JLabel("Contraseña");
 		contraseña.setForeground(new Color(255, 20, 147));
@@ -184,8 +213,8 @@ public class Login {
 		gbc_contraseña.fill = GridBagConstraints.VERTICAL;
 		gbc_contraseña.insets = new Insets(0, 0, 5, 5);
 		gbc_contraseña.gridx = 3;
-		gbc_contraseña.gridy = 5;
-		panel_1.add(contraseña, gbc_contraseña);
+		gbc_contraseña.gridy = 7;
+		panelCentro.add(contraseña, gbc_contraseña);
 		
 		textContraseña = new JPasswordField();
 		textContraseña.setColumns(20);
@@ -193,35 +222,8 @@ public class Login {
 		gbc_textContraseña.anchor = GridBagConstraints.WEST;
 		gbc_textContraseña.insets = new Insets(0, 0, 5, 0);
 		gbc_textContraseña.gridx = 4;
-		gbc_textContraseña.gridy = 5;
-		panel_1.add(textContraseña, gbc_textContraseña);
-		
-		JLabel lblNewLabel = new JLabel("\r\n");
-		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
-		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
-		gbc_lblNewLabel.gridx = 4;
-		gbc_lblNewLabel.gridy = 6;
-		panel_1.add(lblNewLabel, gbc_lblNewLabel);
-		
-		JLabel telefono = new JLabel("Telefono");
-		telefono.setForeground(new Color(255, 20, 147));
-		telefono.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		GridBagConstraints gbc_telefono = new GridBagConstraints();
-		gbc_telefono.anchor = GridBagConstraints.EAST;
-		gbc_telefono.fill = GridBagConstraints.VERTICAL;
-		gbc_telefono.insets = new Insets(0, 0, 5, 5);
-		gbc_telefono.gridx = 3;
-		gbc_telefono.gridy = 7;
-		panel_1.add(telefono, gbc_telefono);
-		
-		textUsuario = new JTextField();
-		GridBagConstraints gbc_textUsuario = new GridBagConstraints();
-		gbc_textUsuario.anchor = GridBagConstraints.SOUTHWEST;
-		gbc_textUsuario.insets = new Insets(0, 0, 5, 0);
-		gbc_textUsuario.gridx = 4;
-		gbc_textUsuario.gridy = 7;
-		panel_1.add(textUsuario, gbc_textUsuario);
-		textUsuario.setColumns(15);
+		gbc_textContraseña.gridy = 7;
+		panelCentro.add(textContraseña, gbc_textContraseña);
 	}
 
 }

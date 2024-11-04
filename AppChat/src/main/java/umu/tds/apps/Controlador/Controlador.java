@@ -1,6 +1,10 @@
 package umu.tds.apps.Controlador;
 
+import java.util.Arrays;
+import java.util.List;
+
 import umu.tds.apps.AppChat.GeneradorPDF;
+import umu.tds.apps.AppChat.Mensaje;
 import umu.tds.apps.AppChat.RepositorioUsuarios;
 import umu.tds.apps.AppChat.Usuario;
 
@@ -9,6 +13,7 @@ public class Controlador {
 	private RepositorioUsuarios repositorioUsuarios;
 	private Usuario usuarioActual;
 	private GeneradorPDF servicioPDF;
+	
 	
 	private Controlador() {
 		repositorioUsuarios = RepositorioUsuarios.getInstancia();
@@ -30,4 +35,14 @@ public class Controlador {
 		return true;
 	}
 	
+	//metodo devolverListaMensajesRecientesPorUsuario
+	public static List<Mensaje> devolverListaMensajesRecientesPorUsuario(String usuario) {
+		Mensaje[] values = new Mensaje[] {
+				new Mensaje("ana"), 
+				new Mensaje("manuel"), 
+				new Mensaje("antonio")};
+		
+		
+		return Arrays.asList(values);
+	}
 }

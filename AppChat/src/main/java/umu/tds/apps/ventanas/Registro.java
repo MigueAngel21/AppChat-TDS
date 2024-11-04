@@ -15,6 +15,7 @@ import java.awt.Image;
 import javax.swing.JLabel;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import java.awt.Toolkit;
 import java.awt.Window;
 import java.io.IOException;
 import java.net.URL;
@@ -28,18 +29,19 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JPasswordField;
+import javax.swing.JTextPane;
 
 public class Registro extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-	private JTextField textField_4;
-	private JTextField textField_5;
-	private JTextField textField_6;
+	private JTextField textNombre;
+	private JTextField textApellido;
+	private JTextField textTelefono;
+	private JTextField textURL;
+	private JPasswordField passwordField;
+	private JPasswordField passwordField_1;
 
 	/**
 	 * Launch the application.
@@ -69,6 +71,8 @@ public class Registro extends JFrame {
 			e.printStackTrace();
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//cambiar icono de la ventana
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(420, 160, 716, 553);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -114,9 +118,9 @@ public class Registro extends JFrame {
 		contentPane.add(panel_1, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
 		gbl_panel_1.columnWidths = new int[]{5, 0, 0, 0, 0, 0, 0, 0};
-		gbl_panel_1.rowHeights = new int[]{30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 0};
-		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
-		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_1.rowHeights = new int[]{30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 15, 0, 0, 10, 0};
+		gbl_panel_1.columnWeights = new double[]{0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		panel_1.setLayout(gbl_panel_1);
 		
 		JLabel etqNombre = new JLabel("Nombre");
@@ -129,14 +133,14 @@ public class Registro extends JFrame {
 		gbc_etqNombre.gridy = 1;
 		panel_1.add(etqNombre, gbc_etqNombre);
 		
-		textField = new JTextField();
-		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField.insets = new Insets(0, 0, 5, 5);
-		gbc_textField.gridx = 3;
-		gbc_textField.gridy = 1;
-		panel_1.add(textField, gbc_textField);
-		textField.setColumns(15);
+		textNombre = new JTextField();
+		GridBagConstraints gbc_textNombre = new GridBagConstraints();
+		gbc_textNombre.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textNombre.insets = new Insets(0, 0, 5, 5);
+		gbc_textNombre.gridx = 3;
+		gbc_textNombre.gridy = 1;
+		panel_1.add(textNombre, gbc_textNombre);
+		textNombre.setColumns(15);
 		
 		JLabel lblNewLabel = new JLabel(" ");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
@@ -155,14 +159,14 @@ public class Registro extends JFrame {
 		gbc_etqApellidos.gridy = 3;
 		panel_1.add(etqApellidos, gbc_etqApellidos);
 		
-		textField_1 = new JTextField();
-		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_1.gridx = 3;
-		gbc_textField_1.gridy = 3;
-		panel_1.add(textField_1, gbc_textField_1);
-		textField_1.setColumns(15);
+		textApellido = new JTextField();
+		GridBagConstraints gbc_textApellido = new GridBagConstraints();
+		gbc_textApellido.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textApellido.insets = new Insets(0, 0, 5, 5);
+		gbc_textApellido.gridx = 3;
+		gbc_textApellido.gridy = 3;
+		panel_1.add(textApellido, gbc_textApellido);
+		textApellido.setColumns(15);
 		
 		JLabel lblNewLabel_2 = new JLabel("  ");
 		GridBagConstraints gbc_lblNewLabel_2 = new GridBagConstraints();
@@ -181,14 +185,14 @@ public class Registro extends JFrame {
 		gbc_etqTelefono.gridy = 5;
 		panel_1.add(etqTelefono, gbc_etqTelefono);
 		
-		textField_2 = new JTextField();
-		GridBagConstraints gbc_textField_2 = new GridBagConstraints();
-		gbc_textField_2.anchor = GridBagConstraints.WEST;
-		gbc_textField_2.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_2.gridx = 3;
-		gbc_textField_2.gridy = 5;
-		panel_1.add(textField_2, gbc_textField_2);
-		textField_2.setColumns(10);
+		textTelefono = new JTextField();
+		GridBagConstraints gbc_textTelefono = new GridBagConstraints();
+		gbc_textTelefono.anchor = GridBagConstraints.WEST;
+		gbc_textTelefono.insets = new Insets(0, 0, 5, 5);
+		gbc_textTelefono.gridx = 3;
+		gbc_textTelefono.gridy = 5;
+		panel_1.add(textTelefono, gbc_textTelefono);
+		textTelefono.setColumns(10);
 		
 		JLabel lblNewLabel_3 = new JLabel(" ");
 		GridBagConstraints gbc_lblNewLabel_3 = new GridBagConstraints();
@@ -207,14 +211,14 @@ public class Registro extends JFrame {
 		gbc_etqContraseña.gridy = 7;
 		panel_1.add(etqContraseña, gbc_etqContraseña);
 		
-		textField_3 = new JTextField();
-		GridBagConstraints gbc_textField_3 = new GridBagConstraints();
-		gbc_textField_3.anchor = GridBagConstraints.WEST;
-		gbc_textField_3.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_3.gridx = 3;
-		gbc_textField_3.gridy = 7;
-		panel_1.add(textField_3, gbc_textField_3);
-		textField_3.setColumns(15);
+		passwordField = new JPasswordField();
+		passwordField.setColumns(15);
+		GridBagConstraints gbc_passwordField = new GridBagConstraints();
+		gbc_passwordField.anchor = GridBagConstraints.WEST;
+		gbc_passwordField.insets = new Insets(0, 0, 5, 5);
+		gbc_passwordField.gridx = 3;
+		gbc_passwordField.gridy = 7;
+		panel_1.add(passwordField, gbc_passwordField);
 		
 		JLabel etq2Contraseña = new JLabel("Contraseña");
 		etq2Contraseña.setForeground(new Color(255, 20, 147));
@@ -226,14 +230,14 @@ public class Registro extends JFrame {
 		gbc_etq2Contraseña.gridy = 7;
 		panel_1.add(etq2Contraseña, gbc_etq2Contraseña);
 		
-		textField_5 = new JTextField();
-		GridBagConstraints gbc_textField_5 = new GridBagConstraints();
-		gbc_textField_5.anchor = GridBagConstraints.WEST;
-		gbc_textField_5.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_5.gridx = 6;
-		gbc_textField_5.gridy = 7;
-		panel_1.add(textField_5, gbc_textField_5);
-		textField_5.setColumns(15);
+		passwordField_1 = new JPasswordField();
+		passwordField_1.setColumns(15);
+		GridBagConstraints gbc_passwordField_1 = new GridBagConstraints();
+		gbc_passwordField_1.anchor = GridBagConstraints.WEST;
+		gbc_passwordField_1.insets = new Insets(0, 0, 5, 0);
+		gbc_passwordField_1.gridx = 6;
+		gbc_passwordField_1.gridy = 7;
+		panel_1.add(passwordField_1, gbc_passwordField_1);
 		
 		JLabel lblNewLabel_4 = new JLabel(" ");
 		GridBagConstraints gbc_lblNewLabel_4 = new GridBagConstraints();
@@ -262,25 +266,6 @@ public class Registro extends JFrame {
 		gbc_dateChooser.gridy = 9;
 		panel_1.add(dateChooser, gbc_dateChooser);
 		
-		JLabel etqSaludo = new JLabel("Saludo");
-		etqSaludo.setForeground(new Color(255, 20, 147));
-		etqSaludo.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		GridBagConstraints gbc_etqSaludo = new GridBagConstraints();
-		gbc_etqSaludo.insets = new Insets(0, 0, 5, 5);
-		gbc_etqSaludo.anchor = GridBagConstraints.EAST;
-		gbc_etqSaludo.gridx = 2;
-		gbc_etqSaludo.gridy = 11;
-		panel_1.add(etqSaludo, gbc_etqSaludo);
-		
-		textField_4 = new JTextField();
-		GridBagConstraints gbc_textField_4 = new GridBagConstraints();
-		gbc_textField_4.insets = new Insets(0, 0, 5, 5);
-		gbc_textField_4.anchor = GridBagConstraints.WEST;
-		gbc_textField_4.gridx = 3;
-		gbc_textField_4.gridy = 11;
-		panel_1.add(textField_4, gbc_textField_4);
-		textField_4.setColumns(20);
-		
 		JLabel etqImagen2 = new JLabel("Imagen : ");
 		etqImagen2.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		etqImagen2.setForeground(new Color(255, 20, 147));
@@ -291,23 +276,42 @@ public class Registro extends JFrame {
 		gbc_etqImagen2.gridy = 11;
 		panel_1.add(etqImagen2, gbc_etqImagen2);
 		
-		textField_6 = new JTextField();
-		GridBagConstraints gbc_textField_6 = new GridBagConstraints();
-		gbc_textField_6.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textField_6.insets = new Insets(0, 0, 5, 0);
-		gbc_textField_6.gridx = 6;
-		gbc_textField_6.gridy = 11;
-		panel_1.add(textField_6, gbc_textField_6);
-		textField_6.setColumns(10);
+		textURL = new JTextField();
+		GridBagConstraints gbc_textURL = new GridBagConstraints();
+		gbc_textURL.fill = GridBagConstraints.HORIZONTAL;
+		gbc_textURL.insets = new Insets(0, 0, 5, 0);
+		gbc_textURL.gridx = 6;
+		gbc_textURL.gridy = 11;
+		panel_1.add(textURL, gbc_textURL);
+		textURL.setColumns(10);
+		
+		JLabel etqSaludo = new JLabel("Saludo");
+		etqSaludo.setForeground(new Color(255, 20, 147));
+		etqSaludo.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		GridBagConstraints gbc_etqSaludo = new GridBagConstraints();
+		gbc_etqSaludo.anchor = GridBagConstraints.NORTHEAST;
+		gbc_etqSaludo.insets = new Insets(0, 0, 5, 5);
+		gbc_etqSaludo.gridx = 2;
+		gbc_etqSaludo.gridy = 12;
+		panel_1.add(etqSaludo, gbc_etqSaludo);
+		
+		JTextPane textPaneSaludo = new JTextPane();
+		GridBagConstraints gbc_textPaneSaludo = new GridBagConstraints();
+		gbc_textPaneSaludo.insets = new Insets(0, 0, 5, 5);
+		gbc_textPaneSaludo.fill = GridBagConstraints.BOTH;
+		gbc_textPaneSaludo.gridx = 3;
+		gbc_textPaneSaludo.gridy = 12;
+		panel_1.add(textPaneSaludo, gbc_textPaneSaludo);
 		
 		JLabel imagen = new JLabel("");
 		GridBagConstraints gbc_imagen = new GridBagConstraints();
+		gbc_imagen.insets = new Insets(0, 0, 5, 0);
 		gbc_imagen.gridx = 6;
 		gbc_imagen.gridy = 12;
 		panel_1.add(imagen, gbc_imagen);
 		//hacer que el usuario intriduzca una url de una imagen de interner y que se muestre en el label imagen
-		textField_6.addActionListener(e -> {
-			String urlImagen = textField_6.getText();
+		textURL.addActionListener(e -> {
+			String urlImagen = textURL.getText();
 			URL url = getClass().getResource(urlImagen);
 			if (url != null) {
 				Image fotoImage = null;
@@ -317,7 +321,7 @@ public class Registro extends JFrame {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				imagen.setIcon(new ImageIcon(fotoImage));
+				imagen.setIcon(new ImageIcon(Registro.class.getResource("/umu/tds/apps/resources/anadir-imagen.png")));
 			}
 		});
 		

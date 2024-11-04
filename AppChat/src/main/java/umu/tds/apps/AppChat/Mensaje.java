@@ -17,6 +17,10 @@ public class Mensaje {
 		this.receptor = receptor;
 	}	
 	
+	public Mensaje(String texto) {
+		this.texto = texto;
+	}
+	
 	public String getTexto() {
 		return texto;
 	}

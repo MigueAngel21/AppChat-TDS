@@ -81,7 +81,7 @@ public class Usuario {
 	}		
 	
 	
-	//Devuelve el contacto individual que es otroUsuario, si lo hubiera , si no, devuelve null
+	//Devuelve el contacto individual que es otroUsuario(el nombre), si lo hubiera , si no, devuelve null y muestra su numero de telefono porque no lo tiene como contacto
 	public Contacto getContactoIndividual(String otroUsuario) {
 		
 		return null;
