@@ -29,7 +29,7 @@ public class Controlador {
 		return controlador;
 	}	
 	
-	public boolean login(String usuario, String contraseña) {
+	public static boolean login(String usuario, String contraseña) {
 		//usuarioActual = repositorioUsuarios.getUsuario(usuario, contraseña);
 		//return usuarioActual != null;
 		return true;
