@@ -1,6 +1,6 @@
 package umu.tds.apps.AppChat;
 
-public class DescuentoFecha extends Descuento{
+public class DescuentoFecha implements Descuento{
 
 	private int dia;
 	private int mes;

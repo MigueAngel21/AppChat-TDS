@@ -1,6 +1,6 @@
 package umu.tds.apps.AppChat;
 
-public abstract class Descuento {
+public interface Descuento {
 	
 	public abstract double calcularDescuento();
 	

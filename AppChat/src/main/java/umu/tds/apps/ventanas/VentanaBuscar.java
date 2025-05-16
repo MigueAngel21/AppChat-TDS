@@ -21,13 +21,17 @@ import javax.swing.JList;
 import javax.swing.AbstractListModel;
 import java.awt.Font;
 import java.awt.Toolkit;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 
 public class VentanaBuscar extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField telefono;
+	private JTextField contacto;
+	private JTextField texto;
 
 	/**
 	 * Launch the application.
@@ -56,7 +60,7 @@ public class VentanaBuscar extends JFrame {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		//cambiar icono de la ventana
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(400, 80, 708, 616);
@@ -80,24 +84,109 @@ public class VentanaBuscar extends JFrame {
 		JPanel panel_Norte = new JPanel();
 		panel_Norte.setBorder(new TitledBorder(null, "buscar", TitledBorder.LEADING, TitledBorder.TOP, null, new Color(255, 255, 255)));
 		panelCentro.add(panel_Norte, BorderLayout.NORTH);
-		FlowLayout fl_panel_Norte = new FlowLayout(FlowLayout.CENTER, 5, 5);
-		fl_panel_Norte.setAlignOnBaseline(true);
-		panel_Norte.setLayout(fl_panel_Norte);
+		GridBagLayout gbl_panel_Norte = new GridBagLayout();
+		gbl_panel_Norte.columnWidths = new int[]{0, 0, 40, 96, 63, 0};
+		gbl_panel_Norte.rowHeights = new int[]{21, 0, 0};
+		gbl_panel_Norte.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gbl_panel_Norte.rowWeights = new double[]{0.0, 0.0, Double.MIN_VALUE};
+		panel_Norte.setLayout(gbl_panel_Norte);
 		
-		textField = new JTextField();
-		panel_Norte.add(textField);
-		textField.setColumns(10);
+		texto = new JTextField();
+		GridBagConstraints gbc_texto = new GridBagConstraints();
+		gbc_texto.gridwidth = 5;
+		gbc_texto.insets = new Insets(0, 0, 5, 5);
+		gbc_texto.fill = GridBagConstraints.HORIZONTAL;
+		gbc_texto.gridx = 0;
+		gbc_texto.gridy = 0;
+		// dento del textfield texto aparezca un texto de fondo que diga "texto", pero que se puede ascribir encima de el
+		texto.setText("texto");
+		texto.setForeground(Color.GRAY);
+		texto.addFocusListener(new java.awt.event.FocusAdapter() {
+			public void focusGained(java.awt.event.FocusEvent evt) {
+				texto.setText("");
+				texto.setForeground(Color.WHITE);
+			}
+
+			public void focusLost(java.awt.event.FocusEvent evt) {
+				if (texto.getText().equals("")) {
+					texto.setText("texto");
+					texto.setForeground(Color.GRAY);
+				}
+			}
+		});
+		panel_Norte.add(texto, gbc_texto);
+		texto.setColumns(10);
 		
-		textField_1 = new JTextField();
-		panel_Norte.add(textField_1);
-		textField_1.setColumns(10);
+		telefono = new JTextField();
+		GridBagConstraints gbc_telefono = new GridBagConstraints();
+		gbc_telefono.fill = GridBagConstraints.HORIZONTAL;
+		gbc_telefono.insets = new Insets(0, 0, 0, 5);
+		gbc_telefono.gridx = 0;
+		gbc_telefono.gridy = 1;
+		// dento del textfield telefono aparezca un texto de fondo que diga "telefono", pero que se puede ascribir encima de el
+		telefono.setText("telefono");
+		telefono.setForeground(Color.GRAY);
+		telefono.addFocusListener(new java.awt.event.FocusAdapter() {
+			public void focusGained(java.awt.event.FocusEvent evt) {
+				telefono.setText("");
+				telefono.setForeground(Color.WHITE);
+			}
+
+			public void focusLost(java.awt.event.FocusEvent evt) {
+				if (telefono.getText().equals("")) {
+					telefono.setText("telefono");
+					telefono.setForeground(Color.GRAY);
+				}
+			}
+		});
+		
+		panel_Norte.add(telefono, gbc_telefono);
+		telefono.setColumns(10);
+		
+		contacto = new JTextField();
+		GridBagConstraints gbc_contacto = new GridBagConstraints();
+		gbc_contacto.anchor = GridBagConstraints.WEST;
+		gbc_contacto.insets = new Insets(0, 0, 0, 5);
+		gbc_contacto.gridx = 1;
+		gbc_contacto.gridy = 1;
+		//dento del textfield contacto aparezca un texto de fondo que diga "contacto", pero que se puede ascribir encima de el
+		contacto.setText("contacto");
+		contacto.setForeground(Color.GRAY);
+		contacto.addFocusListener(new java.awt.event.FocusAdapter() {
+			public void focusGained(java.awt.event.FocusEvent evt) {
+				contacto.setText("");
+				contacto.setForeground(Color.WHITE);
+			}
+
+			public void focusLost(java.awt.event.FocusEvent evt) {
+				if (contacto.getText().equals("")) {
+					contacto.setText("contacto");
+					contacto.setForeground(Color.GRAY);
+				}
+			}
+		});
+		panel_Norte.add(contacto, gbc_contacto);
+		contacto.setColumns(10);
+		
+		JButton botonbuscar = new JButton("Buscar");
+		GridBagConstraints gbc_botonbuscar = new GridBagConstraints();
+		gbc_botonbuscar.insets = new Insets(0, 0, 0, 5);
+		gbc_botonbuscar.gridx = 2;
+		gbc_botonbuscar.gridy = 1;
+		panel_Norte.add(botonbuscar, gbc_botonbuscar);
+		
 		
 		JPanel panel_centro = new JPanel();
 	
 		JList list = new JList();
 		list.setFont(new Font("Tahoma", Font.PLAIN, 12));
 		list.setModel(new AbstractListModel() {
-			String[] values = new String[] {"jfhsiodjfs+ç", "sodfhsdfsç", "sdfsdfsdf", "sdfsdfsdf", "sdfsdfsdfsçdfsd", "fsfdsdfsdfs", "dfsfsdf"};
+			String[] values = new String[] {"jfhsiodjfs+ç", "sodfhsdfsç", "sdfsdfsdf", "sdfsdfsdf", "sdfsdfsdfsçdfsd", "fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs",
+					"fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs",
+					"fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs",
+					"fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs",
+					"fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs",
+					"fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","dfsfsdf"};
 			public int getSize() {
 				return values.length;
 			}

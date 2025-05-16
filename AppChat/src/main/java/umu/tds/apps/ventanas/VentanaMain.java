@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
@@ -76,7 +77,7 @@ public class VentanaMain extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//cambiar icono de la ventana
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
-		setBounds(350, 8, 860, 805);
+		setBounds(350, 8, 833, 771);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -98,15 +99,20 @@ public class VentanaMain extends JFrame {
 		botonBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/apps/resources/lupa-buscar.png")));
 		panelNorte.add(botonBuscar);
 		botonBuscar.addActionListener(ev -> {
-			this.setVisible(false);
+			//this.setVisible(false);
 			VentanaBuscar ventanaBuscar = new VentanaBuscar();
 			ventanaBuscar.setVisible(true);
 			
 		});
 		
 		JButton botonContactos = new JButton("Contactos");
-		botonContactos.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/apps/resources/imagen-contactos.png")));
+		botonContactos.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/apps/resources/imagen-contactos.png")));	
 		panelNorte.add(botonContactos);
+		botonContactos.addActionListener(ev -> {
+			//this.setVisible(false);
+			VentanaGrupos ventanaGrupos = new VentanaGrupos();
+			ventanaGrupos.setVisible(true);
+		});
 		
 		JButton botonPremium = new JButton("premium");
 		botonPremium.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/apps/resources/icono-premium.png")));
@@ -144,9 +150,10 @@ public class VentanaMain extends JFrame {
 				return mensajes.get(index);
 			}
 		});
-		panelContactos.add(list);
-		
-		
+		//panelContactos.add(list);
+		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setViewportView(list); //por defecto la barra es vertical
+		panelContactos.add(scrollPane);
 		
 		JPanel panelCentro = new JPanel();
 		contentPane.add(panelCentro, BorderLayout.CENTER);
@@ -196,25 +203,33 @@ public class VentanaMain extends JFrame {
 		chat.setPreferredSize(new Dimension(400,700));
 		
 		BubbleText burbuja; 
-		burbuja=new BubbleText(chat,"Hola grupo!!", Color.GREEN, "J.Ramón", BubbleText.SENT); 
+		burbuja=new BubbleText(chat,"Alumno, cual era tu duda ?", Color.GREEN, "J.Ramón", BubbleText.SENT); 
 		chat.add(burbuja);
 		
 		BubbleText burbuja2; 
 		burbuja2=new BubbleText(chat, 
-		"Hola, ¿Está seguro de que la burbuja usa varias lineas si es necesario?", 
+		"Pues verá, no se porque me pongo tan horny cuando pienso en tds", 
 		Color.LIGHT_GRAY, "Alumno", BubbleText.RECEIVED); 
 		chat.add(burbuja2);
 		
 		BubbleText burbuja3; 
-		burbuja3=new BubbleText(chat,"No estoy seguro",  
+		burbuja3=new BubbleText(chat,"No estoy seguro, pero será porque estoy yo",  
 		Color.GREEN, "J.Ramón", BubbleText.SENT, 24); 
 		chat.add(burbuja3); 
+		
+		BubbleText burbuja4; 
+		burbuja4=new BubbleText(chat,"Venta para mi despacho y lo hablamos ;)",  
+		Color.GREEN, "J.Ramón", BubbleText.SENT, 24); 
+		chat.add(burbuja4);
 		
 		BubbleText burbujaEmo =new BubbleText(chat, 4, Color.GREEN, "J.Ramón", BubbleText.SENT,18); 
 		chat.add(burbujaEmo);
 		
+		JScrollPane scrollPane2 = new JScrollPane();
+		scrollPane2.setViewportView(chat); //por defecto la barra es vertical
+		panelCentro.add(scrollPane2);
 		
-		panelCentro.add(chat, BorderLayout.CENTER);
+		//panelCentro.add(chat, BorderLayout.CENTER);
 		
 		this.setTitle("UNICORNCHAT");
 		this.setVisible(true);

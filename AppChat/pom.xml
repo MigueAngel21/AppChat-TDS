@@ -67,12 +67,11 @@
 	  <version>2.0</version> 
 	</dependency>
 	
-	<dependency> 
-	  <groupId>umu.tds</groupId> 
-	  <artifactId>chatWindowLib</artifactId> 
-	  <version>1.0.0</version> 
+	<dependency>
+ 	  <groupId>umu.tds</groupId>
+  	  <artifactId>chatWindowLib</artifactId>
+  	  <version>1.0</version>
 	</dependency>
-	
 	
   </dependencies>
 </project>

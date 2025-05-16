@@ -14,8 +14,26 @@ public class Usuario {
 	private List<Contacto> contactos;
 	private List<Mensaje> mensajesEnviados;
 	private List<Mensaje> mensajesRecibidos;
-	private Descuento descuento;
+	private Optional<Descuento> descuento;
+	private RepositorioUsuarios repositorioUsuarios;
 	
+	
+	// constructor para cuando un usuario tenga algun descuento
+	public Usuario(String usuario, String contraseña, String telefono, LocalDate fechaNacimiento, String imagen,
+			String saludo, Descuento descuento) {
+		this.usuario = usuario;
+		this.contraseña = contraseña;
+		this.telefono = telefono;
+		this.fechaNacimiento = fechaNacimiento;
+		this.imagen = imagen;
+		this.saludo = saludo;
+		this.mensajesEnviados = new LinkedList<Mensaje>();
+		this.mensajesRecibidos = new LinkedList<Mensaje>();
+		this.descuento = Optional.ofNullable(descuento);
+		repositorioUsuarios = RepositorioUsuarios.getInstancia();
+	}	
+	
+	//constructor para cuando descuento sea null
 	public Usuario(String usuario, String contraseña, String telefono, LocalDate fechaNacimiento, String imagen,
 			String saludo) {
 		this.usuario = usuario;
@@ -24,9 +42,10 @@ public class Usuario {
 		this.fechaNacimiento = fechaNacimiento;
 		this.imagen = imagen;
 		this.saludo = saludo;
-		mensajesEnviados = new LinkedList<Mensaje>();
-		mensajesRecibidos = new LinkedList<Mensaje>();
-		descuento = null;
+		this.mensajesEnviados = new LinkedList<Mensaje>();
+		this.mensajesRecibidos = new LinkedList<Mensaje>();
+		this.descuento = Optional.empty();
+		repositorioUsuarios = RepositorioUsuarios.getInstancia();
 	}
 	
 	public String getUsuario() {
@@ -57,7 +76,7 @@ public class Usuario {
 		return contactos;
 	}
 	
-	public Descuento getDescuento() {
+	public Optional<Descuento> getDescuento() {
 		return descuento;
 	}
 	

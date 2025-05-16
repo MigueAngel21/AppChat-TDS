@@ -1,6 +1,6 @@
 package umu.tds.apps.AppChat;
 
-public class DescuentoMensaje extends Descuento{
+public class DescuentoMensaje implements Descuento{
 
 	private int mensajes;
 

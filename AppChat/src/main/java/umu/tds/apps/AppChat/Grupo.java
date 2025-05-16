@@ -9,6 +9,8 @@ public class Grupo extends Contacto{
 	public Grupo(String nombre, String imagen) {
 		super(nombre);
 		this.imagen = imagen;
+		miembros = new LinkedList<ContactoIndividual>();
+		
 	}
 	
 	public String getImagen() {
