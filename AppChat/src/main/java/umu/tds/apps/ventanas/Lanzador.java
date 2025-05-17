@@ -14,7 +14,8 @@ public class Lanzador {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
-				//invoca a la ventana de login para abrir la aplicacion
+				//invoca a la ventana de login para abrir la aplicacion y la inicia
+				
 				try {
 					Login window = new Login();
 					window.frame.setVisible(true);
