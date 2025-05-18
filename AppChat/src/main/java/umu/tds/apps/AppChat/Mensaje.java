@@ -4,7 +4,7 @@ public class Mensaje {
 	private String texto;
 	private String fecha;
 	private String hora;
-	private String emoticonono; //preguntar al profesor que es, un string o que
+	private String emoticonono; 
 	private Usuario emisor;
 	private Usuario receptor;
 	

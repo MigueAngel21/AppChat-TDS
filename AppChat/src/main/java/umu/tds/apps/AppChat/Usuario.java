@@ -10,6 +10,7 @@ public class Usuario {
 	private LocalDate fechaNacimiento;
 	private String imagen;
 	private String saludo;
+	private boolean premium;
 	
 	private List<Contacto> contactos;
 	private List<Mensaje> mensajesEnviados;

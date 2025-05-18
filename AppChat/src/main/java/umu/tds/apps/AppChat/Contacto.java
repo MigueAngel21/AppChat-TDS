@@ -2,6 +2,7 @@ package umu.tds.apps.AppChat;
 
 public class Contacto {
 	private String nombre;
+	
 
 	public Contacto(String nombre) {
 		this.nombre = nombre;
