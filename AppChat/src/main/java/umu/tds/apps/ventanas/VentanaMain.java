@@ -118,6 +118,10 @@ public class VentanaMain extends JFrame {
 		botonPremium.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/apps/resources/icono-premium.png")));
 		botonPremium.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				// this.setVisible(false);
+				Premium ventanaPremium = new Premium();
+				ventanaPremium.setVisible(true);
+				
 			}
 		});
 		panelNorte.add(botonPremium);

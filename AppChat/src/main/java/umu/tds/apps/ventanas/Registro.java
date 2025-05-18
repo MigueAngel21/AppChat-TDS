@@ -7,7 +7,10 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -28,9 +31,12 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.imageio.ImageIO;
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Registro extends JFrame {
 
@@ -39,9 +45,10 @@ public class Registro extends JFrame {
 	private JTextField textNombre;
 	private JTextField textApellido;
 	private JTextField textTelefono;
-	private JTextField textURL;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
+	private JLabel imagenSeleccionada;
+	private JPanel panel_1;
 
 	/**
 	 * Launch the application.
@@ -113,7 +120,7 @@ public class Registro extends JFrame {
 			window.frame.setVisible(true);
 		});
 		
-		JPanel panel_1 = new JPanel();
+		panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Registro", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(255, 255, 255)));
 		contentPane.add(panel_1, BorderLayout.CENTER);
 		GridBagLayout gbl_panel_1 = new GridBagLayout();
@@ -276,14 +283,18 @@ public class Registro extends JFrame {
 		gbc_etqImagen2.gridy = 11;
 		panel_1.add(etqImagen2, gbc_etqImagen2);
 		
-		textURL = new JTextField();
-		GridBagConstraints gbc_textURL = new GridBagConstraints();
-		gbc_textURL.fill = GridBagConstraints.HORIZONTAL;
-		gbc_textURL.insets = new Insets(0, 0, 5, 0);
-		gbc_textURL.gridx = 6;
-		gbc_textURL.gridy = 11;
-		panel_1.add(textURL, gbc_textURL);
-		textURL.setColumns(10);
+		JButton btnañadirImagen = new JButton("Añadir Imagen");
+		btnañadirImagen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton.gridx = 6;
+		gbc_btnNewButton.gridy = 11;
+		panel_1.add(btnañadirImagen, gbc_btnNewButton);
+		btnañadirImagen.addActionListener(e -> seleccionarImagen());
+		
 		
 		JLabel etqSaludo = new JLabel("Saludo");
 		etqSaludo.setForeground(new Color(255, 20, 147));
@@ -303,31 +314,42 @@ public class Registro extends JFrame {
 		gbc_textPaneSaludo.gridy = 12;
 		panel_1.add(textPaneSaludo, gbc_textPaneSaludo);
 		
-		JLabel imagen = new JLabel("");
-		GridBagConstraints gbc_imagen = new GridBagConstraints();
-		gbc_imagen.insets = new Insets(0, 0, 5, 0);
-		gbc_imagen.gridx = 6;
-		gbc_imagen.gridy = 12;
-		panel_1.add(imagen, gbc_imagen);
-		//hacer que el usuario intriduzca una url de una imagen de interner y que se muestre en el label imagen
-		textURL.addActionListener(e -> {
-			String urlImagen = textURL.getText();
-			URL url = getClass().getResource(urlImagen);
-			if (url != null) {
-				Image fotoImage = null;
-				try {
-					fotoImage = ImageIO.read(url).getScaledInstance(130, 130, Image.SCALE_DEFAULT);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-				imagen.setIcon(new ImageIcon(Registro.class.getResource("/umu/tds/apps/resources/anadir-imagen.png")));
-			}
-		});
-		
 		this.setTitle("UNICORNCHAT");
 		this.setVisible(true);
 		
 	}
+	
+	
+	private void seleccionarImagen() {
+	    JFileChooser fileChooser = new JFileChooser();
+	    fileChooser.setDialogTitle("Seleccionar imagen");
+	    fileChooser.setAcceptAllFileFilterUsed(false);
+	    fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("Imágenes (.jpg, .png, .jpeg)", "jpg", "jpeg", "png"));
 
+	    int resultado = fileChooser.showOpenDialog(this);
+
+	    if (resultado == JFileChooser.APPROVE_OPTION) {
+	        java.io.File archivoImagen = fileChooser.getSelectedFile();
+	        ImageIcon imagenIcon = new ImageIcon(archivoImagen.getAbsolutePath());
+
+	        // Escalar la imagen si es muy grande
+	        Image imagenEscalada = imagenIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+	        imagenIcon = new ImageIcon(imagenEscalada);
+
+	        if (imagenSeleccionada == null) {
+	        	imagenSeleccionada = new JLabel();
+	        	GridBagConstraints gbc_imagenSeleccionada = new GridBagConstraints();
+	    		gbc_imagenSeleccionada.insets = new Insets(0, 0, 5, 0);
+	    		gbc_imagenSeleccionada.gridx = 6;
+	    		gbc_imagenSeleccionada.gridy = 12;
+	    		panel_1.add(imagenSeleccionada, gbc_imagenSeleccionada);
+	        }
+	        
+	        imagenSeleccionada.setIcon(imagenIcon);
+	        //guardar la imagen como imagen del usuarios en la base de datos
+
+	    }
+	}
+
+	
 }

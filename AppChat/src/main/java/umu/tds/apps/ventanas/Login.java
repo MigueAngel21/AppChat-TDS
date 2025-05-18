@@ -127,7 +127,7 @@ public class Login {
 			String contraseña = new String(textContraseña.getPassword());
 			
 			//comprobar si el usuario y la contraseña son correctos
-			boolean logueado = Controlador.getInstancia().login(usuario, contraseña);
+			boolean logueado = Controlador.INSTANCE.login(usuario, contraseña);
 			
 			if(!logueado) {
 				// mostrar mensaje de error

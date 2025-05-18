@@ -8,7 +8,10 @@ import umu.tds.apps.AppChat.Mensaje;
 import umu.tds.apps.AppChat.RepositorioUsuarios;
 import umu.tds.apps.AppChat.Usuario;
 
-public class Controlador {
+public enum Controlador {
+	
+	INSTANCE;
+	
 	private static Controlador controlador;
 	private RepositorioUsuarios repositorioUsuarios;
 	private Usuario usuarioActual;
@@ -23,13 +26,14 @@ public class Controlador {
 	 * Consiguiendo de esta forma que exista una única instancia de la clase Controlador,
 	 * que es accesible globalmente.
 	 */
+	/*
 	public static Controlador getInstancia() {
 		if (controlador == null)
 			controlador = new Controlador();
 		return controlador;
 	}	
-	
-	public static boolean login(String usuario, String contraseña) {
+	*/
+	public boolean login(String usuario, String contraseña) {
 		//usuarioActual = repositorioUsuarios.getUsuario(usuario, contraseña);
 		//return usuarioActual != null;
 		return true;
@@ -88,4 +92,11 @@ public class Controlador {
 		
 		return Arrays.asList(values);
 	}
+
+	public List<Mensaje> obtenerChat(String receptor) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 }

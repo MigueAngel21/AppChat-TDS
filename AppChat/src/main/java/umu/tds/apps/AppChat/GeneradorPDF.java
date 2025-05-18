@@ -1,5 +1,7 @@
 package umu.tds.apps.AppChat;
 
+import java.util.List;
+
 public class GeneradorPDF {
 	private static GeneradorPDF generadorPDF;
 
@@ -15,5 +17,10 @@ public class GeneradorPDF {
 
 	public void crearPDF() {
 		// Genera un PDF
+	}
+
+	public static void exportarChat(String receptor, List<Mensaje> mensajes, String ruta) {
+		// TODO Auto-generated method stub
+		
 	}
 }
