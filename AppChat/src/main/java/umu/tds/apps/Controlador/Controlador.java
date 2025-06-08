@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import umu.tds.apps.AppChat.GeneradorPDF;
+import umu.tds.apps.AppChat.GestorDescuentos;
 import umu.tds.apps.AppChat.Mensaje;
 import umu.tds.apps.AppChat.RepositorioUsuarios;
 import umu.tds.apps.AppChat.Usuario;
@@ -16,11 +17,10 @@ public enum Controlador {
 	private RepositorioUsuarios repositorioUsuarios;
 	private Usuario usuarioActual;
 	private GeneradorPDF servicioPDF;
+	private GestorDescuentos gestorDescuentos;
 	
 	
-	private Controlador() {
-		repositorioUsuarios = RepositorioUsuarios.getInstancia();
-	}
+	
 	
 	/* Aplicamos el patrón Singleton.
 	 * Consiguiendo de esta forma que exista una única instancia de la clase Controlador,
@@ -96,6 +96,10 @@ public enum Controlador {
 	public List<Mensaje> obtenerChat(String receptor) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	
+	public double obtenerPrecioConDescuento() {
+		return gestorDescuentos.calcularMejorDescuento(usuarioActual);
 	}
 	
 	

@@ -16,10 +16,13 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.Window;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -47,8 +50,12 @@ public class Registro extends JFrame {
 	private JTextField textTelefono;
 	private JPasswordField passwordField;
 	private JPasswordField passwordField_1;
+	private JDateChooser dateChooser;
+	private String rutaImagen;
 	private JLabel imagenSeleccionada;
 	private JPanel panel_1;
+	
+	
 
 	/**
 	 * Launch the application.
@@ -112,13 +119,7 @@ public class Registro extends JFrame {
 		botonAceptar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		botonAceptar.setBackground(new Color(255, 20, 147));
 		panel.add(botonAceptar);
-		botonAceptar.addActionListener(e -> {
-			//crear aqui el metodo para registrar al usuario completo
-			this.setVisible(false);
-			//hacer visible de nuevo la ventana de login
-			Login window = new Login();
-			window.frame.setVisible(true);
-		});
+		
 		
 		panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Registro", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(255, 255, 255)));
@@ -263,7 +264,7 @@ public class Registro extends JFrame {
 		gbc_etqFecha.gridy = 9;
 		panel_1.add(etqFecha, gbc_etqFecha);
 		
-		JDateChooser dateChooser = new JDateChooser();
+	    dateChooser = new JDateChooser();
 		dateChooser.setDateFormatString("dd MMM yy");
 		GridBagConstraints gbc_dateChooser = new GridBagConstraints();
 		gbc_dateChooser.anchor = GridBagConstraints.WEST;
@@ -293,7 +294,7 @@ public class Registro extends JFrame {
 		gbc_btnNewButton.gridx = 6;
 		gbc_btnNewButton.gridy = 11;
 		panel_1.add(btnañadirImagen, gbc_btnNewButton);
-		btnañadirImagen.addActionListener(e -> seleccionarImagen());
+		btnañadirImagen.addActionListener(e -> seleccionarImagen(rutaImagen)); //llama al metodo seleccionarImagen para seleccionar la imagen del usuario
 		
 		
 		JLabel etqSaludo = new JLabel("Saludo");
@@ -314,13 +315,33 @@ public class Registro extends JFrame {
 		gbc_textPaneSaludo.gridy = 12;
 		panel_1.add(textPaneSaludo, gbc_textPaneSaludo);
 		
+		
+		botonAceptar.addActionListener(e -> {
+			//crear aqui el metodo para registrar al usuario completo
+			this.setVisible(false);
+			//hacer visible de nuevo la ventana de login
+			Login window = new Login();
+			window.frame.setVisible(true);
+		});
+		/*
+		botonAceptar.addActionListener(e -> {
+			if (validarCampos()) { //funcion para comprobar que todos los campos son correctos
+				//Aqui es donde se llama al metodo del controlador para registrar a un usuarios con todos sus campos
+				 Controlador.INSTANCE.registrarUsuario(textNombre.getText() + " " + textApellidos.getText(),
+							new String(passwordField.getPassword()), textTelefono.getText().trim(),
+							dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
+							lblSaludo.getText(), rutaImagen);
+				dispose();
+			}
+		});
+		*/
 		this.setTitle("UNICORNCHAT");
 		this.setVisible(true);
 		
 	}
 	
 	
-	private void seleccionarImagen() {
+	private void seleccionarImagen(String rutaImagen) {
 	    JFileChooser fileChooser = new JFileChooser();
 	    fileChooser.setDialogTitle("Seleccionar imagen");
 	    fileChooser.setAcceptAllFileFilterUsed(false);
@@ -329,27 +350,112 @@ public class Registro extends JFrame {
 	    int resultado = fileChooser.showOpenDialog(this);
 
 	    if (resultado == JFileChooser.APPROVE_OPTION) {
-	        java.io.File archivoImagen = fileChooser.getSelectedFile();
-	        ImageIcon imagenIcon = new ImageIcon(archivoImagen.getAbsolutePath());
+	        File archivoImagen = fileChooser.getSelectedFile();
 
-	        // Escalar la imagen si es muy grande
-	        Image imagenEscalada = imagenIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
-	        imagenIcon = new ImageIcon(imagenEscalada);
+	        try {
+	            // Guardar la ruta para la imagen
+	        	rutaImagen = archivoImagen.getAbsolutePath();
+	           // Usuario usuario = Controlador.INSTANCE.getUsuarioActual();
+	           // usuario.setRutaAvatar(archivoImagen.getAbsolutePath());
 
-	        if (imagenSeleccionada == null) {
-	        	imagenSeleccionada = new JLabel();
-	        	GridBagConstraints gbc_imagenSeleccionada = new GridBagConstraints();
-	    		gbc_imagenSeleccionada.insets = new Insets(0, 0, 5, 0);
-	    		gbc_imagenSeleccionada.gridx = 6;
-	    		gbc_imagenSeleccionada.gridy = 12;
-	    		panel_1.add(imagenSeleccionada, gbc_imagenSeleccionada);
+	            // Mostrar la imagen en la interfaz
+	            ImageIcon imagenIcon = new ImageIcon(archivoImagen.getAbsolutePath());
+	            Image imagenEscalada = imagenIcon.getImage().getScaledInstance(100, 100, Image.SCALE_SMOOTH);
+	            imagenIcon = new ImageIcon(imagenEscalada);
+
+	            if (imagenSeleccionada == null) {
+		        	imagenSeleccionada = new JLabel();
+		        	GridBagConstraints gbc_imagenSeleccionada = new GridBagConstraints();
+		    		gbc_imagenSeleccionada.insets = new Insets(0, 0, 5, 0);
+		    		gbc_imagenSeleccionada.gridx = 6;
+		    		gbc_imagenSeleccionada.gridy = 12;
+		    		panel_1.add(imagenSeleccionada, gbc_imagenSeleccionada);
+		        }
+	            imagenSeleccionada.setIcon(imagenIcon);
+
+	            JOptionPane.showMessageDialog(this,
+	                "Avatar actualizado correctamente.",
+	                "Éxito",
+	                JOptionPane.INFORMATION_MESSAGE);
+
+	        } catch (Exception e) {
+	            e.printStackTrace();
+	            JOptionPane.showMessageDialog(this,
+	                "Error al procesar la imagen: " + e.getMessage(),
+	                "Error",
+	                JOptionPane.ERROR_MESSAGE);
 	        }
-	        
-	        imagenSeleccionada.setIcon(imagenIcon);
-	        //guardar la imagen como imagen del usuarios en la base de datos
-
 	    }
 	}
+	
+	/*
+	private boolean validarCampos() {
+	    boolean salida = true;
+	    ocultarErrores();
+	
+	    if (textNombre.getText().trim().isEmpty()) {
+	        textNombre.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        salida = false;
+	    }
+	
+	    if (textApellido.getText().trim().isEmpty()) {
+	        textApellido.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        salida = false;
+	    }
+	
+	    String pass1 = new String(passwordField.getPassword());
+	    String pass2 = new String(passwordField_1.getPassword());
+	
+	    if (pass1.isEmpty()) {
+	        passwordField.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        salida = false;
+	    }
+	
+	    if (pass2.isEmpty()) {
+	        passwordField_1.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        salida = false;
+	    }
+	
+	    if (!pass1.equals(pass2)) {
+	        passwordField.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        passwordField_1.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        salida = false;
+	    }
+	
+	    if (textTelefono.getText().trim().isEmpty()) {
+	        textTelefono.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        salida = false;
+	        
+	    } else if (Controlador.INSTANCE.esUsuarioRegistrado(textTelefono.getText().trim())) {
+	        textTelefono.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        JOptionPane.showMessageDialog(this,
+	                "El teléfono introducido ya está registrado.",
+	                "Error",
+	                JOptionPane.ERROR_MESSAGE);
+	        salida = false;
+	    }
+	
+	    if (dateChooser.getDate() == null) {
+	        dateChooser.setBorder(BorderFactory.createLineBorder(Color.RED));
+	        salida = false;
+	    }
+	
+	    return salida;
+	}
+	
+	private void ocultarErrores() {
+	    Border defaultBorder = new JTextField().getBorder();
+	
+	    textNombre.setBorder(defaultBorder);
+	    textApellido.setBorder(defaultBorder);
+	    textTelefono.setBorder(defaultBorder);
+	    passwordField.setBorder(defaultBorder);
+	    passwordField_1.setBorder(defaultBorder);
+	    dateChooser.setBorder(null);
+	}
+
+	*/
+
 
 	
 }

@@ -1,22 +1,27 @@
 package umu.tds.apps.AppChat;
 
-public class DescuentoMensaje implements Descuento{
+import java.time.LocalDateTime;
 
-	private int mensajes;
+public class DescuentoMensaje extends Descuento{
 
-	public DescuentoMensaje(int mensajes) {
-		this.mensajes = mensajes;
+	private int cantidadMensajes;
+
+	public DescuentoMensaje(double porcentajeDescuento, int cantidadMensajes) {
+		super(porcentajeDescuento);
+		this.cantidadMensajes = cantidadMensajes;
 	}
 
-	public double calcularDescuento() {
-		return 0.1;
+	
+	@Override
+	public boolean esAplicable(Usuario usuario) {
+		
+		LocalDateTime mesAnterior = LocalDateTime.now().minusMonths(1);
+		// Filtrar los mensajes enviados por el usuario en el último mes y contar cuántos mensajes ha enviado
+		long mensajesEnviadosUltimoMes = usuario.getMensajesEnviados().stream()
+				.filter(mensaje -> !mensaje.getFecha().isBefore(mesAnterior))
+				.count();
+		
+		return mensajesEnviadosUltimoMes >= cantidadMensajes;
 	}
-
-	public boolean esAplicable() {
-		return true;
-	}
-
-	public String toString() {
-		return "Descuento del 10% si el numero de mensajes es: " + mensajes;
-	}
+	
 }

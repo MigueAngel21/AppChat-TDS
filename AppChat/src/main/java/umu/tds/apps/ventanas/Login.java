@@ -129,15 +129,17 @@ public class Login {
 			//comprobar si el usuario y la contraseña son correctos
 			boolean logueado = Controlador.INSTANCE.login(usuario, contraseña);
 			
-			if(!logueado) {
-				// mostrar mensaje de error
-				JOptionPane.showMessageDialog(botonLogin, "Usuario" + usuario + " o contraseña incorrectos","Error Login", JOptionPane.ERROR_MESSAGE, null);
-			} else {
+			if(logueado) {
 				// abrir la ventana principal
 				 VentanaMain ventanaMain = new VentanaMain();
 				 ventanaMain.setVisible(true);
 				// ocultar la ventana de login
 				frame.setVisible(false);
+				
+			} else {
+				// mostrar mensaje de error
+				JOptionPane.showMessageDialog(botonLogin, "Usuario" + usuario + " o contraseña incorrectos","Error Login", JOptionPane.ERROR_MESSAGE, null);
+			
 			}
 		});
 		panelSur.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));

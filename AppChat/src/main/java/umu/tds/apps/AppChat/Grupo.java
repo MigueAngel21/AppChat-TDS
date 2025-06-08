@@ -4,20 +4,35 @@ import java.util.*;
 
 public class Grupo extends Contacto{
 	private String imagen;
-	private List<ContactoIndividual> miembros;
+	private List<Contacto> miembros; //mirar a ver si se usa ContactoIndividual o Contacto
 	
 	public Grupo(String nombre, String imagen) {
 		super(nombre);
-		this.imagen = imagen;
-		miembros = new LinkedList<ContactoIndividual>();
+		miembros = new LinkedList<Contacto>();
 		
+	}
+	
+	public Grupo(String nombre, List<Contacto> miembros, String imagen) {
+		super(nombre);
+		this.imagen = imagen;
+		this.miembros = miembros;
 	}
 	
 	public String getImagen() {
 		return imagen;
 	}
 	
-	public List<ContactoIndividual> getMiembros() {
+	public List<Contacto> getMiembros() {
 		return miembros;
 	}
+	
+	public void setMiembros(List<Contacto> miembros) {
+		this.miembros = miembros;
+	}
+	
+	public void setImagen(String imagen) {
+		this.imagen = imagen;
+	}
+	
+	
 }

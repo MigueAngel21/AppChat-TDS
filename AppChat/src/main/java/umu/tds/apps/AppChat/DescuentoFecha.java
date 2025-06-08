@@ -1,26 +1,25 @@
 package umu.tds.apps.AppChat;
 
-public class DescuentoFecha implements Descuento{
+import java.time.LocalDate;
 
-	private int dia;
-	private int mes;
-	private int anio;
+public class DescuentoFecha extends Descuento{
 
-	public DescuentoFecha(int dia, int mes, int anio) {
-		this.dia = dia;
-		this.mes = mes;
-		this.anio = anio;
+	private LocalDate fechaInicio;
+	private LocalDate fechaFin;
+	
+    
+	public DescuentoFecha(double porcentajeDescuento, LocalDate fechaInicio, LocalDate fechaFin) {
+		super(porcentajeDescuento); 
+		this.fechaInicio = fechaInicio;
+		this.fechaFin = fechaFin;
 	}
 
-	public double calcularDescuento() {
-		return 0.1;
+	
+	@Override
+	public boolean esAplicable(Usuario usuario) {
+		LocalDate fechaR = usuario.getFechaRegistro();
+		return !fechaR.isBefore(fechaInicio) && !fechaR.isAfter(fechaFin);
 	}
-
-	public boolean esAplicable() {
-		return true;
-	}
-
-	public String toString() {
-		return "Descuento del 10% si la fecha es: " + dia + "/" + mes + "/" + anio;
-	}
+	
+	
 }

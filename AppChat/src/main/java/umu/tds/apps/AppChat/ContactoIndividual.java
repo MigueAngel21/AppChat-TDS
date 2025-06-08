@@ -12,4 +12,13 @@ public class ContactoIndividual extends Contacto{
 	public Usuario getUsuario() {
 		return usuario;
 	}
+	
+	public String getImagen() {
+		return usuario.getImagen();
+	}
+	
+	@Override
+	public String toString() {
+		return usuario.toString();
+	}
 }

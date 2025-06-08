@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
+import umu.tds.apps.AppChat.Descuento;
 import umu.tds.apps.AppChat.GeneradorPDF;
 import umu.tds.apps.AppChat.Mensaje;
 import umu.tds.apps.Controlador.Controlador;
@@ -41,8 +42,8 @@ public class Premium extends JFrame {
     private JTextArea txtVentajasPremium;
 
     private boolean esPremium = false; // Puedes ajustar esto según usuario actual
-    private double precio = 9.99; // Simula Controlador.obtenerPrecioConDescuento()
-    private String receptor = "contactoEjemplo";
+    private double precio = Descuento.PRECIO_BASE; 
+    private String receptor = "contactoEjemplo"; //quitar cuando se implemente el chat real solo dejar receptor
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {

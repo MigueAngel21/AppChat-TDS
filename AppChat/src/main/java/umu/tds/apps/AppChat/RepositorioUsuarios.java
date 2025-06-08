@@ -2,37 +2,71 @@ package umu.tds.apps.AppChat;
 
 import java.util.*;
 
-public class RepositorioUsuarios {
-	private static RepositorioUsuarios repositorioUsuarios;
-	private List<Usuario> usuarios;
+import umu.tds.apps.DAO.DAOException;
+import umu.tds.apps.DAO.FactoriaDAO;
 
+public enum RepositorioUsuarios {
+	INSTANCE;
+	
+	private FactoriaDAO factoria;
+
+	private HashMap<Integer, Usuario> usuariosPorCodigo;
+	private HashMap<String, Usuario> usuariosPorTlf;
+	private HashMap<String, Usuario> usuariosPorNombre;
+
+	
 	private RepositorioUsuarios() {
-		usuarios = new LinkedList<Usuario>();
-	}
+		usuariosPorCodigo = new HashMap<Integer, Usuario>();
+		usuariosPorTlf = new HashMap<String, Usuario>();
+		usuariosPorNombre = new HashMap<String, Usuario>();
 
-	public static RepositorioUsuarios getInstancia() {
-		if (repositorioUsuarios == null)
-			repositorioUsuarios = new RepositorioUsuarios();
-		return repositorioUsuarios;
-	}
+		try {
+			factoria = FactoriaDAO.getInstancia();
 
-	public void registrarUsuario(Usuario usuario) {
-		usuarios.add(usuario);
-	}
-
-	public void eliminarUsuario(Usuario usuario) {
-		usuarios.remove(usuario);
-	}
-
-	public Usuario getUsuario(String nombre) {
-		for (Usuario usuario : usuarios) {
-			if (usuario.getUsuario().equals(nombre))
-				return usuario;
+			List<Usuario> listausuarios = factoria.getUsuarioDAO().recuperarTodosUsuarios();
+			for (Usuario usuario : listausuarios) {
+				usuariosPorCodigo.put(usuario.getId(), usuario);
+				usuariosPorTlf.put(usuario.getTelefono(), usuario);
+				usuariosPorNombre.put(usuario.getUsuario(), usuario);
+			}
+		} catch (DAOException eDAO) {
+			eDAO.printStackTrace();
 		}
-		return null;
 	}
 
-	public List<Usuario> getUsuarios() {
-		return usuarios;
+
+	public List<Usuario> findUsuarios() throws DAOException {
+		return new LinkedList<Usuario>(usuariosPorTlf.values());
 	}
+	
+	
+	public Usuario findUsuario(String telefono) {
+		return usuariosPorTlf.get(telefono);
+	}
+
+	public Usuario findUsuario(int id) {
+		return usuariosPorCodigo.get(id);
+	}
+	
+	
+	public Usuario findUsuarioNombre(String nombre) {
+		return usuariosPorNombre.get(nombre);
+	}
+	
+	
+	public void addUsuario(Usuario usuario) {
+		usuariosPorCodigo.put(usuario.getId(), usuario);
+		usuariosPorTlf.put(usuario.getTelefono(), usuario);
+		System.out.println("Usuario registrado con código: " + usuario.getId() + " y tlf: " + usuario.getTelefono()
+				+ " en la base de datos");
+	}
+	
+	public void removeUsuario(Usuario usuario) {
+		usuariosPorCodigo.remove(usuario.getId());
+		usuariosPorTlf.remove(usuario.getTelefono());
+		System.out.println("Usuario con código: " + usuario.getId() + " eliminado");
+	}
+	
+	
+	
 }
