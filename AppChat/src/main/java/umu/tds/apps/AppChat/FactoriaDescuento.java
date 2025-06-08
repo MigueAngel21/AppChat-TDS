@@ -8,7 +8,7 @@ public class FactoriaDescuento {
 		return new DescuentoFecha(porcentajeDescuento, fechaInicio, fechaFin);
 	}
 
-	public static Descuento crearDescuentoFidelidad(double porcentajeDescuento, int cantMensajes) {
+	public static Descuento crearDescuentoMensaje(double porcentajeDescuento, int cantMensajes) {
 		return new DescuentoMensaje(porcentajeDescuento, cantMensajes);
 	}
 	

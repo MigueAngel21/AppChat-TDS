@@ -1,38 +1,48 @@
 package umu.tds.apps.Controlador;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
-
-import umu.tds.apps.AppChat.GeneradorPDF;
+import umu.tds.apps.AppChat.FactoriaDescuento;
 import umu.tds.apps.AppChat.GestorDescuentos;
 import umu.tds.apps.AppChat.Mensaje;
 import umu.tds.apps.AppChat.RepositorioUsuarios;
 import umu.tds.apps.AppChat.Usuario;
+import umu.tds.apps.DAO.DAOException;
+import umu.tds.apps.DAO.FactoriaDAO;
+import umu.tds.apps.DAO.ContactoIndividualDAO;
+import umu.tds.apps.DAO.GrupoDAO;
+import umu.tds.apps.DAO.MensajeDAO;
+import umu.tds.apps.DAO.UsuarioDAO;
 
 public enum Controlador {
 	
 	INSTANCE;
 	
-	private static Controlador controlador;
 	private RepositorioUsuarios repositorioUsuarios;
 	private Usuario usuarioActual;
-	private GeneradorPDF servicioPDF;
 	private GestorDescuentos gestorDescuentos;
+	private FactoriaDAO factoria;
+	private ContactoIndividualDAO adaptadorContactoIndividual;
+	private GrupoDAO adaptadorGrupo;
+	private MensajeDAO adaptadorMensaje;
+	private UsuarioDAO adaptadorUsuario;
 	
 	
+	private Controlador() {
+		try {
+			factoria = FactoriaDAO.getInstancia();
+		} catch (DAOException e) {
+			e.printStackTrace();
+		}
+		gestorDescuentos = new GestorDescuentos();
+		inicializarAdaptadores();
+		inicializarRepositorio();
+		inicializarDescuentos();
+		usuarioActual = null;
+	}
 	
 	
-	/* Aplicamos el patrón Singleton.
-	 * Consiguiendo de esta forma que exista una única instancia de la clase Controlador,
-	 * que es accesible globalmente.
-	 */
-	/*
-	public static Controlador getInstancia() {
-		if (controlador == null)
-			controlador = new Controlador();
-		return controlador;
-	}	
-	*/
 	public boolean login(String usuario, String contraseña) {
 		//usuarioActual = repositorioUsuarios.getUsuario(usuario, contraseña);
 		//return usuarioActual != null;
@@ -102,5 +112,23 @@ public enum Controlador {
 		return gestorDescuentos.calcularMejorDescuento(usuarioActual);
 	}
 	
+	
+	private void inicializarDescuentos() {
+		gestorDescuentos.agregarDescuento(
+				FactoriaDescuento.crearDescuentoFecha(15.0, LocalDate.now().minusYears(2), LocalDate.now().minusDays(1)));
+
+		gestorDescuentos.agregarDescuento(FactoriaDescuento.crearDescuentoMensaje(20.0, 5));
+	}
+
+	private void inicializarRepositorio() {
+		repositorioUsuarios = RepositorioUsuarios.INSTANCE;
+	}
+
+	private void inicializarAdaptadores() {
+		adaptadorUsuario = factoria.getUsuarioDAO(); 
+		adaptadorContactoIndividual = factoria.getContactoIndividualDAO();
+		adaptadorGrupo = factoria.getGrupoDAO();
+		adaptadorMensaje = factoria.getMensajeDAO();
+	}
 	
 }
