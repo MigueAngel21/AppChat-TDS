@@ -127,8 +127,8 @@ public class Login {
 			String contraseña = new String(textContraseña.getPassword());
 			
 			//comprobar si el usuario y la contraseña son correctos
-			boolean logueado = Controlador.INSTANCE.login(usuario, contraseña);
-			
+			//boolean logueado = Controlador.INSTANCE.login(usuario, contraseña);
+			boolean logueado = true; // Simulamos que el login es correcto para la demostración
 			if(logueado) {
 				// abrir la ventana principal
 				 VentanaMain ventanaMain = new VentanaMain();

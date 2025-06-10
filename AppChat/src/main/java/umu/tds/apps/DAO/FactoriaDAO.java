@@ -4,7 +4,7 @@ public abstract class FactoriaDAO {
 	
 	private static FactoriaDAO unicaInstancia;
 	
-	public static final String DAO_TDS= "DAO.TDSFactoriaDAO";
+	public static final String DAO_TDS= "DAO.TDSFactoriaDAO"; //mirar esto
 	
 	/**
 	 * Crea un tipo de factoria DAO. Solo existe el tipo TDSFactoriaDAO
