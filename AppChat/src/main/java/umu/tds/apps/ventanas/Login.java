@@ -131,8 +131,10 @@ public class Login {
 			boolean logueado = true; // Simulamos que el login es correcto para la demostración
 			if(logueado) {
 				// abrir la ventana principal
-				 VentanaMain ventanaMain = new VentanaMain();
-				 ventanaMain.setVisible(true);
+				 //VentanaMain ventanaMain = new VentanaMain();
+				 //ventanaMain.setVisible(true);
+				Main_Prueba ventanaMain = new Main_Prueba();
+				ventanaMain.setVisible(true);
 				// ocultar la ventana de login
 				frame.setVisible(false);
 				
