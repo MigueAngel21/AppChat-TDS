@@ -10,7 +10,7 @@ import umu.tds.apps.Controlador.Controlador;
 public class Usuario {
 	private int id; //codigo
 	private String usuario;
-	private String contraseña;
+	private String password;
 	private String telefono;
 	private LocalDate fechaNacimiento;
 	private String imagen;
@@ -25,10 +25,10 @@ public class Usuario {
 
 	
 	// constructor para cuando un usuario tenga algun descuento
-	public Usuario(String usuario, String contraseña, String telefono, LocalDate fechaNacimiento, String imagen,
-			String saludo, boolean premium, LocalDate fechaRegistro, double precioSuscripcion) {
+	public Usuario(String usuario, String password, String telefono, LocalDate fechaNacimiento, String imagen,
+			String saludo, boolean premium, double precioSuscripcion) {
 		this.usuario = usuario;
-		this.contraseña = contraseña;
+		this.password = password;
 		this.telefono = telefono;
 		this.fechaNacimiento = fechaNacimiento;
 		this.imagen = imagen;
@@ -46,7 +46,7 @@ public class Usuario {
 	public Usuario(String usuario, String contraseña, String telefono, LocalDate fechaNacimiento, String imagen,
 			String saludo) {
 		this.usuario = usuario;
-		this.contraseña = contraseña;
+		this.password = contraseña;
 		this.telefono = telefono;
 		this.fechaNacimiento = fechaNacimiento;
 		this.imagen = imagen;
@@ -60,12 +60,12 @@ public class Usuario {
 		return usuario;
 	}
 	
-	public String getContraseña() {
-		return contraseña;
+	public String getPassword() {
+		return password;
 	}
 	
-	public void setContraseña(String contraseña) {
-		this.contraseña = contraseña;
+	public void setPassword(String contraseña) {
+		this.password = contraseña;
 	}
 	
 	public String getTelefono() {

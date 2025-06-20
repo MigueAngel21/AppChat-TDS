@@ -24,6 +24,8 @@ import java.awt.Toolkit;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
 import java.awt.Insets;
+import javax.swing.BorderFactory;
+import javax.swing.DefaultListModel;
 
 public class VentanaBuscar extends JFrame {
 
@@ -178,8 +180,15 @@ public class VentanaBuscar extends JFrame {
 		
 		JPanel panel_centro = new JPanel();
 	
-		JList list = new JList();
-		list.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		DefaultListModel<String> modelo = new DefaultListModel<>();
+		modelo.addElement("Mensaje 1 de prueba");
+		modelo.addElement("Mensaje 2 de prueba");
+		modelo.addElement("Mensaje 3 de prueba");
+		
+		JList<String> lista = new JList<>(modelo);
+		lista.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lista.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+		/*
 		list.setModel(new AbstractListModel() {
 			String[] values = new String[] {"jfhsiodjfs+ç", "sodfhsdfsç", "sdfsdfsdf", "sdfsdfsdf", "sdfsdfsdfsçdfsd", "fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs",
 					"fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs","fsfdsdfsdfs",
@@ -194,9 +203,9 @@ public class VentanaBuscar extends JFrame {
 				return values[index];
 			}
 		});
+		*/
 		
-		
-		panelCentro.add(new JScrollPane(list), BorderLayout.CENTER);
+		panel_centro.add(new JScrollPane(lista), BorderLayout.CENTER);
 		
 		
 		

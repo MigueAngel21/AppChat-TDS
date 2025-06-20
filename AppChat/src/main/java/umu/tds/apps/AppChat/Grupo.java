@@ -18,6 +18,11 @@ public class Grupo extends Contacto{
 		this.miembros = miembros;
 	}
 	
+	public Grupo(String nombre) {
+		super(nombre);
+		miembros = new LinkedList<Contacto>();
+	}
+	
 	public String getImagen() {
 		return imagen;
 	}

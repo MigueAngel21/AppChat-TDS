@@ -135,8 +135,8 @@ public class Main_Prueba extends JFrame {
         botonBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/apps/resources/lupa-buscar.png")));
         botonBuscar.addActionListener(ev -> {
             //this.setVisible(false);
-            VentanaBuscar ventanaBuscar = new VentanaBuscar();
-            ventanaBuscar.setVisible(true);
+            VentanaBuscar2 ventanaBuscar2 = new VentanaBuscar2();
+            ventanaBuscar2.setVisible(true);
 
         });
         botonera.add(botonBuscar);

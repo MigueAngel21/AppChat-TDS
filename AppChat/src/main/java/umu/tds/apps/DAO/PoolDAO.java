@@ -38,4 +38,8 @@ public class PoolDAO {
 		pool.remove(id);
 	}
 	
+	// Método para verificar si un objeto existe en el pool
+	public boolean containsObject(int id) {
+		return pool.containsKey(id);
+	}
 }
