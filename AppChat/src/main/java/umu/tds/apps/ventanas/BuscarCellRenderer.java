@@ -36,6 +36,7 @@ public class BuscarCellRenderer extends JPanel implements ListCellRenderer<Objec
 		panelTexto = new JPanel();
 		panelTexto.setBackground(Color.WHITE);
 		texto = new JLabel();
+		texto.setForeground(Color.BLACK);
 		panelTexto.add(texto);
 
 		add(panelEmisorReceptor, BorderLayout.NORTH);
@@ -57,6 +58,8 @@ public class BuscarCellRenderer extends JPanel implements ListCellRenderer<Objec
 		if (value instanceof String) {
 			lblEmisor.setText("Emisor");
 			lblReceptor.setText("Receptor");
+			lblEmisor.setForeground(Color.BLACK);
+			lblReceptor.setForeground(Color.BLACK);
 			texto.setText((String) value);
 		} else {
 			lblEmisor.setText("?");
