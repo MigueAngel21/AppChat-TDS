@@ -17,7 +17,7 @@ public class Lanzador {
 				//invoca a la ventana de login para abrir la aplicacion y la inicia
 				
 				try {
-					Login window = new Login();
+					Login window = new Login(); 
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();

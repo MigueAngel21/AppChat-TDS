@@ -4,7 +4,8 @@ public abstract class FactoriaDAO {
 	
 	private static FactoriaDAO unicaInstancia;
 	
-	public static final String DAO_TDS= "DAO.TDSFactoriaDAO"; //mirar esto
+	public static final String DAO_TDS= "DAO.TDSFactoriaDAO"; //si da error puede ser por el nombre del paquete, que seria
+															// "umu.tds.apps.DAO.TDSFactoriaDAO"
 	
 	/**
 	 * Crea un tipo de factoria DAO. Solo existe el tipo TDSFactoriaDAO
