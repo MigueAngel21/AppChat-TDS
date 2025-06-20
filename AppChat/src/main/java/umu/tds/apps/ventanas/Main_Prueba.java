@@ -171,9 +171,11 @@ public class Main_Prueba extends JFrame {
 
 		btnPremium.addActionListener(e -> {
 			/*
-			VentanaPremium ventana = new VentanaPremium(this, usuarioActual.esPremium(), receptor);
+			Premium ventana = new Premium(this, usuarioActual.esPremium(), receptor);
 			ventana.setVisible(true);
 			*/
+			Premium ventanaPremium = new Premium();
+			ventanaPremium.setVisible(true);
 		});
 		
 		horizontalGlue = Box.createHorizontalGlue();
@@ -184,6 +186,7 @@ public class Main_Prueba extends JFrame {
 
 		labelImagen = new JLabel();
 		// labelImagen.setIcon(new ImageIcon(getClass().getResource(usuarioActual.getImagen())));
+		labelImagen.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/imagenperfil1.png")));
 		botonera.add(labelImagen);
 
 		/*

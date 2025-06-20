@@ -41,10 +41,20 @@ public class Premium extends JFrame {
     private JButton btnExportarPDF;
     private JTextArea txtVentajasPremium;
 
+    
     private boolean esPremium = false; // Puedes ajustar esto según usuario actual
     private double precio = Descuento.PRECIO_BASE; 
     private String receptor = "contactoEjemplo"; //quitar cuando se implemente el chat real solo dejar receptor
 
+  //cuando se termine la persistencia hay que meter el constructor con el usuario actual
+    /*
+     public VentanaPremium(JFrame parent, boolean esPremium, String receptor) {
+        super(parent, "Gestión de Suscripción", true); // true para hacerla modal
+        this.receptor = receptor;
+        inicializarComponentes(esPremium);
+     }
+     */
+    
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
