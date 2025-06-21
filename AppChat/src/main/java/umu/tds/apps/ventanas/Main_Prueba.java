@@ -128,6 +128,7 @@ public class Main_Prueba extends JFrame {
 					actualizarPanelChat(scroll, panelMensajesInterno, receptor);
 				}
 				*/
+			
 			}
 		});
 
