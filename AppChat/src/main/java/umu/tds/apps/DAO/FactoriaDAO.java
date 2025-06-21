@@ -4,7 +4,7 @@ public abstract class FactoriaDAO {
 	
 	private static FactoriaDAO unicaInstancia;
 	
-	public static final String DAO_TDS= "DAO.TDSFactoriaDAO"; //si da error puede ser por el nombre del paquete, que seria
+	public static final String DAO_TDS= "umu.tds.apps.DAO.TDSFactoriaDAO"; //si da error puede ser por el nombre del paquete, que seria
 															// "umu.tds.apps.DAO.TDSFactoriaDAO"
 	
 	/**
