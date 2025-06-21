@@ -4,6 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import java.awt.BorderLayout;
 import javax.swing.JButton;
@@ -25,6 +26,7 @@ import java.awt.Window;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.ZoneId;
 
 import javax.swing.JTextField;
 import com.toedter.calendar.JDateChooser;
@@ -34,12 +36,16 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+
+import umu.tds.apps.Controlador.Controlador;
+
 
 public class Registro extends JFrame {
 
@@ -54,24 +60,6 @@ public class Registro extends JFrame {
 	private String rutaImagen;
 	private JLabel imagenSeleccionada;
 	private JPanel panel_1;
-	
-	
-
-	/**
-	 * Launch the application.
-	 
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					VentanaMain frame = new VentanaMain();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
 	
 	
 	/**
@@ -101,7 +89,6 @@ public class Registro extends JFrame {
 		botonCancelar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		botonCancelar.setBackground(new Color(255, 20, 147));
 		panel.add(botonCancelar);
-		//creame un evento para el boton de cancelar, que cuando lo pulses se oculte la ventana de registro la ventana de registro y vuelva a hacerse visible la ventana de login implementadolo con una expresion lambda
 		botonCancelar.addActionListener(e -> {
 			this.setVisible(false);
 			//hacer visible de nuevo la ventana de login
@@ -323,18 +310,18 @@ public class Registro extends JFrame {
 			Login window = new Login();
 			window.frame.setVisible(true);
 		});
-		/*
+		
 		botonAceptar.addActionListener(e -> {
 			if (validarCampos()) { //funcion para comprobar que todos los campos son correctos
 				//Aqui es donde se llama al metodo del controlador para registrar a un usuarios con todos sus campos
-				 Controlador.INSTANCE.registrarUsuario(textNombre.getText() + " " + textApellidos.getText(),
+				 Controlador.INSTANCE.registrarUsuario(textNombre.getText() + " " + textApellido.getText(),
 							new String(passwordField.getPassword()), textTelefono.getText().trim(),
 							dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-							lblSaludo.getText(), rutaImagen);
+							textPaneSaludo.getText(), rutaImagen);
 				dispose();
 			}
 		});
-		*/
+		
 		this.setTitle("UNICORNCHAT");
 		this.setVisible(true);
 		
@@ -388,7 +375,7 @@ public class Registro extends JFrame {
 	    }
 	}
 	
-	/*
+	
 	private boolean validarCampos() {
 	    boolean salida = true;
 	    ocultarErrores();
@@ -454,7 +441,7 @@ public class Registro extends JFrame {
 	    dateChooser.setBorder(null);
 	}
 
-	*/
+	
 
 
 	

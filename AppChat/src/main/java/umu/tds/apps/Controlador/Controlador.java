@@ -36,7 +36,7 @@ public enum Controlador {
 	private UsuarioDAO usuarioDAO;
 	
 	
-	/*
+	
 	private Controlador() {
 		try {
 			factoria = FactoriaDAO.getInstancia();
@@ -49,7 +49,7 @@ public enum Controlador {
 		inicializarDescuentos();
 		usuarioActual = null;
 	}
-	*/
+	
 	
 	
 	public boolean login(String telefono, String contraseña) {

@@ -45,22 +45,6 @@ public class Login {
 	private JTextField textTelefono;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login window = new Login();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the application.
 	 */
 	public Login() {
@@ -123,14 +107,13 @@ public class Login {
 		botonLogin.addActionListener(e -> {
 			// implementar la accion de login
 			//leer datos de la pantalla
-			String usuario = textTelefono.getText();
+			String telefono = textTelefono.getText();
 			String contraseña = new String(textContraseña.getPassword());
 			
 			//comprobar si el usuario y la contraseña son correctos
-			//boolean logueado = Controlador.INSTANCE.login(usuario, contraseña);
-			boolean logueado = true; // Simulamos que el login es correcto para la demostración
+			boolean logueado = Controlador.INSTANCE.login(telefono, contraseña);
 			if(logueado) {
-				// abrir la ventana principal
+				 //abrir la ventana principal
 				 //VentanaMain ventanaMain = new VentanaMain();
 				 //ventanaMain.setVisible(true);
 				Main_Prueba ventanaMain = new Main_Prueba();
@@ -140,7 +123,7 @@ public class Login {
 				
 			} else {
 				// mostrar mensaje de error
-				JOptionPane.showMessageDialog(botonLogin, "Usuario" + usuario + " o contraseña incorrectos","Error Login", JOptionPane.ERROR_MESSAGE, null);
+				JOptionPane.showMessageDialog(botonLogin, "Telefono" + telefono + " o contraseña incorrectos","Error Login", JOptionPane.ERROR_MESSAGE, null);
 			
 			}
 		});
@@ -163,7 +146,6 @@ public class Login {
 		botonRegistro.setForeground(new Color(255, 255, 255));
 		botonRegistro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelSur.add(botonRegistro);
-		//creame un evento para el boton de registro, que cuando lo pulses se abra la ventana de registro haciendose visible y se oculte la de login implementadolo con una expresion lambda
 		botonRegistro.addActionListener(e -> {
 			Registro registro = new Registro();
 			registro.setVisible(true);
