@@ -176,10 +176,7 @@ public class VentanaBuscar2 extends JFrame {
 						contacto.getText().equals("contacto") ? "" : contacto.getText(),
 						texto.getText().equals("texto") ? "" : texto.getText());
 				
-				/*
-				List<Mensaje> mensajesFiltrados = Controlador.INSTANCE.obtenerMensajesFiltrados(telefono.getText(),
-						contacto.getText(),texto.getText());
-				*/
+				
 				modelo.clear();
 				mensajesFiltrados.forEach(modelo::addElement);
 			}

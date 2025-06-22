@@ -289,6 +289,7 @@ public class Registro extends JFrame {
 		panel_1.add(btnañadirImagen, gbc_btnNewButton);
 		btnañadirImagen.addActionListener(e -> seleccionarImagen(rutaImagen)); //llama al metodo seleccionarImagen para seleccionar la imagen del usuario
 		*/
+		
 		lblImagen_1 = new JLabel("");
 		lblImagen_1.setIcon(new ImageIcon(Registro.class.getResource(Usuario.IMG)));
 		rutaImagen = Usuario.IMG;
@@ -341,7 +342,7 @@ public class Registro extends JFrame {
 		gbc_btnNewButton.gridx = 6;
 		gbc_btnNewButton.gridy = 11;
 		panel_1.add(lblImagen_1, gbc_btnNewButton);
-
+		
 		
 		
 		
@@ -402,9 +403,9 @@ public class Registro extends JFrame {
 
 	        try {
 	            // Guardar la ruta para la imagen
-	           //rutaImagen = archivoImagen.getAbsolutePath();
+	           rutaImagen = archivoImagen.getAbsolutePath();
 	           Usuario usuario = Controlador.INSTANCE.getUsuarioActual();
-	           usuario.setImagen(archivoImagen.getAbsolutePath());
+	           usuario.setImagen(rutaImagen);
 
 	            // Mostrar la imagen en la interfaz
 	            ImageIcon imagenIcon = new ImageIcon(archivoImagen.getAbsolutePath());

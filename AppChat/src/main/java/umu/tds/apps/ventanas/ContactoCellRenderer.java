@@ -37,7 +37,7 @@ public class ContactoCellRenderer extends JPanel implements ListCellRenderer<Con
 		nameLabel.setText(contacto.getNombre());
 
 		// Load the image from a random URL (for example, using "https://robohash.org")
-		ImageIcon imageIcon = new ImageIcon(ContactoCellRenderer.class.getResource(Usuario.IMG));
+		ImageIcon imageIcon = new ImageIcon(ContactoCellRenderer.class.getResource(Usuario.IMG));//Usuario.IMG
 		imageLabel.setIcon(imageIcon);
 
 		// Set background and foreground based on selection

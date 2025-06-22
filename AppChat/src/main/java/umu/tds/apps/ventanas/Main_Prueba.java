@@ -277,7 +277,7 @@ public class Main_Prueba extends JFrame {
 
 		JLabel labelImagen = new JLabel("");
 		Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
-		labelImagen.setIcon(new ImageIcon(Main_Prueba.class.getResource(Usuario.IMG)));//usuarioActual.getImagen()
+		labelImagen.setIcon(new ImageIcon(Main_Prueba.class.getResource(Usuario.IMG)));//Usuario.IMG
 		botonera.add(labelImagen);
 		labelImagen.addMouseListener(new MouseAdapter() {
 			@Override

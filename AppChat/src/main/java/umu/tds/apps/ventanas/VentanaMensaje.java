@@ -144,7 +144,7 @@ public class VentanaMensaje extends JFrame {
 
 		JButton btnEnviar = new JButton("");
 		btnEnviar.setBounds(350, 200, 41, 30);
-		btnEnviar.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/avion-enviar-whatsapp.png")));
+		btnEnviar.setIcon(new ImageIcon(VentanaMensaje.class.getResource("/umu/tds/apps/resources/avion-enviar-whatsapp.png")));
 		btnEnviar.setFocusPainted(false);
 		contentPane.add(btnEnviar);
 		btnEnviar.addActionListener(e -> {
