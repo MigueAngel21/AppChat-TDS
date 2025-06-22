@@ -8,7 +8,9 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Toolkit;
-
+import java.awt.event.ActionEvent;
+import java.util.List;
+import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
@@ -23,6 +25,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.TitledBorder;
+
+import umu.tds.apps.AppChat.Mensaje;
+import umu.tds.apps.Controlador.Controlador;
 
 public class VentanaBuscar2 extends JFrame {
 
@@ -41,8 +46,7 @@ public class VentanaBuscar2 extends JFrame {
 		}
 
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setIconImage(Toolkit.getDefaultToolkit()
-				.getImage(VentanaBuscar.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaBuscar.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(400, 80, 708, 616);
 		setTitle("UNICORNCHAT");
 
@@ -152,10 +156,18 @@ public class VentanaBuscar2 extends JFrame {
 		gbc_contacto.gridy = 1;
 		panel_Norte.add(contacto, gbc_contacto);
 
-		// Botón buscar (no tiene funcionalidad activa en esta versión)
+		
+		// Esto hya que cambiarlo cuando tengamos los renders activados
+		DefaultListModel<Mensaje> modelo = new DefaultListModel<>();
+		List<Mensaje> listaMensajes = Controlador.INSTANCE.obtenerTodosMensajes();
+		listaMensajes.forEach(modelo::addElement);
+		
+		JList<Mensaje> lista = new JList<>(modelo);
+		lista.setFocusable(false);
+		lista.setCellRenderer(new BuscarCellRenderer());
+		
+		// Botón buscar 
 		JButton botonbuscar = new JButton("Buscar");
-		// El actionListener está comentado para evitar errores por falta de backend
-		/*
 		botonbuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<Mensaje> mensajesFiltrados = Controlador.INSTANCE.obtenerMensajesFiltrados(
@@ -166,33 +178,13 @@ public class VentanaBuscar2 extends JFrame {
 				mensajesFiltrados.forEach(modelo::addElement);
 			}
 		});
-		*/
+		
 		GridBagConstraints gbc_botonbuscar = new GridBagConstraints();
 		gbc_botonbuscar.insets = new Insets(0, 0, 0, 5);
 		gbc_botonbuscar.gridx = 2;
 		gbc_botonbuscar.gridy = 1;
 		panel_Norte.add(botonbuscar, gbc_botonbuscar);
 
-		// Lista de resultados (vacía por ahora)
-		DefaultListModel<String> modelo = new DefaultListModel<>();
-		modelo.addElement("Mensaje 1 de prueba");
-		modelo.addElement("Mensaje 2 de prueba");
-		modelo.addElement("Mensaje 3 de prueba");
-
-		JList<String> lista = new JList<>(modelo);
-		lista.setFont(new Font("Tahoma", Font.PLAIN, 12));
-		lista.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		lista.setCellRenderer(new BuscarCellRenderer());
-		/*
-		// Esto hya que cambiarlo cuando tengamos los renders activados
-		DefaultListModel<Mensaje> modelo = new DefaultListModel<>();
-		List<Mensaje> listaMensajes = Controlador.INSTANCE.obtenerTodosMensajes();
-		listaMensajes.forEach(modelo::addElement);
-		
-		JList<Mensaje> lista = new JList<>(modelo);
-		lista.setFocusable(false);
-		lista.setCellRenderer(new FiltroCellRenderer());
-		*/
 		
 		// Agregar la lista en el panel central
 		panelCentro.add(new JScrollPane(lista), BorderLayout.CENTER);

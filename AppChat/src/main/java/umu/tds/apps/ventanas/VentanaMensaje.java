@@ -27,8 +27,8 @@ public class VentanaMensaje extends JFrame {
 	private JTextField textMensaje;
 	private boolean menuEmojiAbierto = false;
 
-	public VentanaMensaje(String tipo, VentanaMain ventanaMain, JPanel panelMensajesInterno, JScrollPane scroll,
-			DefaultListModel<?> modelo, JPanel panelChatRecientes, JList<?> list) {
+	public VentanaMensaje(String tipo, Main_Prueba ventanaMain, JPanel panelMensajesInterno, JScrollPane scroll,
+			DefaultListModel<Usuario> modelo, JPanel panelChatRecientes, JList<Usuario> list) {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -39,10 +39,11 @@ public class VentanaMensaje extends JFrame {
 		setBounds(420, 160, 716, 553);
 		this.setTitle("UNICORNCHAT");
 		//cambiar icono de la ventana
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaMensaje.class.getResource("/umu/tds/apps/resources/icono app.png")));
 				
 		setLocationRelativeTo(null);
 		this.setVisible(true);
+		
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -55,7 +56,7 @@ public class VentanaMensaje extends JFrame {
 		contentPane.add(lblTitulo);
 
 		txtTelefono = new JTextField();
-
+		// Campo de teléfono (solo si es nuevo teléfono)
 		if (tipo.equals("Nuevo teléfono")) {
 			JLabel lblTelefono = new JLabel("Introduce el teléfono:");
 			lblTelefono.setBounds(20, 60, 120, 20);
@@ -76,11 +77,12 @@ public class VentanaMensaje extends JFrame {
 		contentPane.add(btnEmojis);
 
 		JPopupMenu menuEmojis = new JPopupMenu();
-		JPanel panelEmojis = new JPanel(new GridLayout(2, 4, 3, 3));
+		JPanel panelEmojis = new JPanel(new GridLayout(2, 4, 3, 3)); //2 filas, 4 columnas, gap de 2px
 		panelEmojis.setBackground(Color.WHITE);
 		menuEmojis.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		panelEmojis.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
+		// Creamos los 8 botones de emojis
 		VentanaMensaje aux = this;
 		for (int i = 0; i < 8; i++) {
 			JButton emojiButton = new JButton(BubbleText.getEmoji(i));
@@ -92,7 +94,7 @@ public class VentanaMensaje extends JFrame {
 			emojiButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					/*
+					
 					if (hayTelefono()) {
 						Controlador.INSTANCE.enviarMensaje(txtTelefono.getText(), emojiIndex);
 						ventanaMain.actualizarPanelChat(scroll, panelMensajesInterno, txtTelefono.getText());
@@ -104,7 +106,7 @@ public class VentanaMensaje extends JFrame {
 						JOptionPane.showMessageDialog(aux, "Introduce un teléfono para enviar un emoji", "Error",
 								JOptionPane.ERROR_MESSAGE);
 					}
-					*/
+					
 				}
 			});
 
@@ -142,11 +144,11 @@ public class VentanaMensaje extends JFrame {
 
 		JButton btnEnviar = new JButton("");
 		btnEnviar.setBounds(350, 200, 41, 30);
-		btnEnviar.setIcon(new ImageIcon(VentanaMain.class.getResource("/recursos/enviar.png")));
+		btnEnviar.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/avion-enviar-whatsapp.png")));
 		btnEnviar.setFocusPainted(false);
 		contentPane.add(btnEnviar);
 		btnEnviar.addActionListener(e -> {
-			/*
+			
 			if (hayTexto()) {
 				if (hayTelefono()) {
 					try {
@@ -168,11 +170,11 @@ public class VentanaMensaje extends JFrame {
 				JOptionPane.showMessageDialog(aux, "Introduce un texto para enviar un mensaje", "Error",
 						JOptionPane.ERROR_MESSAGE);
 			}
-			*/
+			
 		});
 	}
 
-	/*
+	
 	private boolean hayTexto() {
 		return textMensaje.getText().length() > 0;
 	}
@@ -180,6 +182,6 @@ public class VentanaMensaje extends JFrame {
 	private boolean hayTelefono() {
 		return txtTelefono.getText().length() > 0;
 	}
-	*/
+	
 
 }

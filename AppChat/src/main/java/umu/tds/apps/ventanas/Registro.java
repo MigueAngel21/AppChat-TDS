@@ -42,8 +42,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 import javax.swing.JTextPane;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 
+import umu.tds.apps.AppChat.Usuario;
 import umu.tds.apps.Controlador.Controlador;
 
 
@@ -60,6 +63,8 @@ public class Registro extends JFrame {
 	private String rutaImagen;
 	private JLabel imagenSeleccionada;
 	private JPanel panel_1;
+	private JLabel lblImagen_1;
+	
 	
 	
 	/**
@@ -74,7 +79,7 @@ public class Registro extends JFrame {
 		}
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//cambiar icono de la ventana
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(Registro.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(420, 160, 716, 553);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -271,6 +276,7 @@ public class Registro extends JFrame {
 		gbc_etqImagen2.gridy = 11;
 		panel_1.add(etqImagen2, gbc_etqImagen2);
 		
+		/*
 		JButton btnañadirImagen = new JButton("Añadir Imagen");
 		btnañadirImagen.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -282,6 +288,61 @@ public class Registro extends JFrame {
 		gbc_btnNewButton.gridy = 11;
 		panel_1.add(btnañadirImagen, gbc_btnNewButton);
 		btnañadirImagen.addActionListener(e -> seleccionarImagen(rutaImagen)); //llama al metodo seleccionarImagen para seleccionar la imagen del usuario
+		*/
+		lblImagen_1 = new JLabel("");
+		lblImagen_1.setIcon(new ImageIcon(Registro.class.getResource(Usuario.IMG)));
+		rutaImagen = Usuario.IMG;
+		
+		lblImagen_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+
+				String nuevaURL = JOptionPane.showInputDialog(Registro.this,
+						"Introduce la URL de la imagen de perfil deseada:", "Seleccionar imagen de Usuario",
+						JOptionPane.PLAIN_MESSAGE);
+				
+				if (nuevaURL == null)
+					return;
+				
+				if (nuevaURL.isEmpty()) {
+					JOptionPane.showMessageDialog(Registro.this, "Introduce una URL no vacía.", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				else {
+					try {
+						URL recurso = getClass().getResource(nuevaURL);
+						if (recurso != null) {
+							ImageIcon icono = new ImageIcon(recurso);
+							if (icono.getIconWidth() > 0 && icono.getIconHeight() > 0) {
+								lblImagen_1.setIcon(icono);
+								rutaImagen = nuevaURL;
+							} else {
+								JOptionPane.showMessageDialog(Registro.this,
+										"Error al cargar la imagen. URL no válida.", "Error",
+										JOptionPane.ERROR_MESSAGE);
+							}
+						} else {
+							JOptionPane.showMessageDialog(Registro.this,
+									"El recurso no se encontró. Verifica que la ruta sea correcta.", "Error",
+									JOptionPane.ERROR_MESSAGE);
+						}
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(Registro.this, "Error al cargar la imagen. URL no válida.",
+								"Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+		});
+
+		GridBagConstraints gbc_btnNewButton = new GridBagConstraints();
+		gbc_btnNewButton.insets = new Insets(0, 0, 5, 0);
+		gbc_btnNewButton.gridx = 6;
+		gbc_btnNewButton.gridy = 11;
+		panel_1.add(lblImagen_1, gbc_btnNewButton);
+
+		
 		
 		
 		JLabel etqSaludo = new JLabel("Saludo");
@@ -341,9 +402,9 @@ public class Registro extends JFrame {
 
 	        try {
 	            // Guardar la ruta para la imagen
-	        	rutaImagen = archivoImagen.getAbsolutePath();
-	           // Usuario usuario = Controlador.INSTANCE.getUsuarioActual();
-	           // usuario.setRutaAvatar(archivoImagen.getAbsolutePath());
+	           //rutaImagen = archivoImagen.getAbsolutePath();
+	           Usuario usuario = Controlador.INSTANCE.getUsuarioActual();
+	           usuario.setImagen(archivoImagen.getAbsolutePath());
 
 	            // Mostrar la imagen en la interfaz
 	            ImageIcon imagenIcon = new ImageIcon(archivoImagen.getAbsolutePath());

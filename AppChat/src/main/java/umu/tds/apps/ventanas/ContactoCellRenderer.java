@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 
 import umu.tds.apps.AppChat.Contacto;
+import umu.tds.apps.AppChat.Usuario;
 
 public class ContactoCellRenderer extends JPanel implements ListCellRenderer<Contacto> {
 	/**
@@ -31,12 +32,12 @@ public class ContactoCellRenderer extends JPanel implements ListCellRenderer<Con
 	@Override
 	public Component getListCellRendererComponent(JList<? extends Contacto> list, Contacto contacto, int index,
 			boolean isSelected, boolean cellHasFocus) {
-		/*
+		
 		// Set the text
 		nameLabel.setText(contacto.getNombre());
 
 		// Load the image from a random URL (for example, using "https://robohash.org")
-		ImageIcon imageIcon = new ImageIcon(VentanaMain.class.getResource(contacto.getImagen()));
+		ImageIcon imageIcon = new ImageIcon(VentanaMain.class.getResource(Usuario.IMG));
 		imageLabel.setIcon(imageIcon);
 
 		// Set background and foreground based on selection
@@ -47,7 +48,7 @@ public class ContactoCellRenderer extends JPanel implements ListCellRenderer<Con
 			setBackground(list.getBackground());
 			setForeground(list.getForeground());
 		}
-		*/
+		
 		return this;
 	}
 }

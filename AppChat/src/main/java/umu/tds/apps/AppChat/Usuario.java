@@ -22,6 +22,8 @@ public class Usuario {
 	private List<Contacto> contactos;
 	private List<Mensaje> mensajesEnviados;
 	private List<Mensaje> mensajesRecibidos;
+	
+	public final static String IMG = "/umu/tds/apps/resources/imagenPerfil1.png";
 
 	
 	// constructor para cuando un usuario tenga algun descuento

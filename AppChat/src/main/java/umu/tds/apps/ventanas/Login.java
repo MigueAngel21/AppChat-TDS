@@ -67,7 +67,7 @@ public class Login {
 		frame.setTitle("UNICORNCHAT");
 		frame.setResizable(false);
 		//cambiar icono de la ventana
-		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		
 		JLabel titulo = new JLabel("AppChat");
 		URL url1 = getClass().getResource("/umu/tds/apps/resources/logo app.png");

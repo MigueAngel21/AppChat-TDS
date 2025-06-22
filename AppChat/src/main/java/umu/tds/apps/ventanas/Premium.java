@@ -1,139 +1,112 @@
 package umu.tds.apps.ventanas;
 
-import java.awt.EventQueue;
-import java.awt.Toolkit;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.Font;
+import java.util.List;
+
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
-import javax.swing.border.EmptyBorder;
-
-import java.awt.*;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
+import javax.swing.JTextArea;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
 
 import umu.tds.apps.AppChat.Descuento;
 import umu.tds.apps.AppChat.GeneradorPDF;
 import umu.tds.apps.AppChat.Mensaje;
 import umu.tds.apps.Controlador.Controlador;
 
-import java.awt.event.ActionEvent;
-import javax.swing.border.EmptyBorder;
-
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
-
-public class Premium extends JFrame {
-
-    private static final long serialVersionUID = 1L;
-    private JPanel contentPane;
-    private JPanel mainPanel;
-    private JPanel buttonPanel;
-
-    private JLabel lblEstadoPremium;
+public class Premium extends JDialog {
+    
+	private static final long serialVersionUID = 1L;
+	
+	private JLabel lblEstadoPremium;
     private JLabel lblPrecioActual;
     private JButton btnSuscribirse;
     private JButton btnAnular;
     private JButton btnExportarPDF;
     private JTextArea txtVentajasPremium;
+    private String receptor;
+    private double precio = Descuento.PRECIO_BASE;
 
-    
-    private boolean esPremium = false; // Puedes ajustar esto según usuario actual
-    private double precio = Descuento.PRECIO_BASE; 
-    private String receptor = "contactoEjemplo"; //quitar cuando se implemente el chat real solo dejar receptor
-
-  //cuando se termine la persistencia hay que meter el constructor con el usuario actual
-    /*
-     public VentanaPremium(JFrame parent, boolean esPremium, String receptor) {
+    public Premium(JFrame parent, boolean esPremium, String receptor) {
         super(parent, "Gestión de Suscripción", true); // true para hacerla modal
         this.receptor = receptor;
         inicializarComponentes(esPremium);
-     }
-     */
-    
-    public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-            try {
-                Premium frame = new Premium();
-                frame.setVisible(true);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
     }
 
-    public Premium() {
-        try {
-            UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    private void inicializarComponentes(boolean esPremium) {
+        // Configuración básica de la ventana
+        setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+        setSize(400, 300);
+        setLocationRelativeTo(null);
+        getContentPane().setLayout(new BorderLayout(10, 10));
 
-        setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-        setBounds(420, 160, 716, 553);
-        setTitle("UNICORNCHAT");
-        setIconImage(Toolkit.getDefaultToolkit().getImage(Premium.class.getResource("/umu/tds/apps/resources/icono app.png")));
-
-        contentPane = new JPanel(new BorderLayout(10, 10));
-        contentPane.setBorder(new EmptyBorder(15, 15, 15, 15));
-        setContentPane(contentPane);
-
-        mainPanel = new JPanel();
+        // Panel principal con padding
+        JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new BoxLayout(mainPanel, BoxLayout.Y_AXIS));
-        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        contentPane.add(mainPanel, BorderLayout.CENTER);
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        inicializarInterfaz();
-    }
-
-    private void inicializarInterfaz() {
-        mainPanel.removeAll();
-
+        // Título
         JLabel lblTitulo = new JLabel("GESTIÓN DE SUSCRIPCIÓN");
-        lblTitulo.setFont(new Font("Dialog", Font.BOLD, 22));
         lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+        lblTitulo.setFont(new Font("Dialog", Font.BOLD, 16));
         mainPanel.add(lblTitulo);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        lblEstadoPremium = new JLabel(esPremium ?
-            "Actualmente eres Premium" :
+        // Estado Premium
+        lblEstadoPremium = new JLabel(esPremium ? 
+            "Actualmente eres Premium" : 
             "Actualmente no eres Premium");
-        lblEstadoPremium.setFont(new Font("Dialog", Font.PLAIN, 16));
         lblEstadoPremium.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(lblEstadoPremium);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 10)));
 
-        lblPrecioActual = new JLabel("Cuota actual: " + (esPremium ? precio + "€" : "0€"));
-        lblPrecioActual.setFont(new Font("Dialog", Font.PLAIN, 15));
+        // Precio actual
+        lblPrecioActual = new JLabel("Cuota actual: " + 
+            (esPremium ? Controlador.INSTANCE.getUsuarioActual().getPrecioSuscripcion() + "€" : "0€"));
         lblPrecioActual.setAlignmentX(Component.CENTER_ALIGNMENT);
         mainPanel.add(lblPrecioActual);
         mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
 
-        buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
+        // Panel de botones
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
         buttonPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
 
         if (esPremium) {
+            // Botones para usuarios Premium
             btnExportarPDF = new JButton("Exportar PDF");
             btnAnular = new JButton("Anular suscripción");
-
+            
             buttonPanel.add(btnExportarPDF);
             buttonPanel.add(btnAnular);
 
-            // TODO: implementar exportarPDF()
+            // Añadir listeners
             btnExportarPDF.addActionListener(e -> exportarPDF());
-
             btnAnular.addActionListener(e -> anularSuscripcion());
-
         } else {
+            // Botón para usuarios no Premium
+        	precio = Controlador.INSTANCE.obtenerPrecioConDescuento();
+        	precio = Math.round(precio * 100.0) / 100.0;
             btnSuscribirse = new JButton("Suscribirse por " + precio + "€");
             buttonPanel.add(btnSuscribirse);
+            
+            // Añadir listener
+            btnSuscribirse.addActionListener(e -> suscribirse());
 
-            btnSuscribirse.addActionListener(this::suscribirse);
-
+            // Texto de ventajas Premium
             txtVentajasPremium = new JTextArea(
                 "Ventajas de ser Premium:\n" +
                 "- Exportar chats a PDF\n" +
@@ -142,37 +115,46 @@ public class Premium extends JFrame {
             );
             txtVentajasPremium.setEditable(false);
             txtVentajasPremium.setBackground(null);
-            txtVentajasPremium.setFont(new Font("Dialog", Font.PLAIN, 14));
             txtVentajasPremium.setAlignmentX(Component.CENTER_ALIGNMENT);
-
             mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
             mainPanel.add(txtVentajasPremium);
         }
 
-        mainPanel.add(Box.createRigidArea(new Dimension(0, 20)));
         mainPanel.add(buttonPanel);
-
-        mainPanel.revalidate();
-        mainPanel.repaint();
+        getContentPane().add(mainPanel);
     }
 
-    private void suscribirse(ActionEvent e) {
-        int respuesta = JOptionPane.showConfirmDialog(this,
-            "¿Deseas suscribirte al plan Premium por " + precio + "€?",
-            "Confirmar suscripción",
-            JOptionPane.YES_NO_OPTION);
-
-        if (respuesta == JOptionPane.YES_OPTION) {
-            // Lógica real de suscripción
-            //Controlador.INSTANCE.activarPremium(); // Suponiendo que existe
-            esPremium = true;
-
+    private void exportarPDF() {
+        try {
+            // Crear un FileChooser para que el usuario elija dónde guardar el PDF
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setDialogTitle("Guardar PDF");
+            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+            fileChooser.setFileFilter(new FileNameExtensionFilter("PDF files (*.pdf)", "pdf"));
+            
+            int userSelection = fileChooser.showSaveDialog(this);
+            
+            if (userSelection == JFileChooser.APPROVE_OPTION) {
+                String rutaArchivo = fileChooser.getSelectedFile().getAbsolutePath();
+                if (!rutaArchivo.toLowerCase().endsWith(".pdf")) {
+                    rutaArchivo += ".pdf";
+                }
+                
+                //TODO DEBERIA FUNCIONAR
+                List<Mensaje> mensajes = Controlador.INSTANCE.obtenerChat(receptor);
+                
+                GeneradorPDF.exportarChat(receptor, mensajes, rutaArchivo);
+                
+                JOptionPane.showMessageDialog(this,
+                    "PDF exportado correctamente",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this,
-                "¡Bienvenido a Premium!",
-                "Suscripción completada",
-                JOptionPane.INFORMATION_MESSAGE);
-
-            actualizarUIaPremium();
+                "Error al exportar el PDF: " + e.getMessage(),
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
         }
     }
 
@@ -181,64 +163,31 @@ public class Premium extends JFrame {
             "¿Estás seguro de que deseas anular tu suscripción Premium?",
             "Confirmar anulación",
             JOptionPane.YES_NO_OPTION);
-
+            
         if (respuesta == JOptionPane.YES_OPTION) {
-            // Lógica real de anulación
-            //Controlador.INSTANCE.anularPremium(); // Suponiendo que existe
-            esPremium = false;
-
+            // Implementar lógica de anulación
+        	Controlador.INSTANCE.anularPremium();
             JOptionPane.showMessageDialog(this,
-                "Suscripción Premium anulada.",
+                "Suscripción Premium anulada",
                 "Anulación completada",
                 JOptionPane.INFORMATION_MESSAGE);
-
-            actualizarUIaNoPremium();
+            dispose();
         }
     }
-    
-    private void exportarPDF() {
-        try {
-            JFileChooser fileChooser = new JFileChooser();
-            fileChooser.setDialogTitle("Guardar PDF");
-            fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-            fileChooser.setFileFilter(new javax.swing.filechooser.FileNameExtensionFilter("PDF files (*.pdf)", "pdf"));
 
-            int seleccion = fileChooser.showSaveDialog(this);
-
-            if (seleccion == JFileChooser.APPROVE_OPTION) {
-                String ruta = fileChooser.getSelectedFile().getAbsolutePath();
-                if (!ruta.toLowerCase().endsWith(".pdf")) {
-                    ruta += ".pdf";
-                }
-
-                // Obtener el chat del receptor
-                java.util.List<Mensaje> mensajes = Controlador.INSTANCE.obtenerChat(receptor);
-
-                // Exportar usando el exportador de PDF
-                GeneradorPDF.exportarChat(receptor, mensajes, ruta);
-
-                JOptionPane.showMessageDialog(this,
-                    "PDF exportado correctamente.",
-                    "Éxito",
-                    JOptionPane.INFORMATION_MESSAGE);
-            }
-
-        } catch (Exception e) {
+    private void suscribirse() {
+        int respuesta = JOptionPane.showConfirmDialog(this,
+            "¿Deseas suscribirte al plan Premium por " + precio + "€?",
+            "Confirmar suscripción",
+            JOptionPane.YES_NO_OPTION);
+            
+        if (respuesta == JOptionPane.YES_OPTION) {
+            Controlador.INSTANCE.activarPremium();
             JOptionPane.showMessageDialog(this,
-                "Error al exportar el PDF: " + e.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
-            e.printStackTrace();
+                "¡Bienvenido a Premium!",
+                "Suscripción completada",
+                JOptionPane.INFORMATION_MESSAGE);
+            dispose();
         }
-    }
-
-    
-    private void actualizarUIaPremium() {
-        inicializarInterfaz(); // reconstruye con esPremium = true
-    }
-
-    private void actualizarUIaNoPremium() {
-        inicializarInterfaz(); // reconstruye con esPremium = false
     }
 }
-

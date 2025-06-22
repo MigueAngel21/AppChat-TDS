@@ -11,7 +11,7 @@ import umu.tds.apps.AppChat.Usuario;
 import umu.tds.apps.AppChat.Mensaje;
 
 
-public class RecientesCellRenderer extends JPanel implements ListCellRenderer<Object> {
+public class RecientesCellRenderer extends JPanel implements ListCellRenderer<Usuario> {
     private static final long serialVersionUID = 1L;
 
     private JLabel userLabel;
@@ -23,9 +23,9 @@ public class RecientesCellRenderer extends JPanel implements ListCellRenderer<Ob
     public RecientesCellRenderer() {
         setLayout(new FlowLayout());
 
-        userLabel = new JLabel("Nombre");
+        userLabel = new JLabel();
         imageLabel = new JLabel();
-        estadoLabel = new JTextField("Último mensaje...");
+        estadoLabel = new JTextField();
         estadoLabel.setEditable(false);
         estadoLabel.setBackground(null);
 
@@ -48,15 +48,15 @@ public class RecientesCellRenderer extends JPanel implements ListCellRenderer<Ob
 
     //cambiar esta funcion por la del github
     @Override
-    public Component getListCellRendererComponent(JList<? extends Object> list,
-            Object value, int index, boolean isSelected, boolean cellHasFocus) {
-    	/*
+    public Component getListCellRendererComponent(JList<? extends Usuario> list,
+            Usuario usuario, int index, boolean isSelected, boolean cellHasFocus) {
+
     	 Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
 
          String nombre = usuarioActual.existeContacto(usuario.getTelefono());
          userLabel.setText(nombre);
 
-         ImageIcon imageIcon = new ImageIcon(VentanaMain.class.getResource(usuario.getImagen()));
+         ImageIcon imageIcon = new ImageIcon(VentanaMain.class.getResource(Usuario.IMG));
          imageLabel.setIcon(imageIcon);
          Mensaje m = usuarioActual.getUltimoMensaje(usuario);
          estadoLabel.setText(m != null ? m.getTexto() : "");
@@ -70,7 +70,7 @@ public class RecientesCellRenderer extends JPanel implements ListCellRenderer<Ob
              panel.setBackground(list.getBackground());
              rightPanel.setBackground(list.getBackground());
          }
-         */
+         
          return this;
     }
 }

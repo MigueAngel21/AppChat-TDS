@@ -60,7 +60,7 @@ public class VentanaGrupos extends JFrame {
 		}
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		//cambiar icono de la ventana
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaGrupos.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(420, 160, 716, 553);
 		this.setTitle("UNICORNCHAT");
 		this.setVisible(true);
@@ -81,34 +81,38 @@ public class VentanaGrupos extends JFrame {
 		panelContactos.setSize(new Dimension(150, 0));
 		panelContactos.setLayout(new BoxLayout(panelContactos, BoxLayout.X_AXIS));
 		
-		DefaultListModel<String> modelo = new DefaultListModel<>();
-		DefaultListModel<String> modelo2 = new DefaultListModel<>();
+		DefaultListModel<Contacto> modelo = new DefaultListModel<>();
+		DefaultListModel<Contacto> modelo2 = new DefaultListModel<>();
 		
-		JList<String> lista2 = new JList<>(modelo2);
-		// lista2.setCellRenderer(new ContactoCellRenderer()); // Comentado: requiere clase externa
+		JList<Contacto> lista2 = new JList<>(modelo2);
+		lista2.setCellRenderer(new ContactoCellRenderer()); 
 		lista2.setModel(modelo2);
-
-		// Simulación de lista de contactos sin persistencia
-		modelo.addElement("Contacto 1");
-		modelo.addElement("Contacto 2");
-		modelo.addElement("Grupo de amigos");
-
+		
+		Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
+		List<Contacto> contactos = usuarioActual.getContactos();
+		
 		JPanel panelGrupo = new JPanel();
-
-		JList<String> lista = new JList<>(modelo);
-		// lista.setCellRenderer(new ContactoCellRenderer()); // Comentado: requiere clase externa
-
+		contactos.forEach(modelo::addElement);
+	
+		// Crear el JList basado en el modelo
+		JList<Contacto> lista = new JList<>(modelo);
+		lista.setCellRenderer(new ContactoCellRenderer());
 		lista.addListSelectionListener(new ListSelectionListener() {
+			
+			@Override
 			public void valueChanged(ListSelectionEvent e) {
-				String seleccionado = lista.getSelectedValue();
-				if (seleccionado != null && seleccionado.contains("Grupo")) {
+				// TODO Auto-generated method stub
+				//modelo2.clear();
+				Contacto contactoSeleccionado = lista.getSelectedValue();
+				if (contactoSeleccionado instanceof Grupo) {
+					Grupo g = (Grupo) contactoSeleccionado;
 					modelo2.clear();
-					modelo2.addElement("Miembro A");
-					modelo2.addElement("Miembro B");
-
-					grupo = seleccionado;
+					List<Contacto> lista = g.getMiembros();
+					lista.forEach(modelo2::addElement);
+					grupo = g.getNombre();
 					TitledBorder titulo = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), grupo);
 					panelGrupo.setBorder(titulo);
+
 				}
 			}
 		});
@@ -124,10 +128,12 @@ public class VentanaGrupos extends JFrame {
 		JButton btnDerecha = new JButton(">>>");
 		btnDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String seleccionado = lista.getSelectedValue();
-				if (seleccionado != null && !seleccionado.contains("Grupo")) {
-					modelo.removeElement(seleccionado);
-					modelo2.addElement(seleccionado);
+				ContactoIndividual seleccionado = (ContactoIndividual) lista.getSelectedValue();
+				if (seleccionado != null) {
+					if (!usuarioActual.esMiembroGrupo(seleccionado.getNombre(), grupo)) {
+						modelo.removeElement(seleccionado);
+						modelo2.addElement(seleccionado);
+					}
 				}
 			}
 		});
@@ -162,43 +168,63 @@ public class VentanaGrupos extends JFrame {
 
 		JButton btnAddContactoGrp = new JButton("Añadir o Modificar Grupo");
 		btnAddContactoGrp.addActionListener(new ActionListener() {
+			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (grupo.equals("Añadir grupo")) {
-					List<String> listaGrupo = new LinkedList<>();
+					List<Contacto> listaGrupo = new LinkedList<Contacto>();
 					for (int i = 0; i < modelo2.size(); i++) {
 						listaGrupo.add(modelo2.get(i));
 					}
-
-					if (listaGrupo.isEmpty()) {
+					
+					if(listaGrupo.isEmpty()) {
 						JOptionPane.showMessageDialog(VentanaGrupos.this, "El grupo está vacío", "Error",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-
+					
 					String nombreGrupo = JOptionPane.showInputDialog(VentanaGrupos.this, "Introduce el nombre del grupo:",
 							"Crear grupo", JOptionPane.PLAIN_MESSAGE);
-
-					if (nombreGrupo == null || nombreGrupo.isEmpty()) {
+					
+					if (nombreGrupo != null && nombreGrupo.isEmpty()) {
 						JOptionPane.showMessageDialog(VentanaGrupos.this, "Introduce un nombre para el grupo", "Error",
 								JOptionPane.ERROR_MESSAGE);
 						return;
 					}
-
-					// Comentado: validaciones con Controlador
-					// if (Controlador.INSTANCE.existeGrupo(nombreGrupo)) {
-					// 	JOptionPane.showMessageDialog(...);
-					// 	return;
-					// }
-
-					JOptionPane.showMessageDialog(VentanaGrupos.this,
-							"¡Has creado el grupo " + nombreGrupo + " correctamente!",
-							"Grupo creado", JOptionPane.INFORMATION_MESSAGE);
-					grupo = nombreGrupo;
-					modelo2.clear();
+					
+					boolean existeGrupo = Controlador.INSTANCE.existeGrupo(nombreGrupo);
+					
+					if (nombreGrupo != null && existeGrupo) {
+						JOptionPane.showMessageDialog(VentanaGrupos.this, "El nombre introducido ya existe para otro grupo", "Error",
+								JOptionPane.ERROR_MESSAGE);
+						return;
+					}
+					
+					
+					if (nombreGrupo != null && !nombreGrupo.isEmpty() && !existeGrupo) {
+						
+						
+						String imagenGrupo = JOptionPane.showInputDialog(VentanaGrupos.this, "Introduce la imagen del grupo (opcional):",
+								"Insertar imagen", JOptionPane.PLAIN_MESSAGE);
+						
+						Controlador.INSTANCE.crearGrupo(nombreGrupo, listaGrupo, imagenGrupo);
+						JOptionPane.showMessageDialog(VentanaGrupos.this, "¡Has creado el grupo " + nombreGrupo + " correctamente!", "Grupo creado", JOptionPane.INFORMATION_MESSAGE);
+						modelo2.clear();
+						modelo.clear();
+						List<Contacto> lista = Controlador.INSTANCE.recuperarTodosContactos();
+						lista.forEach(modelo::addElement);
+						
+					}
 				} else {
-					JOptionPane.showMessageDialog(VentanaGrupos.this,
-							"Grupo '" + grupo + "' modificado correctamente.",
-							"Grupo modificado", JOptionPane.INFORMATION_MESSAGE);
+					List<Contacto> listaGrupo = new LinkedList<Contacto>();
+					for (int i = 0; i < modelo2.size(); i++) {
+						listaGrupo.add(modelo2.get(i));
+					}
+					boolean res = Controlador.INSTANCE.modificarGrupo(listaGrupo, grupo);
+					if (res) {
+						JOptionPane.showMessageDialog(btnAddContactoGrp.getParent().getParent(), "¡Has modificado el grupo correctamente!", "Grupo modificado", JOptionPane.PLAIN_MESSAGE);
+					} else {
+						JOptionPane.showMessageDialog(btnAddContactoGrp.getParent().getParent(), "No se ha modificado el grupo correctamente", "Error", JOptionPane.ERROR_MESSAGE);
+					}
 				}
 			}
 		});

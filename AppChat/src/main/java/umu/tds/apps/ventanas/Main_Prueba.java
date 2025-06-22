@@ -1,37 +1,94 @@
 package umu.tds.apps.ventanas;
 
-import java.awt.EventQueue;
-import java.awt.Toolkit;
 
-import javax.swing.*;
-import javax.swing.event.*;
 import java.awt.*;
-import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+
+import tds.BubbleText;
+import umu.tds.apps.AppChat.*;
+import umu.tds.apps.Controlador.Controlador;
+
+import java.awt.Toolkit;
+import java.awt.event.ActionListener;
+import java.util.LinkedList;
+import java.util.List;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.net.URL;
-import java.util.*;
 
 public class Main_Prueba extends JFrame {
 
-
+	/**
+	 * 
+	 */
 	private static final long serialVersionUID = 1L;
-
 	private JTextField textMensaje;
 	private boolean menuEmojiAbierto = false;
-	// private Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
+	private Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
 	private String receptor = null;
-	private JComboBox<String> comboBox;
+	private JComboBox<String> comboBox = new JComboBox<String>();
 
-	private JPanel panelChatRecientes;
-	private JPanel panelChatActual;
-	private JPanel panelMensajes;
-	private JPanel panelTxtMensaje;
-	private JPanel panelMensajesInterno;
-	private JScrollPane scroll;
-	private DefaultListModel/*<Usuario>*/ modelo;
-	private JList/*<Usuario>*/ list;
-	private JLabel lblNombreusuario;
-	private JLabel labelImagen;
-	private Component horizontalGlue;
+	private void actualizarComboBox() {
+		List<String> array = new LinkedList<String>();
+		List<Contacto> listaContactos = usuarioActual.getContactos();
+		listaContactos.stream().map(c -> c.getNombre()).forEach(n -> array.add(n));
+		array.add("Nuevo teléfono");
+		comboBox.setModel(new DefaultComboBoxModel<String>(array.toArray(new String[0])));
+	}
+
+	protected void actualizarPanelChat(JScrollPane scroll, JPanel panelChatActual, String usuarioSeleccionado) {
+		List<Mensaje> listaMensajes = Controlador.INSTANCE.obtenerChat(usuarioSeleccionado);
+		panelChatActual.removeAll();
+		for (Mensaje mensaje : listaMensajes) {
+			if (mensaje.getEmoticono() != -1) {
+				if (mensaje.getEmisor().equals(usuarioActual))
+					panelChatActual.add(new BubbleText(panelChatActual, mensaje.getEmoticono(), Color.GREEN,
+							usuarioActual.getUsuario(), BubbleText.SENT, 12));
+				else
+					panelChatActual.add(new BubbleText(panelChatActual, mensaje.getEmoticono(), Color.GRAY, receptor,
+							BubbleText.RECEIVED, 12));
+			}
+
+			else {
+				if (mensaje.getEmisor().equals(usuarioActual))
+					panelChatActual.add(new BubbleText(panelChatActual, mensaje.getTexto(), Color.GREEN,
+							usuarioActual.getUsuario(), BubbleText.SENT));
+				else
+					panelChatActual.add(new BubbleText(panelChatActual, mensaje.getTexto(), Color.GRAY, receptor,
+							BubbleText.RECEIVED));
+			}
+		}
+
+		panelChatActual.revalidate();
+		panelChatActual.repaint();
+		SwingUtilities.invokeLater(() -> {
+			JScrollBar verticalScrollBar = scroll.getVerticalScrollBar();
+			verticalScrollBar.setValue(verticalScrollBar.getMaximum());
+		});
+	};
+
+	protected void actualizarChatRecientes(DefaultListModel<Usuario> modelo, JPanel panelChatRecientes,
+			JList<Usuario> list) {
+		List<Mensaje> mensajes = usuarioActual.obtenerTodosUltimosMensajes();
+		modelo.clear();
+		for (Mensaje m : mensajes) {
+			Usuario emisor = m.getEmisor();
+			Usuario receptor = m.getReceptor();
+			if (emisor.equals(usuarioActual))
+				modelo.addElement(receptor);
+			else
+				modelo.addElement(emisor);
+		}
+
+		list.setModel(modelo);
+		panelChatRecientes.revalidate();
+		panelChatRecientes.repaint();
+	}
 
 	public Main_Prueba() {
 		try {
@@ -40,284 +97,360 @@ public class Main_Prueba extends JFrame {
                 | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
-		setTitle("UnicornChat");
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		setTitle("UNICORNCHAT");
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_Prueba.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(420, 160, 716, 553);
-		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setLocationRelativeTo(null);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
-
-		initComponentes();
-		eventos();
-		this.setVisible(true);
-	}
-
-	private void initComponentes() {
+		setLocationRelativeTo(null);
 		JPanel botonera = new JPanel();
 		getContentPane().add(botonera, BorderLayout.NORTH);
+
 		botonera.setLayout(new BoxLayout(botonera, BoxLayout.X_AXIS));
 
-		panelChatRecientes = new JPanel(new BorderLayout());
-		panelChatActual = new JPanel(new BorderLayout());
-		panelMensajes = new JPanel();
-		panelTxtMensaje = new JPanel();
-		panelMensajesInterno = new JPanel();
-		scroll = new JScrollPane(panelMensajesInterno);
-
+		JPanel panelChatRecientes = new JPanel();
+		JPanel panelChatActual = new JPanel();
+		JPanel panelMensajes = new JPanel();
+		JPanel panelTxtMensaje = new JPanel();
+		JPanel panelMensajesInterno = new JPanel();
+		JScrollPane scroll = new JScrollPane(panelMensajesInterno);
 		getContentPane().add(panelChatRecientes, BorderLayout.WEST);
-		getContentPane().add(panelChatActual, BorderLayout.CENTER);
+		panelChatRecientes.setLayout(new BorderLayout(0, 0)); ////
+		actualizarComboBox();
+		comboBox.addActionListener(new ActionListener() {
 
-		comboBox = new JComboBox<>();
-		// actualizarComboBox();
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				receptor = (String) comboBox.getSelectedItem();
+			}
+		});
+		comboBox.setEditable(false);
 		botonera.add(comboBox);
 
-		modelo = new DefaultListModel();
-		list = new JList(modelo);
-		// list.setCellRenderer(new RecientesCellRenderer());
-		panelChatRecientes.add(new JScrollPane(list), BorderLayout.CENTER);
-
-		panelMensajesInterno.setLayout(new BoxLayout(panelMensajesInterno, BoxLayout.Y_AXIS));
-		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		scroll.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.X_AXIS));
-		panelMensajes.add(scroll);
-
-		panelChatActual.add(panelMensajes, BorderLayout.CENTER);
-		panelChatActual.add(panelTxtMensaje, BorderLayout.SOUTH);
-		panelChatActual.setPreferredSize(new Dimension(400, 700));
-		panelChatActual.setBackground(Color.WHITE);
-
-		panelTxtMensaje.setLayout(new BoxLayout(panelTxtMensaje, BoxLayout.X_AXIS));
-		crearEmojis(panelTxtMensaje);
-
-		textMensaje = new JTextField();
-		panelTxtMensaje.add(textMensaje);
-		textMensaje.setColumns(10);
-		
-		JButton btnEnviarMensaje = new JButton();
-		btnEnviarMensaje.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/avion-enviar-whatsapp.png")));
-		btnEnviarMensaje.setText("Enviar");
-		panelTxtMensaje.add(btnEnviarMensaje);
-
-		btnEnviarMensaje.addActionListener(e -> {
-			/*
-			if (receptor != null && !textMensaje.getText().isEmpty()) {
-				Controlador.INSTANCE.enviarMensaje(receptor, textMensaje.getText());
-				textMensaje.setText("");
-				actualizarChatRecientes();
-				actualizarPanelChat();	
-			} else {
-				JOptionPane.showMessageDialog(this, "Selecciona un receptor válido.", "Error", JOptionPane.ERROR_MESSAGE);
-			}
-			*/
-		});
-
-		JButton btnEnviarArriba = new JButton("");
+		DefaultListModel<Usuario> modelo = new DefaultListModel<>();
+		JList<Usuario> list = new JList<Usuario>();
+		list.setCellRenderer(new RecientesCellRenderer());
+		JButton btnEnviarArriba = new JButton();
 		btnEnviarArriba.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/enviar-mensaje-avionPapel.png")));
-		botonera.add(btnEnviarArriba);
-
+		Main_Prueba aux = this;
 		btnEnviarArriba.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				/*
-				if (receptor == null) return;
 
-				if (receptor.equals("Nuevo teléfono") || usuarioActual.existeGrupo(receptor)) {
-					VentanaMensaje ventana = new VentanaMensaje(receptor, Main_Prueba.this, panelMensajesInterno, scroll, modelo, panelChatRecientes, list);
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (receptor == "Nuevo teléfono" || usuarioActual.existeGrupo(receptor)) {
+					VentanaMensaje ventana = new VentanaMensaje(receptor, aux, panelMensajesInterno, scroll, modelo,
+							panelChatRecientes, list);
 					ventana.setVisible(true);
 				} else {
 					actualizarPanelChat(scroll, panelMensajesInterno, receptor);
 				}
-				*/
-			
 			}
 		});
 
-		JButton botonBuscar = new JButton("");
-        botonBuscar.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/apps/resources/lupa-buscar.png")));
-        botonBuscar.addActionListener(ev -> {
-            //this.setVisible(false);
-            VentanaBuscar2 ventanaBuscar2 = new VentanaBuscar2();
-            ventanaBuscar2.setVisible(true);
+		Component horizontalGlue_3_1 = Box.createHorizontalGlue();
+		botonera.add(horizontalGlue_3_1);
+		botonera.add(btnEnviarArriba);
 
-        });
-        botonera.add(botonBuscar);
+		Component horizontalGlue_3 = Box.createHorizontalGlue();
+		botonera.add(horizontalGlue_3);
+
+		JButton btnBuscarMensaje = new JButton("");
+		btnBuscarMensaje.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/lupa-buscar.png")));
+		btnBuscarMensaje.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaBuscar2 ventana2 = new VentanaBuscar2();
+				ventana2.setLocationRelativeTo(null);
+				ventana2.setVisible(true);
+			}
+		});
 		
+		JButton btnAddTelefono = new JButton("");
+		btnAddTelefono.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		btnAddTelefono.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/mas.png")));
+		btnAddTelefono.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (list.getSelectedValue() != null) {
+					if (comprobarExisteContacto(list)) {
+						String telefono = list.getSelectedValue().getTelefono();
+						String nombre = JOptionPane.showInputDialog(aux, "Introduce el nombre de tu nuevo contacto " + telefono, null, JOptionPane.WARNING_MESSAGE);
+						if (nombre != null) {
+							int añadido = Controlador.INSTANCE.addContactoIndividual(nombre, telefono);
+							if (añadido == 1) {
+								JOptionPane.showMessageDialog(Main_Prueba.this,
+										"No existe un usuario asociado al teléfono introducido", "Error",
+										JOptionPane.ERROR_MESSAGE);
+							} else if (añadido == 2) {
+								JOptionPane.showMessageDialog(Main_Prueba.this,
+										"El teléfono introducido ya lo tienes agregado como contacto", "Error",
+										JOptionPane.ERROR_MESSAGE);
+	
+							} else if (añadido == 3) {
+								JOptionPane.showMessageDialog(Main_Prueba.this, "El teléfono introducido es tu teléfono",
+										"Error", JOptionPane.ERROR_MESSAGE);
+	
+							} else if (añadido == 4) {
+								JOptionPane.showMessageDialog(Main_Prueba.this, "El nombre introducido ya existe en tu lista de contactos",
+										"Error", JOptionPane.ERROR_MESSAGE);
+							} else {
+								actualizarChatRecientes(modelo, panelChatRecientes, list);
+								actualizarComboBox();
+								actualizarPanelChat(scroll, panelMensajesInterno, nombre);
+							}
+						}
+					} else {
+						JOptionPane.showMessageDialog(aux, "Selecciona un chat no agregado a Contactos", "Error", JOptionPane.ERROR_MESSAGE);
+					}
+				}
+			}
+
+			private boolean comprobarExisteContacto(JList<Usuario> list) {
+				return Controlador.INSTANCE.existeContacto(list.getSelectedValue().getTelefono()).equals(list.getSelectedValue().getTelefono());
+			}
+		});
+		botonera.add(btnAddTelefono);
+		
+		Component horizontalGlue_2_1 = Box.createHorizontalGlue();
+		botonera.add(horizontalGlue_2_1);
+		botonera.add(btnBuscarMensaje);
+
+		Component horizontalGlue_2 = Box.createHorizontalGlue();
+		botonera.add(horizontalGlue_2);
+
 		JButton btnContactos = new JButton("Contactos");
-        btnContactos.setIcon(new ImageIcon(VentanaMain.class.getResource("/umu/tds/apps/resources/imagen-contactos.png")));
-        btnContactos.addActionListener(new ActionListener() {
+		btnContactos.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/imagen-contactos.png")));
+		btnContactos.addActionListener(new ActionListener() {
 
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // TODO Auto-generated method stub
-            	VentanaGrupos ventanaGrupos = new VentanaGrupos();
-            	ventanaGrupos.setVisible(true);
-                /*
-            	VentanaContactos ventanaContactos = new VentanaContactos();
-                ventanaContactos.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent e) {
-                        actualizarComboBox();
-                    }
-                });
-                ventanaContactos.setVisible(true);
-                */
-            }
-        });
-        botonera.add(btnContactos);
-		
-		
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				VentanaGrupos ventanaGrupos = new VentanaGrupos();
+				ventanaGrupos.addWindowListener(new WindowAdapter() {
+					@Override
+					public void windowClosed(WindowEvent e) {
+						actualizarComboBox();
+					}
+				});
+				ventanaGrupos.setVisible(true);
+			}
+		});
+		botonera.add(btnContactos);
+
+		Component horizontalGlue_1 = Box.createHorizontalGlue();
+		botonera.add(horizontalGlue_1);
+
 		JButton btnPremium = new JButton("Premium");
 		btnPremium.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/icono-premium.png")));
 		botonera.add(btnPremium);
 
+		// GESTION VENTANA PREMIUM
 		btnPremium.addActionListener(e -> {
-			/*
-			Premium ventana = new Premium(this, usuarioActual.esPremium(), receptor);
-			ventana.setVisible(true);
-			*/
-			Premium ventanaPremium = new Premium();
+			Premium ventanaPremium = new Premium(Main_Prueba.this,
+					Controlador.INSTANCE.getUsuarioActual().isPremium(), receptor);
 			ventanaPremium.setVisible(true);
+
 		});
-		
-		horizontalGlue = Box.createHorizontalGlue();
+
+		Component horizontalGlue = Box.createHorizontalGlue();
 		botonera.add(horizontalGlue);
 
-		lblNombreusuario = new JLabel("Usuario"); // usuarioActual.getNombre()
+		JLabel lblNombreusuario = new JLabel(Controlador.INSTANCE.getUsuarioActual().getUsuario());
+		Color miColor = new Color(238, 202, 36);
+
 		botonera.add(lblNombreusuario);
 
-		labelImagen = new JLabel();
-		// labelImagen.setIcon(new ImageIcon(getClass().getResource(usuarioActual.getImagen())));
-		labelImagen.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/imagenperfil1.png")));
-		botonera.add(labelImagen);
-
-		/*
 		Timer timer = new Timer(1800, e -> {
-			lblNombreusuario.setForeground(usuarioActual.esPremium() ? new Color(238, 202, 36) : Color.BLACK);
+			if (Controlador.INSTANCE.getUsuarioActual().isPremium())
+				lblNombreusuario.setForeground(miColor);
+			else
+				lblNombreusuario.setForeground(Color.BLACK);
+
+			lblNombreusuario.revalidate();
+			lblNombreusuario.repaint();
 		});
 		timer.start();
-		*/
-	}
 
-	private void eventos() {
-		comboBox.addActionListener(e -> receptor = (String) comboBox.getSelectedItem());
-
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		list.addListSelectionListener(e -> {
-			/*
-			if (!e.getValueIsAdjusting() && list.getSelectedValue() != null) {
-				receptor = usuarioActual.existeContacto(list.getSelectedValue().getTelefono());
-				actualizarPanelChat();
-			}
-			*/
-		});
-
+		JLabel labelImagen = new JLabel("");
+		Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
+		labelImagen.setIcon(new ImageIcon(Main_Prueba.class.getResource(Usuario.IMG)));//usuarioActual.getImagen()
+		botonera.add(labelImagen);
 		labelImagen.addMouseListener(new MouseAdapter() {
 			@Override
+
 			public void mouseClicked(MouseEvent e) {
-				/*
-				String nuevaURL = JOptionPane.showInputDialog(Main_Prueba.this, "Introduce la URL de la nueva imagen:", "Cambiar imagen de Usuario", JOptionPane.PLAIN_MESSAGE);
-				if (nuevaURL != null && !nuevaURL.isEmpty()) {
+
+				String nuevaURL = JOptionPane.showInputDialog(Main_Prueba.this, "Introduce la URL de la nueva imagen:",
+						"Cambiar imagen de Usuario", JOptionPane.PLAIN_MESSAGE);
+
+				if (nuevaURL == null)
+					return;
+				
+				if (nuevaURL != null && nuevaURL.isEmpty()) {
+					JOptionPane.showMessageDialog(Main_Prueba.this, "Introduce una URL no vacía.", "Error",
+							JOptionPane.ERROR_MESSAGE);
+					return;
+				}
+
+				else {
 					try {
 						URL recurso = getClass().getResource(nuevaURL);
 						if (recurso != null) {
 							ImageIcon icono = new ImageIcon(recurso);
-							if (Controlador.INSTANCE.cambiarImagenUsuario(nuevaURL)) {
+							if (icono.getIconWidth() > 0 && icono.getIconHeight() > 0
+									&& Controlador.INSTANCE.cambiarImagenUsuario(nuevaURL)) {
 								labelImagen.setIcon(icono);
+							} else {
+								JOptionPane.showMessageDialog(Main_Prueba.this,
+										"Error al cargar la imagen. URL no válida.", "Error",
+										JOptionPane.ERROR_MESSAGE);
 							}
 						} else {
-							JOptionPane.showMessageDialog(Main_Prueba.this, "URL no válida.", "Error", JOptionPane.ERROR_MESSAGE);
+							JOptionPane.showMessageDialog(Main_Prueba.this,
+									"El recurso no se encontró. Verifica que la ruta sea correcta.", "Error",
+									JOptionPane.ERROR_MESSAGE);
 						}
 					} catch (Exception ex) {
-						JOptionPane.showMessageDialog(Main_Prueba.this, "Error al cargar la imagen.", "Error", JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(Main_Prueba.this, "Error al cargar la imagen. URL no válida.",
+								"Error", JOptionPane.ERROR_MESSAGE);
 					}
 				}
-				*/
 			}
 		});
 
-		// actualizarChatRecientes();
-	}
+		actualizarChatRecientes(modelo, panelChatRecientes, list);
+		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		list.addListSelectionListener(new ListSelectionListener() {
 
-	private void actualizarComboBox() {
-		/*
-		List<String> contactos = new LinkedList<>();
-		usuarioActual.getListaContactos().forEach(c -> contactos.add(c.getNombre()));
-		contactos.add("Nuevo teléfono");
-		comboBox.setModel(new DefaultComboBoxModel<>(contactos.toArray(new String[0])));
-		*/
-	}
-
-	private void actualizarPanelChat() {
-		/*
-		List<Mensaje> mensajes = Controlador.INSTANCE.obtenerChat(receptor);
-		panelMensajesInterno.removeAll();
-
-		for (Mensaje m : mensajes) {
-			Color color = m.getEmisor().equals(usuarioActual) ? Color.GREEN : Color.GRAY;
-			String nombre = m.getEmisor().equals(usuarioActual) ? usuarioActual.getNombre() : receptor;
-			if (m.getEmoji() != -1) {
-				panelMensajesInterno.add(new BubbleText(panelMensajesInterno, m.getEmoji(), color, nombre, m.getEmisor().equals(usuarioActual) ? BubbleText.SENT : BubbleText.RECEIVED, 12));
-			} else {
-				panelMensajesInterno.add(new BubbleText(panelMensajesInterno, m.getTexto(), color, nombre, m.getEmisor().equals(usuarioActual) ? BubbleText.SENT : BubbleText.RECEIVED));
+			@Override
+			public void valueChanged(ListSelectionEvent e) {
+				if (list.getSelectedValue() != null) {
+					receptor = usuarioActual.existeContacto(list.getSelectedValue().getTelefono());
+				}
+				actualizarPanelChat(scroll, panelMensajesInterno, receptor);
 			}
-		}
+		});
+		panelChatRecientes.add(new JScrollPane(list));
+		panelTxtMensaje.setBackground(Color.GREEN);
+		panelChatActual.setLayout(new BorderLayout(0, 0));
+		panelChatActual.add(panelMensajes, BorderLayout.CENTER);
+		panelChatActual.add(panelTxtMensaje, BorderLayout.SOUTH);
+		getContentPane().add(panelChatActual, BorderLayout.CENTER);
+		panelChatActual.setSize(400, 700);
+		panelChatActual.setMinimumSize(new Dimension(400, 700));
+		panelChatActual.setMaximumSize(new Dimension(400, 700));
+		panelChatActual.setPreferredSize(new Dimension(400, 700));
+		panelChatActual.setBackground(Color.WHITE);
 
-		panelMensajesInterno.revalidate();
-		panelMensajesInterno.repaint();
-		SwingUtilities.invokeLater(() -> scroll.getVerticalScrollBar().setValue(scroll.getVerticalScrollBar().getMaximum()));
-		*/
-	}
+		panelMensajesInterno.setLayout(new BoxLayout(panelMensajesInterno, BoxLayout.Y_AXIS));
 
-	private void actualizarChatRecientes() {
-		/*
-		modelo.clear();
-		List<Mensaje> ultimos = usuarioActual.obtenerTodosUltimosMensajes();
-		for (Mensaje m : ultimos) {
-			Usuario u = m.getEmisor().equals(usuarioActual) ? m.getReceptor() : m.getEmisor();
-			modelo.addElement(u);
-		}
-		*/
-	}
+		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		scroll.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		SwingUtilities.invokeLater(() -> {
+			JScrollBar verticalScrollBar = scroll.getVerticalScrollBar();
+			verticalScrollBar.setValue(verticalScrollBar.getMaximum());
+		});
+		panelMensajes.setLayout(new BoxLayout(panelMensajes, BoxLayout.X_AXIS));
+		panelMensajes.add(scroll);
+		panelTxtMensaje.setLayout(new BoxLayout(panelTxtMensaje, BoxLayout.X_AXIS));
 
-	private void crearEmojis(JPanel panel) {
+		// EMOJIS
 		JButton btnEmojis = new JButton("");
-		btnEmojis.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/emoticonos-texto.png")));
+		btnEmojis.setIcon(BubbleText.getEmoji(6));
 		btnEmojis.setPreferredSize(new Dimension(40, 21));
-		panel.add(btnEmojis);
+		btnEmojis.setMinimumSize(new Dimension(40, 21));
+		btnEmojis.setMaximumSize(new Dimension(40, 21));
+		panelTxtMensaje.add(btnEmojis);
 
 		JPopupMenu menuEmojis = new JPopupMenu();
-		JPanel panelEmojis = new JPanel(new GridLayout(2, 4, 3, 3));
+		JPanel panelEmojis = new JPanel(new GridLayout(2, 4, 3, 3)); // 2 filas, 4 columnas, gap de 2px
 		panelEmojis.setBackground(Color.WHITE);
+
 		menuEmojis.setBorder(BorderFactory.createLineBorder(Color.LIGHT_GRAY));
 		panelEmojis.setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
+		// Creamos los 8 botones de emojis
 		for (int i = 0; i < 8; i++) {
-			JButton emojiButton = new JButton("☺"); // BubbleText.getEmoji(i)
-			//emojiButton.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/emoticonos-texto.png")));
+			JButton emojiButton = new JButton(BubbleText.getEmoji(i));
 			emojiButton.setBackground(Color.WHITE);
 			emojiButton.setBorderPainted(false);
 			emojiButton.setFocusPainted(false);
-			int idx = i;
-			emojiButton.addActionListener(e -> {
-				/*
-				Controlador.INSTANCE.enviarMensaje(receptor, idx);
-				actualizarPanelChat();
-				actualizarChatRecientes();
-				menuEmojis.setVisible(false);
-				*/
+
+			final int emojiIndex = i;
+			emojiButton.addActionListener(new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+
+					Controlador.INSTANCE.enviarMensaje(receptor, emojiIndex);
+					actualizarPanelChat(scroll, panelMensajesInterno, receptor);
+					actualizarChatRecientes(modelo, panelChatRecientes, list);
+					menuEmojis.setVisible(false);
+					menuEmojiAbierto = false;
+				}
 			});
+
 			panelEmojis.add(emojiButton);
 		}
+
 		menuEmojis.add(panelEmojis);
-		btnEmojis.addActionListener(e -> {
-			if (menuEmojiAbierto) {
-				menuEmojis.setVisible(false);
-				menuEmojiAbierto = false;
-			} else {
-				menuEmojis.show(btnEmojis, 0, -menuEmojis.getPreferredSize().height);
-				menuEmojiAbierto = true;
+
+		// Manejo del Menu
+		btnEmojis.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (menuEmojiAbierto) {
+					menuEmojis.setVisible(false);
+					menuEmojiAbierto = false;
+				} else {
+					// Posicionamos el popup justo encima del botón de emojis
+					menuEmojis.show(btnEmojis, 0, -menuEmojis.getPreferredSize().height);
+					menuEmojiAbierto = true;
+				}
+			}
+		});
+
+		// Ajustar el tamaño de los botones de emojis
+		Dimension emojiButtonSize = new Dimension(40, 40);
+		for (Component c : panelEmojis.getComponents()) {
+			if (c instanceof JButton) {
+				JButton btn = (JButton) c;
+				btn.setPreferredSize(emojiButtonSize);
+				btn.setMinimumSize(emojiButtonSize);
+				btn.setMaximumSize(emojiButtonSize);
+			}
+		}
+
+		textMensaje = new JTextField();
+		textMensaje.setToolTipText("Escribe un mensaje...");
+		panelTxtMensaje.add(textMensaje);
+		textMensaje.setColumns(10);
+
+		JButton btnEnviarMensaje = new JButton();
+		btnEnviarMensaje.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/avion-enviar-whatsapp.png")));
+		panelTxtMensaje.add(btnEnviarMensaje);
+		btnEnviarMensaje.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (receptor != null) {
+					if (hayTexto()) {
+						String msg = textMensaje.getText();
+						Controlador.INSTANCE.enviarMensaje(receptor, msg);
+						actualizarChatRecientes(modelo, panelChatRecientes, list);
+						actualizarPanelChat(scroll, panelMensajesInterno, receptor);
+						textMensaje.setText("");
+					}
+				} else {
+					JOptionPane.showMessageDialog(btnEnviarMensaje.getParent().getParent(), "Selecciona un contacto o teléfono para enviar el mensaje", "Error", JOptionPane.ERROR_MESSAGE);
+				}
+			}
+
+			private boolean hayTexto() {
+				return textMensaje.getText().length() > 0;
 			}
 		});
 	}
-
 }

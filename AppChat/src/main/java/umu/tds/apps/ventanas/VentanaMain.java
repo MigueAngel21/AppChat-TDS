@@ -119,8 +119,8 @@ public class VentanaMain extends JFrame {
 		botonPremium.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				// this.setVisible(false);
-				Premium ventanaPremium = new Premium();
-				ventanaPremium.setVisible(true);
+				//Premium ventanaPremium = new Premium();
+				//ventanaPremium.setVisible(true);
 				
 			}
 		});

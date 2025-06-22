@@ -31,11 +31,11 @@ public class VentanaAddContacto extends JFrame {
 	private JTextField textNombre;
 	private JTextField textTelefono;
 
-	public VentanaAddContacto(DefaultListModel<String> modelo) { //cambiar el defaultlist por Contacto
+	public VentanaAddContacto(DefaultListModel<Contacto> modelo) { //cambiar el defaultlist por Contacto
 		initialize(modelo);
 	}
 
-	private void initialize(DefaultListModel<String> modelo) {
+	private void initialize(DefaultListModel<Contacto> modelo) {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
@@ -44,7 +44,7 @@ public class VentanaAddContacto extends JFrame {
 		}
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		//cambiar icono de la ventana
-		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaEjemplo.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAddContacto.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(420, 160, 716, 553);
 		this.setTitle("UNICORNCHAT");
 		this.setVisible(true);
@@ -115,9 +115,7 @@ public class VentanaAddContacto extends JFrame {
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				// ---- INICIO BLOQUE DE PERSISTENCIA (comentado para pruebas de UI) ----
-				/*
+				
 				int añadido = Controlador.INSTANCE.addContactoIndividual(textNombre.getText(), textTelefono.getText());
 
 				if (añadido == 1) {
@@ -141,17 +139,11 @@ public class VentanaAddContacto extends JFrame {
 					List<Contacto> lista = Controlador.INSTANCE.recuperarTodosContactos();
 					lista.forEach(modelo::addElement);
 					dispose();
-				}
-				*/
-				// ---- FIN BLOQUE DE PERSISTENCIA ----
+				}				
 
-				// Mensaje simulado para pruebas sin persistencia
-				JOptionPane.showMessageDialog(VentanaAddContacto.this,
-						"Simulación: Contacto añadido correctamente (sin persistencia)", "Información",
-						JOptionPane.INFORMATION_MESSAGE);
-				dispose();
 			}
 		});
+		
 		panelBotones.add(btnAceptar);
 
 		JButton btnCancelar = new JButton("Cancelar");

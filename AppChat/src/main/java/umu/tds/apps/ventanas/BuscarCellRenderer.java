@@ -3,13 +3,16 @@ package umu.tds.apps.ventanas;
 import javax.swing.JPanel;
 import javax.swing.ListCellRenderer;
 import javax.swing.border.LineBorder;
+
+import umu.tds.apps.AppChat.Mensaje;
+
 import javax.swing.JLabel;
 import javax.swing.JList;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.BorderLayout;
 
-public class BuscarCellRenderer extends JPanel implements ListCellRenderer<Object> {
+public class BuscarCellRenderer extends JPanel implements ListCellRenderer<Mensaje> {
 	private static final long serialVersionUID = 1L;
 
 	private final JPanel panelEmisorReceptor;
@@ -44,36 +47,14 @@ public class BuscarCellRenderer extends JPanel implements ListCellRenderer<Objec
 	}
 
 	@Override
-	public Component getListCellRendererComponent(JList<? extends Object> list, Object value, int index,
+	public Component getListCellRendererComponent(JList<? extends Mensaje> list, Mensaje mensaje, int index,
 			boolean isSelected, boolean cellHasFocus) {
 
-		// Simulación de renderizado sin persistencia
-		// Normalmente sería:
-		// Mensaje mensaje = (Mensaje) value;
-		// lblEmisor.setText(mensaje.getEmisor().getNombre());
-		// lblReceptor.setText(mensaje.getReceptor().getNombre());
-		// texto.setText(mensaje.getTexto());
-
-		// Versión temporal: renderiza un string plano como si fuera un mensaje simulado
-		if (value instanceof String) {
-			lblEmisor.setText("Emisor");
-			lblReceptor.setText("Receptor");
-			lblEmisor.setForeground(Color.BLACK);
-			lblReceptor.setForeground(Color.BLACK);
-			texto.setText((String) value);
-		} else {
-			lblEmisor.setText("?");
-			lblReceptor.setText("?");
-			texto.setText("Mensaje desconocido");
-		}
-
-		// Estilo si está seleccionado
-		if (isSelected) {
-			setBackground(new Color(220, 240, 255));
-		} else {
-			setBackground(Color.WHITE);
-		}
-		return this;
+		// Actualizar los valores de las etiquetas con los datos del mensaje
+		lblEmisor.setText(mensaje.getEmisor().getUsuario());
+		lblReceptor.setText(mensaje.getReceptor().getUsuario());
+		texto.setText(mensaje.getTexto());
+		return this; // Devolver el panel configurado
 	}
 }
 
