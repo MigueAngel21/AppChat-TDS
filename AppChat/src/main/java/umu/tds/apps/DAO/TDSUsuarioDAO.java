@@ -193,7 +193,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 			pr = true;
 		}
 		
-		Usuario usuario = new Usuario(nombre, password, telefono, LocalDate.parse(fechaNacimiento), saludo, imagen, pr, Double.valueOf(precio));
+		Usuario usuario = new Usuario(nombre, password, telefono, LocalDate.parse(fechaNacimiento), imagen, saludo, pr, Double.valueOf(precio));
 		usuario.setId(eUsuario.getId());
 		
 		PoolDAO.getInstancia().addObject(usuario.getId(), usuario);

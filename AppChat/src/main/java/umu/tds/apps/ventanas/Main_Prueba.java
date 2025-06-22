@@ -304,7 +304,7 @@ public class Main_Prueba extends JFrame {
 		 // Imagen de usuario
 		JLabel labelImagen = new JLabel("");
 		Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
-		labelImagen.setIcon(new ImageIcon(Main_Prueba.class.getResource(Usuario.IMG)));//Usuario.IMG
+		labelImagen.setIcon(new ImageIcon(Main_Prueba.class.getResource(usuarioActual.getImagen())));//Usuario.IMG
 		botonera.add(labelImagen);
 		labelImagen.addMouseListener(new MouseAdapter() {
 			@Override
@@ -325,6 +325,16 @@ public class Main_Prueba extends JFrame {
 
 				else {
 					try {
+						
+						ImageIcon icono = new ImageIcon(Main_Prueba.class.getResource(nuevaURL));
+						if (Controlador.INSTANCE.cambiarImagenUsuario(nuevaURL)) {
+							labelImagen.setIcon(icono);
+						} else {
+							JOptionPane.showMessageDialog(Main_Prueba.this,
+									"Error al cargar la imagen. URL no válida.", "Error",
+									JOptionPane.ERROR_MESSAGE);
+						}
+						/*
 						URL recurso = getClass().getResource(nuevaURL);
 						if (recurso != null) {
 							ImageIcon icono = new ImageIcon(recurso);
@@ -341,6 +351,7 @@ public class Main_Prueba extends JFrame {
 									"El recurso no se encontró. Verifica que la ruta sea correcta.", "Error",
 									JOptionPane.ERROR_MESSAGE);
 						}
+						*/
 					} catch (Exception ex) {
 						JOptionPane.showMessageDialog(Main_Prueba.this, "Error al cargar la imagen. URL no válida.",
 								"Error", JOptionPane.ERROR_MESSAGE);

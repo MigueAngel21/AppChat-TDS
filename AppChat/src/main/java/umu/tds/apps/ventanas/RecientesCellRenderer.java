@@ -66,7 +66,7 @@ public class RecientesCellRenderer extends JPanel implements ListCellRenderer<Us
          userLabel.setText(nombre);
 		
 		//Establece la imagen de perfil por defecto
-         ImageIcon imageIcon = new ImageIcon(RecientesCellRenderer.class.getResource(Usuario.IMG));//Usuario.IMG
+         ImageIcon imageIcon = new ImageIcon(RecientesCellRenderer.class.getResource(usuario.getImagen()));//Usuario.IMG
          imageLabel.setIcon(imageIcon);
         //Muestra el texto del último mensaje con ese contacto
          Mensaje m = usuarioActual.getUltimoMensaje(usuario);

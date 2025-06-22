@@ -45,8 +45,8 @@ public class Usuario {
 	}	
 	
 	//constructor para cuando descuento sea null
-	public Usuario(String usuario, String contraseña, String telefono, LocalDate fechaNacimiento, String imagen,
-			String saludo) {
+	public Usuario(String usuario, String contraseña, String telefono, LocalDate fechaNacimiento, String saludo,
+			String imagen) {
 		this.usuario = usuario;
 		this.password = contraseña;
 		this.telefono = telefono;
@@ -254,7 +254,8 @@ public class Usuario {
 				// Filtro de texto de mensaje
 				.filter(m -> mensaje.isEmpty() || m.getTexto().contains(mensaje))
 				// Filtro de emisor
-				.filter(m -> emisor.isEmpty() || m.getEmisor().getUsuario().contains(emisor))
+				//.filter(m -> emisor.isEmpty() || m.getEmisor().getUsuario().contains(emisor))
+				.filter(m -> emisor.isEmpty() || m.getReceptor().getTelefono().equals(emisor))
 				// Filtro de receptor
 				.filter(m -> receptor.isEmpty() || m.getReceptor().getUsuario().contains(receptor))
 				.collect(Collectors.toList());

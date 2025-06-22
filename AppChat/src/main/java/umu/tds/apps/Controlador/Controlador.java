@@ -134,7 +134,7 @@ public enum Controlador {
 		if (esUsuarioRegistrado(telefono)) {
 			return false;
 		}
-		Usuario usuario = new Usuario(nombre, password, telefono, fechaNacimiento, saludo, url, false, 0);
+		Usuario usuario = new Usuario(nombre, password, telefono, fechaNacimiento, url, saludo, false, 0);
 
 		usuarioDAO.registrarUsuario(usuario);
 		repositorioUsuarios.addUsuario(usuario);

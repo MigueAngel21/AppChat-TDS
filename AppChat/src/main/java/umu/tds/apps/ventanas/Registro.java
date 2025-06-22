@@ -388,7 +388,7 @@ public class Registro extends JFrame {
 				 Controlador.INSTANCE.registrarUsuario(textNombre.getText() + " " + textApellido.getText(),
 							new String(passwordField.getPassword()), textTelefono.getText().trim(),
 							dateChooser.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate(),
-							textPaneSaludo.getText(), rutaImagen);
+							textPaneSaludo.getText(),rutaImagen);
 				dispose();
 			}
 		});
