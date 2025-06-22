@@ -46,7 +46,7 @@ public class VentanaBuscar2 extends JFrame {
 		}
 
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaBuscar.class.getResource("/umu/tds/apps/resources/icono app.png")));
+		setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaBuscar2.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(400, 80, 708, 616);
 		setTitle("UNICORNCHAT");
 
@@ -61,7 +61,7 @@ public class VentanaBuscar2 extends JFrame {
 
 		JLabel imagenLupa = new JLabel("");
 		imagenLupa.setIcon(
-				new ImageIcon(VentanaBuscar.class.getResource("/umu/tds/apps/resources/search-engine.png")));
+				new ImageIcon(VentanaBuscar2.class.getResource("/umu/tds/apps/resources/search-engine.png")));
 		panelNorte.add(imagenLupa);
 
 		// Panel central donde se encuentra el buscador y la lista
@@ -157,7 +157,7 @@ public class VentanaBuscar2 extends JFrame {
 		panel_Norte.add(contacto, gbc_contacto);
 
 		
-		// Esto hya que cambiarlo cuando tengamos los renders activados
+	
 		DefaultListModel<Mensaje> modelo = new DefaultListModel<>();
 		List<Mensaje> listaMensajes = Controlador.INSTANCE.obtenerTodosMensajes();
 		listaMensajes.forEach(modelo::addElement);
@@ -170,10 +170,16 @@ public class VentanaBuscar2 extends JFrame {
 		JButton botonbuscar = new JButton("Buscar");
 		botonbuscar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				List<Mensaje> mensajesFiltrados = Controlador.INSTANCE.obtenerMensajesFiltrados(
 						telefono.getText().equals("telefono") ? "" : telefono.getText(),
 						contacto.getText().equals("contacto") ? "" : contacto.getText(),
 						texto.getText().equals("texto") ? "" : texto.getText());
+				
+				/*
+				List<Mensaje> mensajesFiltrados = Controlador.INSTANCE.obtenerMensajesFiltrados(telefono.getText(),
+						contacto.getText(),texto.getText());
+				*/
 				modelo.clear();
 				mensajesFiltrados.forEach(modelo::addElement);
 			}
@@ -195,7 +201,7 @@ public class VentanaBuscar2 extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
-				new VentanaBuscar();
+				new VentanaBuscar2();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -56,7 +56,7 @@ public class RecientesCellRenderer extends JPanel implements ListCellRenderer<Us
          String nombre = usuarioActual.existeContacto(usuario.getTelefono());
          userLabel.setText(nombre);
 
-         ImageIcon imageIcon = new ImageIcon(VentanaMain.class.getResource(Usuario.IMG));
+         ImageIcon imageIcon = new ImageIcon(RecientesCellRenderer.class.getResource(Usuario.IMG));
          imageLabel.setIcon(imageIcon);
          Mensaje m = usuarioActual.getUltimoMensaje(usuario);
          estadoLabel.setText(m != null ? m.getTexto() : "");
