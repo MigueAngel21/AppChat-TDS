@@ -11,14 +11,21 @@ import javax.swing.ListCellRenderer;
 import umu.tds.apps.AppChat.Contacto;
 import umu.tds.apps.AppChat.Usuario;
 
+
+/**
+ * Clase que implementa un renderizador personalizado para elementos de tipo `Contacto` en un `JList`.
+ * Muestra una imagen asociada al contacto junto con su nombre.
+ */
 public class ContactoCellRenderer extends JPanel implements ListCellRenderer<Contacto> {
-	/**
-	 * 
-	 */
+
+
+	//Atributos de la clase
 	private static final long serialVersionUID = 1L;
 	private JLabel nameLabel;
 	private JLabel imageLabel;
 
+
+	// Constructor que inicializa los componentes del renderizador.
 	public ContactoCellRenderer() {
 		setLayout(new BorderLayout(5, 5));
 
@@ -29,6 +36,8 @@ public class ContactoCellRenderer extends JPanel implements ListCellRenderer<Con
 		add(nameLabel, BorderLayout.CENTER);
 	}
 
+
+	//Método que devuelve el componente que se va a usar para renderizar cada celda del JList.
 	@Override
 	public Component getListCellRendererComponent(JList<? extends Contacto> list, Contacto contacto, int index,
 			boolean isSelected, boolean cellHasFocus) {

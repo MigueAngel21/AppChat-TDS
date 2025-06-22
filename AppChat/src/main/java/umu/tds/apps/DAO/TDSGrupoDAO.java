@@ -15,13 +15,15 @@ public class TDSGrupoDAO implements GrupoDAO {
     private ServicioPersistencia servPersistencia;
     private static TDSGrupoDAO unicaInstancia = null;
     private ContactoIndividualDAO contactoIndividualDAO;
+    
+    // Constantes para nombres de propiedades
 	private static final String NOMBRE = "Nombre";
 	private static final String CONTACTO = "Grupo";
 	private static final String MIEMBROS = "Miembros";
 	private static final String IMAGEN = "Imagen";
     
     
-    
+    //Obtiene la única instancia del DAO (patrón Singleton).
 	public static TDSGrupoDAO getUnicaInstancia() { // patron singleton
 		if (unicaInstancia == null) {
 			unicaInstancia = new TDSGrupoDAO();
@@ -29,10 +31,13 @@ public class TDSGrupoDAO implements GrupoDAO {
 		return unicaInstancia;
 	}
 	
+	//Constructor privado para el patrón Singleton.
 	private TDSGrupoDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 
+	
+	//Registra un nuevo grupo en la persistencia.
 	@Override
 	public void registrarGrupo(Grupo grupo) {
 		// TODO Auto-generated method stub
@@ -41,6 +46,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 		grupo.setIdContacto(Integer.valueOf("2" + entidad.getId()));
 	}
 
+	//Elimina un grupo de la persistencia.
 	@Override
 	public void borrarGrupo(Grupo grupo) {
 		// TODO Auto-generated method stub
@@ -51,6 +57,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 		servPersistencia.borrarEntidad(entidad);
 	}
 
+	//Recupera un grupo de la persistencia por su ID.
 	@Override
 	public Grupo recuperarGrupo(int id) {
 		// TODO Auto-generated method stub
@@ -67,6 +74,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 		return entidadToGrupo(entidad);
 	}
 
+	//Modifica un grupo existente en la persistencia.
 	@Override
 	public void modificarGrupo(Grupo grupo) {
 		// TODO Auto-generated method stub
@@ -84,6 +92,7 @@ public class TDSGrupoDAO implements GrupoDAO {
 		}
 	}
     
+	//Convierte una lista de contactos a una cadena de IDs separados por espacios.
     private String obtenerCodigoContacto(List<Contacto> contactos) {
     	if (contactos==null || contactos.isEmpty()) {
     		return "";
@@ -92,7 +101,7 @@ public class TDSGrupoDAO implements GrupoDAO {
     			.map(Contacto::getIdContacto).map(c->c.toString()).collect(Collectors.joining(" "));
     }
     
-    
+    //Obtiene el DAO para ContactoIndividual (lazy initialization).
     public ContactoIndividualDAO getContactoIndividualDAO() {
     	        if (contactoIndividualDAO == null) {
 					try {
@@ -106,6 +115,7 @@ public class TDSGrupoDAO implements GrupoDAO {
     }
     
     
+    //Convierte una cadena de IDs de contactos a una lista de objetos Contacto.
     private List<Contacto> obtenerContactosCodigo(String codigos){
     	List<Contacto> contactos = new LinkedList<Contacto>();
     	StringTokenizer str=new StringTokenizer(codigos, " ");
@@ -116,6 +126,7 @@ public class TDSGrupoDAO implements GrupoDAO {
     	return contactos;
     }
     
+    //Convierte un objeto Grupo a una Entidad para persistencia.
     private Entidad grupoToEntidad(Grupo g) {
     	List<Contacto> contactos = g.getMiembros();
     	String codigos = contactos.stream()
@@ -127,6 +138,7 @@ public class TDSGrupoDAO implements GrupoDAO {
     	return entidad;
     }
     
+    //Convierte una Entidad de persistencia a un objeto Grupo.
     private Grupo entidadToGrupo(Entidad entidad) {
     	String nombre = servPersistencia.recuperarPropiedadEntidad(entidad, NOMBRE);
     	Grupo grupo = new Grupo(nombre);

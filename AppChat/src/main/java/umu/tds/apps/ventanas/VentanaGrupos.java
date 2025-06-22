@@ -58,12 +58,16 @@ public class VentanaGrupos extends JFrame {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+
+		// Configuración de la ventana principal
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		//cambiar icono de la ventana
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaGrupos.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(420, 160, 716, 553);
 		this.setTitle("UNICORNCHAT");
 		this.setVisible(true);
+		
+		// Panel principal
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -71,16 +75,19 @@ public class VentanaGrupos extends JFrame {
 		
 		contentPane.setLayout(new BoxLayout(contentPane, BoxLayout.Y_AXIS));
 
+		// Panel que contiene la lista de contactos y grupo
 		JPanel panelMain = new JPanel();
 		panelMain.setBorder(new TitledBorder(new LineBorder(Color.BLACK), "lista de contactos",
 				TitledBorder.LEADING, TitledBorder.TOP, null, Color.BLACK));
 		contentPane.add(panelMain);
 		panelMain.setLayout(new BoxLayout(panelMain, BoxLayout.X_AXIS));
 
+		// Panel de contactos individuales
 		JPanel panelContactos = new JPanel();
 		panelContactos.setSize(new Dimension(150, 0));
 		panelContactos.setLayout(new BoxLayout(panelContactos, BoxLayout.X_AXIS));
 		
+		// Modelos para listas de contactos
 		DefaultListModel<Contacto> modelo = new DefaultListModel<>();
 		DefaultListModel<Contacto> modelo2 = new DefaultListModel<>();
 		
@@ -88,15 +95,17 @@ public class VentanaGrupos extends JFrame {
 		lista2.setCellRenderer(new ContactoCellRenderer()); 
 		lista2.setModel(modelo2);
 		
+		// Obtiene contactos del usuario actual
 		Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
 		List<Contacto> contactos = usuarioActual.getContactos();
 		
 		JPanel panelGrupo = new JPanel();
 		contactos.forEach(modelo::addElement);
 	
-		// Crear el JList basado en el modelo
+		// Lista de contactos individuales
 		JList<Contacto> lista = new JList<>(modelo);
 		lista.setCellRenderer(new ContactoCellRenderer());
+		// Acción al seleccionar un contacto: si es grupo, carga sus miembros
 		lista.addListSelectionListener(new ListSelectionListener() {
 			
 			@Override
@@ -106,10 +115,10 @@ public class VentanaGrupos extends JFrame {
 				Contacto contactoSeleccionado = lista.getSelectedValue();
 				if (contactoSeleccionado instanceof Grupo) {
 					Grupo g = (Grupo) contactoSeleccionado;
-					modelo2.clear();
+					modelo2.clear();// Limpia los miembros anteriores
 					List<Contacto> lista = g.getMiembros();
 					lista.forEach(modelo2::addElement);
-					grupo = g.getNombre();
+					grupo = g.getNombre();// Cambia el nombre del grupo
 					TitledBorder titulo = BorderFactory.createTitledBorder(BorderFactory.createLineBorder(Color.BLACK), grupo);
 					panelGrupo.setBorder(titulo);
 
@@ -119,12 +128,14 @@ public class VentanaGrupos extends JFrame {
 		
 		panelContactos.add(new JScrollPane(lista));
 		panelMain.add(panelContactos);
-
+		
+		// Panel de botones entre listas
 		JPanel panelBotones = new JPanel();
 		panelBotones.setBackground(Color.RED);
 		panelMain.add(panelBotones);
 		panelBotones.setLayout(new BoxLayout(panelBotones, BoxLayout.Y_AXIS));
-
+		
+		// Botón para mover contacto al grupo >>>
 		JButton btnDerecha = new JButton(">>>");
 		btnDerecha.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -138,19 +149,23 @@ public class VentanaGrupos extends JFrame {
 			}
 		});
 		panelBotones.add(btnDerecha);
-
+		
+		// Botón para quitar contacto del grupo <<<
 		JButton btnIzquierda = new JButton("<<<");
 		panelBotones.add(btnIzquierda);
 
+		// Panel que contiene los miembros del grupo
 		panelGrupo.setBorder(new TitledBorder(new LineBorder(Color.BLACK), grupo, TitledBorder.LEADING,
 				TitledBorder.TOP, null, null));
 		panelGrupo.setLayout(new BoxLayout(panelGrupo, BoxLayout.X_AXIS));
 		panelGrupo.add(new JScrollPane(lista2));
 		panelMain.add(panelGrupo);
 
+		// Panel inferior para botones de acción
 		JPanel panelAddContacto = new JPanel();
 		contentPane.add(panelAddContacto);
 
+		// Botón para abrir ventana y añadir nuevo contacto individual
 		JButton btnAddContactoInd = new JButton("Añadir Contacto");
 		btnAddContactoInd.addActionListener(new ActionListener() {
 			
@@ -162,10 +177,12 @@ public class VentanaGrupos extends JFrame {
 		});
 		panelAddContacto.add(btnAddContactoInd);
 
+		// Espaciador para separación visual
 		Component horizontalGlue = Box.createHorizontalGlue();
 		horizontalGlue.setPreferredSize(new Dimension(230, 0));
 		panelAddContacto.add(horizontalGlue);
 
+		// Botón para crear o modificar un grupo
 		JButton btnAddContactoGrp = new JButton("Añadir o Modificar Grupo");
 		btnAddContactoGrp.addActionListener(new ActionListener() {
 			@Override
@@ -208,6 +225,7 @@ public class VentanaGrupos extends JFrame {
 						
 						Controlador.INSTANCE.crearGrupo(nombreGrupo, listaGrupo, imagenGrupo);
 						JOptionPane.showMessageDialog(VentanaGrupos.this, "¡Has creado el grupo " + nombreGrupo + " correctamente!", "Grupo creado", JOptionPane.INFORMATION_MESSAGE);
+						// Recarga modelos
 						modelo2.clear();
 						modelo.clear();
 						List<Contacto> lista = Controlador.INSTANCE.recuperarTodosContactos();

@@ -6,12 +6,14 @@ public class DescuentoMensaje extends Descuento{
 
 	private int cantidadMensajes;
 
+	//Constructor para crear un descuento basado en mensajes enviados.
 	public DescuentoMensaje(double porcentajeDescuento, int cantidadMensajes) {
 		super(porcentajeDescuento);
 		this.cantidadMensajes = cantidadMensajes;
 	}
-
 	
+	//Determina si este descuento es aplicable a un usuario específico, verificando 
+	//si ha enviado suficientes mensajes en el último mes.
 	@Override
 	public boolean esAplicable(Usuario usuario) {
 		

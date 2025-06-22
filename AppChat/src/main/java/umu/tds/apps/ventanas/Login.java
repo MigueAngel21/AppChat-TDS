@@ -37,22 +37,24 @@ import java.awt.Color;
 import javax.swing.ImageIcon;
 import javax.swing.JPasswordField;
 
+//Clase de la ventana de login de la app
 public class Login {
-
+	// Atributos de la clase
 	JFrame frame;
 	private JLabel telefono;
 	private JPasswordField textContraseña;
 	private JTextField textTelefono;
 
 	/**
-	 * Create the application.
+	 * Constructor de la clase Login.
+	 * Inicializa la ventana del formulario de inicio de sesión.
 	 */
 	public Login() {
 		initialize();
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Configura e inicializa todos los componentes de la ventana.
 	 */
 	private void initialize() {
 		try {
@@ -61,6 +63,7 @@ public class Login {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+		// Crea la ventana principal
 		frame = new JFrame();
 		frame.setBounds(420, 160, 681, 485);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -68,7 +71,7 @@ public class Login {
 		frame.setResizable(false);
 		//cambiar icono de la ventana
 		frame.setIconImage(Toolkit.getDefaultToolkit().getImage(Login.class.getResource("/umu/tds/apps/resources/icono app.png")));
-		
+		//Título con logo en la parte superior
 		JLabel titulo = new JLabel("AppChat");
 		URL url1 = getClass().getResource("/umu/tds/apps/resources/logo app.png");
 		if (url1 != null) {
@@ -86,6 +89,7 @@ public class Login {
 		titulo.setHorizontalAlignment(SwingConstants.CENTER);
 		frame.getContentPane().add(titulo, BorderLayout.NORTH);
 		
+		//Panel inferior con botones de login y registro
 		JPanel panelSur = new JPanel();
 		frame.getContentPane().add(panelSur, BorderLayout.SOUTH);
 		
@@ -146,16 +150,18 @@ public class Login {
 		botonRegistro.setForeground(new Color(255, 255, 255));
 		botonRegistro.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		panelSur.add(botonRegistro);
+		// Accion del boton de registro
 		botonRegistro.addActionListener(e -> {
 			Registro registro = new Registro();
 			registro.setVisible(true);
 			frame.setVisible(false);
 		});
 		
-		
+		//Panel central con campos de entrada
 		JPanel panelCentro = new JPanel();
 		panelCentro.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Login", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(255, 255, 255)));
 		frame.getContentPane().add(panelCentro, BorderLayout.CENTER);
+		//Disposición de los componentes del panel central
 		GridBagLayout gbl_panelCentro = new GridBagLayout();
 		gbl_panelCentro.columnWidths = new int[]{10, 0, 0, 0, 0, 0};
 		gbl_panelCentro.rowHeights = new int[]{20, 0, 32, 20, 0, 0, 0, 0, 0, 0};
@@ -163,7 +169,7 @@ public class Login {
 		gbl_panelCentro.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
 		panelCentro.setLayout(gbl_panelCentro);
 		
-		
+		//Etiqueta "Telefono"
 		telefono = new JLabel("Telefono");
 		telefono.setForeground(new Color(255, 20, 147));
 		telefono.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -175,6 +181,7 @@ public class Login {
 		gbc_telefono.gridy = 5;
 		panelCentro.add(telefono, gbc_telefono);
 		
+		//Campo de entrada para el teléfono
 		textTelefono = new JTextField();
 		GridBagConstraints gbc_textTelefono = new GridBagConstraints();
 		gbc_textTelefono.anchor = GridBagConstraints.WEST;
@@ -184,6 +191,7 @@ public class Login {
 		panelCentro.add(textTelefono, gbc_textTelefono);
 		textTelefono.setColumns(15);
 		
+		//Separador visual
 		JLabel lblNewLabel = new JLabel("\r\n");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 0);
@@ -191,6 +199,7 @@ public class Login {
 		gbc_lblNewLabel.gridy = 6;
 		panelCentro.add(lblNewLabel, gbc_lblNewLabel);
 		
+		//Etiqueta "Contraseña"
 		JLabel contraseña = new JLabel("Contraseña");
 		contraseña.setForeground(new Color(255, 20, 147));
 		contraseña.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -202,6 +211,7 @@ public class Login {
 		gbc_contraseña.gridy = 7;
 		panelCentro.add(contraseña, gbc_contraseña);
 		
+		//Campo de entrada para la contraseña
 		textContraseña = new JPasswordField();
 		textContraseña.setColumns(20);
 		GridBagConstraints gbc_textContraseña = new GridBagConstraints();

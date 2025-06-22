@@ -32,11 +32,16 @@ import umu.tds.apps.Controlador.Controlador;
 public class VentanaBuscar2 extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	/** Panel principal de contenido */
 	private JPanel contentPane;
+	/** Campo de texto para el número de teléfono del remitente */
 	private JTextField telefono;
+	/** Campo de texto para el nombre del contacto */
 	private JTextField contacto;
+	/** Campo de texto para el texto del mensaje */
 	private JTextField texto;
 
+	//Crea una nueva ventana de búsqueda de mensajes.
 	public VentanaBuscar2() {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
@@ -157,7 +162,7 @@ public class VentanaBuscar2 extends JFrame {
 		panel_Norte.add(contacto, gbc_contacto);
 
 		
-	
+		// Modelo y lista de mensajes
 		DefaultListModel<Mensaje> modelo = new DefaultListModel<>();
 		List<Mensaje> listaMensajes = Controlador.INSTANCE.obtenerTodosMensajes();
 		listaMensajes.forEach(modelo::addElement);

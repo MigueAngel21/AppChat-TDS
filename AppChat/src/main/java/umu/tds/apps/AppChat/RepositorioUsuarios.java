@@ -15,6 +15,10 @@ public enum RepositorioUsuarios {
 	private HashMap<String, Usuario> usuariosPorNombre;
 
 	
+	/*
+	 * Constructor privado para inicializar el repositorio de usuarios. Carga los
+	 * usuarios desde la base de datos y los almacena en las estructuras de datos.
+	 */
 	private RepositorioUsuarios() {
 		usuariosPorCodigo = new HashMap<Integer, Usuario>();
 		usuariosPorTlf = new HashMap<String, Usuario>();
@@ -34,26 +38,27 @@ public enum RepositorioUsuarios {
 		}
 	}
 
-
+	//Obtiene una lista con todos los usuarios registrados en el sistema
 	public List<Usuario> findUsuarios() throws DAOException {
 		return new LinkedList<Usuario>(usuariosPorTlf.values());
 	}
 	
-	
+	// Busca un usuario por su número de teléfono
 	public Usuario findUsuario(String telefono) {
 		return usuariosPorTlf.get(telefono);
 	}
 
+	// Busca un usuario por su código
 	public Usuario findUsuario(int id) {
 		return usuariosPorCodigo.get(id);
 	}
 	
-	
+	// Busca un usuario por su nombre de usuario
 	public Usuario findUsuarioNombre(String nombre) {
 		return usuariosPorNombre.get(nombre);
 	}
 	
-	
+	// Añade un nuevo usuario al repositorio y lo registra en la base de datos
 	public void addUsuario(Usuario usuario) {
 		usuariosPorCodigo.put(usuario.getId(), usuario);
 		usuariosPorTlf.put(usuario.getTelefono(), usuario);
@@ -61,6 +66,7 @@ public enum RepositorioUsuarios {
 				+ " en la base de datos");
 	}
 	
+	// Actualiza un usuario existente en el repositorio y en la base de datos
 	public void removeUsuario(Usuario usuario) {
 		usuariosPorCodigo.remove(usuario.getId());
 		usuariosPorTlf.remove(usuario.getTelefono());

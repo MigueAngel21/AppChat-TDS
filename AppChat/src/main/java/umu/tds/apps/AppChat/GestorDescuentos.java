@@ -7,6 +7,7 @@ public class GestorDescuentos {
 
 	private List<Descuento> descuentos;
     
+	// Constructor que inicializa la lista de descuentos
     public GestorDescuentos() {
         this.descuentos = new ArrayList<>();
     }

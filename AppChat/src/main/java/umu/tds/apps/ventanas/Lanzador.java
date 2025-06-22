@@ -4,6 +4,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
+//Lanzador de la aplicación
 public class Lanzador {
 
 	private JFrame frame;

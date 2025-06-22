@@ -27,6 +27,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 	private GrupoDAO grupoDAO;
 	private MensajeDAO mensajeDAO;
 	
+	// Constantes para las propiedades de la entidad Usuario
 	private static final String USUARIO = "Usuario";
 	private static final String NOMBRE = "Usuario";
 	private static final String PASSWORD = "Password";
@@ -41,7 +42,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 	private static final String PRECIO = "PrecioSuscripcion";
 	
 	
-
+	// Método para obtener la única instancia del DAO (patrón Singleton)
 	public static TDSUsuarioDAO getUnicaInstancia() { // patron singleton
 		if (unicaInstancia == null) {
 			unicaInstancia = new TDSUsuarioDAO();
@@ -49,10 +50,12 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		return unicaInstancia;
 	}
 
+	// Constructor privado para evitar instanciación externa
 	private TDSUsuarioDAO() {
         servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 	}
 	
+	// Métodos para obtener la instancia del DAO de contactoIndividual
 	public ContactoIndividualDAO getContactoIndividualDAO() {
 		if (contactoIndividualDAO == null) {
 			try {
@@ -65,6 +68,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		return contactoIndividualDAO;
 	}
 	
+	// Método para obtener la instancia del DAO de grupos
 	public GrupoDAO getGrupoDAO() {
 		if (grupoDAO == null) {
 			try {
@@ -77,7 +81,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		return grupoDAO;
 	}
 	
-	
+	// Método para obtener la instancia del DAO de mensajes
 	public MensajeDAO getMensajeDAO() {
 		if (mensajeDAO == null) {
 			try {
@@ -91,7 +95,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 	}
 
 	
-	
+	//Registra un nuevo usuario en la persistencia.
 	@Override
 	public void registrarUsuario(Usuario usuario) {
 		// TODO Auto-generated method stub
@@ -101,6 +105,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		
 	}
 
+	//Elimina un usuario de la persistencia.
 	@Override
 	public void borrarUsuario(Usuario usuario) {
 		// TODO Auto-generated method stub
@@ -110,6 +115,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 	}
 
 
+	//Recupera un usuario desde la persistencia.
 	@Override
 	public Usuario recuperarUsuario(int id) {
 		// TODO Auto-generated method stub
@@ -120,7 +126,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		return entidadToUsuario(eUsuario);
 	}
 
-
+	//Recupera todos los usuarios almacenados en la persistencia.
 	@Override
 	public List<Usuario> recuperarTodosUsuarios() {
 		// TODO Auto-generated method stub
@@ -135,6 +141,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 	}
 
 
+	//Modifica un usuario existente en la persistencia.
 	@Override
 	public void modificarUsuario(Usuario usuario) {
 		// TODO Auto-generated method stub
@@ -169,7 +176,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		}
 	}
 	
-	
+	//Convierte una Entidad de persistencia a un objeto Usuario.
 	private Usuario entidadToUsuario(Entidad eUsuario){
 		
 		String nombre = servPersistencia.recuperarPropiedadEntidad(eUsuario, NOMBRE);
@@ -213,7 +220,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		
 	}
 	
-	
+	//Convierte un objeto Usuario a una Entidad de persistencia.
 	private Entidad usuarioToEntidad(Usuario usuario) {
 		List<Contacto> listaContactos = usuario.getContactos();
 		String ids = listaContactos.stream().map(c -> c.getIdContacto()).map(s -> s.toString())
@@ -235,7 +242,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		return eUsuario;
 	}
 	
-	
+	//Convierte una cadena de IDs de mensajes recibidos a una lista de Mensajes.
 	private List<Mensaje> obtenerRecibidosCodigos(String recibidosCodigos) {
 		List<Mensaje> recibidos = new LinkedList<Mensaje>();
 		StringTokenizer strTok = new StringTokenizer(recibidosCodigos, " ");
@@ -247,7 +254,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		return recibidos;
 	}
 	
-	
+	//Convierte una cadena de IDs de contactos a una lista de Contactos.
 	private List<Contacto> obtenerContactosCodigos(String contactosCodigos) {
 		List<Contacto> contactos = new LinkedList<Contacto>();
 		StringTokenizer strTok = new StringTokenizer(contactosCodigos, " ");
@@ -264,6 +271,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 	}
 	
 	
+	//Convierte una cadena de IDs de mensajes enviados a una lista de Mensajes.
 	private List<Mensaje> obtenerEnviadosCodigos(String enviadosCodigos) {
 		List<Mensaje> enviados = new LinkedList<Mensaje>();
 		StringTokenizer strTok = new StringTokenizer(enviadosCodigos, " ");
@@ -276,6 +284,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 	}
 	
 	
+	//Convierte una lista de contactos a una cadena de IDs separados por espacios.
 	private String obtenerCodigosContactos(List<Contacto> contactos) {
 
 		if (contactos == null || contactos.isEmpty()) {
@@ -285,7 +294,7 @@ public class TDSUsuarioDAO implements UsuarioDAO {  //falta meter los implements
 		return contactos.stream().map(Contacto::getIdContacto).map(c -> c.toString()).collect(Collectors.joining(" "));
 	}
 	
-	
+	//Convierte una lista de mensajes a una cadena de IDs separados por espacios.
 	private String obtenerCodigosListaMensajes(List<Mensaje> lista) {
 
 		if (lista == null || lista.isEmpty()) {

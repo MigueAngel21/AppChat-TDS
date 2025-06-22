@@ -25,8 +25,9 @@ public class VentanaMensaje extends JFrame {
 	private JPanel contentPane;
 	private JTextField txtTelefono;
 	private JTextField textMensaje;
-	private boolean menuEmojiAbierto = false;
+	private boolean menuEmojiAbierto = false;// Controla si el menú de emojis está abierto
 
+	// Constructor de la ventana de mensajes
 	public VentanaMensaje(String tipo, Main_Prueba ventanaMain, JPanel panelMensajesInterno, JScrollPane scroll,
 			DefaultListModel<Usuario> modelo, JPanel panelChatRecientes, JList<Usuario> list) {
 		try {
@@ -43,12 +44,13 @@ public class VentanaMensaje extends JFrame {
 				
 		setLocationRelativeTo(null);
 		this.setVisible(true);
-		
+		// Panel principal
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
+		
+		// Etiqueta del título de la ventana
 		JLabel lblTitulo = new JLabel(
 				tipo.equals("Nuevo teléfono") ? "Enviar mensaje a nuevo teléfono" : "Enviar mensaje a " + tipo);
 		lblTitulo.setFont(new Font("Arial", Font.BOLD, 14));
@@ -57,6 +59,7 @@ public class VentanaMensaje extends JFrame {
 
 		txtTelefono = new JTextField();
 		// Campo de teléfono (solo si es nuevo teléfono)
+		// Si es nuevo teléfono, se muestra campo para escribirlo
 		if (tipo.equals("Nuevo teléfono")) {
 			JLabel lblTelefono = new JLabel("Introduce el teléfono:");
 			lblTelefono.setBounds(20, 60, 120, 20);
@@ -67,7 +70,8 @@ public class VentanaMensaje extends JFrame {
 		} else {
 			txtTelefono.setText(tipo);
 		}
-
+		
+		// Botón para mostrar el menú de emojis
 		JButton btnEmojis = new JButton("");
 		btnEmojis.setIcon(BubbleText.getEmoji(6));
 		btnEmojis.setPreferredSize(new Dimension(40, 21));
@@ -76,6 +80,7 @@ public class VentanaMensaje extends JFrame {
 		btnEmojis.setBounds(20, 200, 30, 30);
 		contentPane.add(btnEmojis);
 
+		// Menú emergente de emojis
 		JPopupMenu menuEmojis = new JPopupMenu();
 		JPanel panelEmojis = new JPanel(new GridLayout(2, 4, 3, 3)); //2 filas, 4 columnas, gap de 2px
 		panelEmojis.setBackground(Color.WHITE);
@@ -91,12 +96,16 @@ public class VentanaMensaje extends JFrame {
 			emojiButton.setFocusPainted(false);
 
 			final int emojiIndex = i;
+			
+			// Acción al seleccionar un emoji
 			emojiButton.addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
 					
 					if (hayTelefono()) {
+						// Enviar emoji como mensaje
 						Controlador.INSTANCE.enviarMensaje(txtTelefono.getText(), emojiIndex);
+						// Actualizar chat y cerrar ventana
 						ventanaMain.actualizarPanelChat(scroll, panelMensajesInterno, txtTelefono.getText());
 						ventanaMain.actualizarChatRecientes(modelo, panelChatRecientes, list);
 						menuEmojis.setVisible(false);
@@ -114,7 +123,8 @@ public class VentanaMensaje extends JFrame {
 		}
 
 		menuEmojis.add(panelEmojis);
-
+		
+		// Acción del botón emoji para abrir/cerrar el menú
 		btnEmojis.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -127,7 +137,8 @@ public class VentanaMensaje extends JFrame {
 				}
 			}
 		});
-
+		
+		// Ajuste de tamaño para los botones de emoji
 		Dimension emojiButtonSize = new Dimension(40, 40);
 		for (Component c : panelEmojis.getComponents()) {
 			if (c instanceof JButton) {
@@ -137,16 +148,19 @@ public class VentanaMensaje extends JFrame {
 				btn.setMaximumSize(emojiButtonSize);
 			}
 		}
-
+		
+		// Campo de texto para escribir el mensaje
 		textMensaje = new JTextField();
 		textMensaje.setBounds(60, 200, 280, 30);
 		contentPane.add(textMensaje);
-
+		
+		// Botón para enviar el mensaje
 		JButton btnEnviar = new JButton("");
 		btnEnviar.setBounds(350, 200, 41, 30);
 		btnEnviar.setIcon(new ImageIcon(VentanaMensaje.class.getResource("/umu/tds/apps/resources/avion-enviar-whatsapp.png")));
 		btnEnviar.setFocusPainted(false);
 		contentPane.add(btnEnviar);
+		// Acción del botón de enviar
 		btnEnviar.addActionListener(e -> {
 			
 			if (hayTexto()) {
@@ -174,11 +188,12 @@ public class VentanaMensaje extends JFrame {
 		});
 	}
 
-	
+	// Comprueba si hay texto en el campo del mensaje
 	private boolean hayTexto() {
 		return textMensaje.getText().length() > 0;
 	}
-
+	
+	// Comprueba si se ha introducido un número de teléfono
 	private boolean hayTelefono() {
 		return txtTelefono.getText().length() > 0;
 	}

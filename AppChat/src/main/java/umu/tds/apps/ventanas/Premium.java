@@ -27,10 +27,13 @@ import umu.tds.apps.AppChat.GeneradorPDF;
 import umu.tds.apps.AppChat.Mensaje;
 import umu.tds.apps.Controlador.Controlador;
 
+/**
+ * Clase que gestiona la interfaz para la suscripción Premium de los usuarios.
+ * Permite activar o anular la suscripción, así como exportar chats a PDF.
+ */
 public class Premium extends JDialog {
-    
+    //Atributos de la clase
 	private static final long serialVersionUID = 1L;
-	
 	private JLabel lblEstadoPremium;
     private JLabel lblPrecioActual;
     private JButton btnSuscribirse;
@@ -40,12 +43,15 @@ public class Premium extends JDialog {
     private String receptor;
     private double precio = Descuento.PRECIO_BASE;
 
+	//Constructor de la clase
     public Premium(JFrame parent, boolean esPremium, String receptor) {
         super(parent, "Gestión de Suscripción", true); // true para hacerla modal
         this.receptor = receptor;
         inicializarComponentes(esPremium);
     }
 
+
+	//Inicializa los componentes de la interfaz.
     private void inicializarComponentes(boolean esPremium) {
         // Configuración básica de la ventana
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
@@ -124,6 +130,8 @@ public class Premium extends JDialog {
         getContentPane().add(mainPanel);
     }
 
+
+	//Exporta el chat con un usuario a un archivo PDF.
     private void exportarPDF() {
         try {
             // Crear un FileChooser para que el usuario elija dónde guardar el PDF
@@ -158,6 +166,8 @@ public class Premium extends JDialog {
         }
     }
 
+
+	//Anula la suscripción Premium del usuario actual tras confirmación.
     private void anularSuscripcion() {
         int respuesta = JOptionPane.showConfirmDialog(this,
             "¿Estás seguro de que deseas anular tu suscripción Premium?",
@@ -175,6 +185,8 @@ public class Premium extends JDialog {
         }
     }
 
+
+	//Activa la suscripción Premium para el usuario actual tras confirmación.
     private void suscribirse() {
         int respuesta = JOptionPane.showConfirmDialog(this,
             "¿Deseas suscribirte al plan Premium por " + precio + "€?",

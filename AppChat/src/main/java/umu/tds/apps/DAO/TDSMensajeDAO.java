@@ -23,6 +23,7 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 	private FactoriaDAO factoriaDAO;
 	private UsuarioDAO usuarioDAO;
 	
+	// Constantes para nombres de propiedades
 	private static final String MENSAJE = "Mensaje";
 	private static final String TEXTO = "Texto";
 	private static final String EMISOR = "Emisor";
@@ -30,7 +31,7 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 	private static final String FECHA = "Fecha";
 	private static final String EMOJI = "Emoticono";
 	
-
+    //Obtiene la única instancia del DAO (patrón Singleton).
 	public static TDSMensajeDAO getUnicaInstancia() { // patron singleton
 		if (unicaInstancia == null) {
 			unicaInstancia = new TDSMensajeDAO();
@@ -38,6 +39,7 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 		return unicaInstancia;
 	}
 
+	//Constructor privado para el patrón Singleton.
 	private TDSMensajeDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 		try {
@@ -49,6 +51,8 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 
 	}
 
+	
+	//Registra un nuevo mensaje en la persistencia.
 	@Override
 	public void registrarMensaje(Mensaje mensaje) {
 		// TODO Auto-generated method stub
@@ -57,6 +61,7 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 		mensaje.setId(entidad.getId());
 	}
 
+	//Elimina un mensaje de la persistencia.
 	@Override
 	public void borrarMensaje(Mensaje mensaje) {
 		// TODO Auto-generated method stub
@@ -64,6 +69,7 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 		servPersistencia.borrarEntidad(entidad);
 	}
 
+	//Recupera un mensaje desde la persistencia.
 	@Override
 	public Mensaje recuperarMensaje(int id) {
 		// TODO Auto-generated method stub
@@ -74,6 +80,7 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 		return entidadToMensaje(entidad);
 	}
 
+	//Recupera todos los mensajes almacenados en la persistencia.
 	@Override
 	public List<Mensaje> recuperarTodosMensajes() {
 		// TODO Auto-generated method stub
@@ -85,6 +92,7 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 		return mensajes;
 	}
 	
+	//Convierte un objeto Mensaje a una Entidad para persistencia.
 	private Entidad mensajeToEntidad(Mensaje mensaje) {
 		Entidad entidad = new Entidad();
 		entidad.setNombre(MENSAJE);
@@ -96,6 +104,7 @@ public class TDSMensajeDAO implements MensajeDAO { // falta meter los implements
 		return entidad;
 	}
 	
+	//Convierte una Entidad recuperada de la persistencia a un objeto Mensaje.
 	private Mensaje entidadToMensaje(Entidad eMensaje) {
 
 		String texto = servPersistencia.recuperarPropiedadEntidad(eMensaje, TEXTO);

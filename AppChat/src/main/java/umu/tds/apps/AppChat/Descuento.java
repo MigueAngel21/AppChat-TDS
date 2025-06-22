@@ -2,9 +2,12 @@ package umu.tds.apps.AppChat;
 
 public abstract class Descuento {
 	
+	//porcentaje de descuento aplicado al precio base
 	protected Double porcentajeDescuento;
+	// precio base del producto al que se le aplica el descuento
 	public static final double PRECIO_BASE = 19.99;
 	
+	//Constructor con porcentaje de descuento
 	public Descuento(Double porcentajeDescuento) {
 		this.porcentajeDescuento = porcentajeDescuento;
 	}

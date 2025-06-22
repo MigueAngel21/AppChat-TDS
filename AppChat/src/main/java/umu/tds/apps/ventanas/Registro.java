@@ -49,9 +49,10 @@ import java.awt.event.ActionEvent;
 import umu.tds.apps.AppChat.Usuario;
 import umu.tds.apps.Controlador.Controlador;
 
-
+//Clase de la ventana de registro del usuario
 public class Registro extends JFrame {
-
+	
+	//Atributos de clase
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField textNombre;
@@ -67,9 +68,11 @@ public class Registro extends JFrame {
 	
 	
 	
-	/**
-	 * Create the frame.
-	 */
+	 /**
+     * Constructor de la clase Registro.
+     * Configura el aspecto visual (LookAndFeel), inicializa los componentes de la ventana,
+     * establece el layout y agrega los listeners para los botones y acciones.
+     */
 	public Registro() {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
@@ -86,9 +89,11 @@ public class Registro extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(new BorderLayout(0, 0));
 		
+		//Panel inferior con botones de aceptar y cancelar
 		JPanel panel = new JPanel();
 		contentPane.add(panel, BorderLayout.SOUTH);
 		
+		//Botón Cancelar: oculta la ventana de registro y muestra la ventana de login
 		JButton botonCancelar = new JButton("Cancelar");
 		botonCancelar.setForeground(new Color(255, 255, 255));
 		botonCancelar.setFont(new Font("Tahoma", Font.PLAIN, 13));
@@ -101,18 +106,20 @@ public class Registro extends JFrame {
 			window.frame.setVisible(true);
 		});
 		
+		//Espacio en el panel inferior
 		JLabel lblNewLabel_1 = new JLabel("       ");
 		lblNewLabel_1.setHorizontalAlignment(SwingConstants.CENTER);
 		lblNewLabel_1.setToolTipText("         ");
 		panel.add(lblNewLabel_1);
 		
+		//Botón Aceptar para procesar el registro
 		JButton botonAceptar = new JButton("Aceptar");
 		botonAceptar.setForeground(new Color(255, 255, 255));
 		botonAceptar.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		botonAceptar.setBackground(new Color(255, 20, 147));
 		panel.add(botonAceptar);
 		
-		
+		//Panel central con GridBagLayout para colocar los campos de registro
 		panel_1 = new JPanel();
 		panel_1.setBorder(new TitledBorder(new EtchedBorder(EtchedBorder.LOWERED, new Color(255, 255, 255), new Color(160, 160, 160)), "Registro", TitledBorder.CENTER, TitledBorder.TOP, null, new Color(255, 255, 255)));
 		contentPane.add(panel_1, BorderLayout.CENTER);
@@ -123,6 +130,7 @@ public class Registro extends JFrame {
 		gbl_panel_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, Double.MIN_VALUE};
 		panel_1.setLayout(gbl_panel_1);
 		
+		//Etiqueta y campo para Nombre
 		JLabel etqNombre = new JLabel("Nombre");
 		etqNombre.setForeground(new Color(255, 20, 147));
 		etqNombre.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -133,6 +141,7 @@ public class Registro extends JFrame {
 		gbc_etqNombre.gridy = 1;
 		panel_1.add(etqNombre, gbc_etqNombre);
 		
+		// (Se repite estructura similar para Apellidos, Teléfono, Contraseña, Fecha, Imagen, Saludo...)
 		textNombre = new JTextField();
 		GridBagConstraints gbc_textNombre = new GridBagConstraints();
 		gbc_textNombre.fill = GridBagConstraints.HORIZONTAL;
@@ -287,7 +296,7 @@ public class Registro extends JFrame {
 		gbc_btnNewButton.gridx = 6;
 		gbc_btnNewButton.gridy = 11;
 		panel_1.add(btnañadirImagen, gbc_btnNewButton);
-		btnañadirImagen.addActionListener(e -> seleccionarImagen(rutaImagen)); //llama al metodo seleccionarImagen para seleccionar la imagen del usuario
+		btnañadirImagen.addActionListener(e -> seleccionarImagen()); //llama al metodo seleccionarImagen para seleccionar la imagen del usuario
 		*/
 		
 		lblImagen_1 = new JLabel("");
@@ -345,7 +354,7 @@ public class Registro extends JFrame {
 		
 		
 		
-		
+		//Campo para saludo personalizado del usuario
 		JLabel etqSaludo = new JLabel("Saludo");
 		etqSaludo.setForeground(new Color(255, 20, 147));
 		etqSaludo.setFont(new Font("Tahoma", Font.PLAIN, 15));
@@ -389,8 +398,8 @@ public class Registro extends JFrame {
 		
 	}
 	
-	
-	private void seleccionarImagen(String rutaImagen) {
+	// Método para seleccionar una imagen desde el sistema de archivos
+	private void seleccionarImagen() {
 	    JFileChooser fileChooser = new JFileChooser();
 	    fileChooser.setDialogTitle("Seleccionar imagen");
 	    fileChooser.setAcceptAllFileFilterUsed(false);
@@ -403,7 +412,7 @@ public class Registro extends JFrame {
 
 	        try {
 	            // Guardar la ruta para la imagen
-	           rutaImagen = archivoImagen.getAbsolutePath();
+	           String rutaImagen = archivoImagen.getAbsolutePath();
 	           Usuario usuario = Controlador.INSTANCE.getUsuarioActual();
 	           usuario.setImagen(rutaImagen);
 
@@ -437,7 +446,7 @@ public class Registro extends JFrame {
 	    }
 	}
 	
-	
+	//Método para validar los campos del formulario de registro
 	private boolean validarCampos() {
 	    boolean salida = true;
 	    ocultarErrores();
@@ -491,7 +500,7 @@ public class Registro extends JFrame {
 	
 	    return salida;
 	}
-	
+	//Método para ocultar los bordes de error de los campos del formulario
 	private void ocultarErrores() {
 	    Border defaultBorder = new JTextField().getBorder();
 	

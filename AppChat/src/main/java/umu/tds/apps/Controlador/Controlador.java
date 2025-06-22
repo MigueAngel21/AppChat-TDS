@@ -25,7 +25,7 @@ import umu.tds.apps.DAO.UsuarioDAO;
 public enum Controlador {
 	
 	INSTANCE;
-	
+	//Atributos de clase
 	private RepositorioUsuarios repositorioUsuarios;
 	private Usuario usuarioActual;
 	private GestorDescuentos gestorDescuentos;
@@ -36,7 +36,7 @@ public enum Controlador {
 	private UsuarioDAO usuarioDAO;
 	
 	
-	
+	// Constructor privado para el patrón Singleton
 	private Controlador() {
 		try {
 			factoria = FactoriaDAO.getInstancia();
@@ -51,7 +51,7 @@ public enum Controlador {
 	}
 	
 	
-	
+	//Inicia sesión dentro de la aplicación comprobando el usuario y la contraseña
 	public boolean login(String telefono, String contraseña) {
 		Usuario usuario = repositorioUsuarios.findUsuario(telefono);
 
@@ -62,65 +62,12 @@ public enum Controlador {
 		return false;
 	}
 	
-	//metodo devolverListaMensajesRecientesPorUsuario
-	public static List<Mensaje> devolverListaMensajesRecientesPorUsuario(String usuario) {
-		Mensaje[] values = new Mensaje[] {
-				new Mensaje("ana"), 
-				new Mensaje("manuel"), 
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio"),
-				new Mensaje("antonio")};
-		
-		
-		return Arrays.asList(values);
-	}
-	
-	
+	//Consulta si existe un contacto para el usuario actual
 	public String existeContacto(String telefono) {
 		return usuarioActual.existeContacto(telefono);
 	}
 
+    //Obtiene un chat con un contacto específico
 	public List<Mensaje> obtenerChat(String receptor) {
 		// TODO Auto-generated method stub
 		Usuario receptorUsuario = usuarioActual.existeContactoNombre(receptor);
@@ -133,16 +80,19 @@ public enum Controlador {
 	}
 	
 	
+	//Obtiene una lista de todos los contactos del usuario actual
 	public List<Contacto> recuperarTodosContactos(){
 		return usuarioActual.getContactos();
 	}
 	
 	
+	//Calcula el precio con descuento
 	public double obtenerPrecioConDescuento() {
 		return gestorDescuentos.calcularMejorDescuento(usuarioActual);
 	}
 	
 	
+	//Inicializa los descuentos
 	private void inicializarDescuentos() {
 		gestorDescuentos.agregarDescuento(
 				FactoriaDescuento.crearDescuentoFecha(15.0, LocalDate.now().minusYears(2), LocalDate.now().minusDays(1)));
@@ -150,10 +100,14 @@ public enum Controlador {
 		gestorDescuentos.agregarDescuento(FactoriaDescuento.crearDescuentoMensaje(20.0, 5));
 	}
 
+
+    //Inicializa el repositorio de usuarios
 	private void inicializarRepositorio() {
 		repositorioUsuarios = RepositorioUsuarios.INSTANCE;
 	}
 
+
+	//Inicializa los DAO
 	private void inicializarAdaptadores() {
 		usuarioDAO = factoria.getUsuarioDAO(); 
 		contactoIndividualDAO = factoria.getContactoIndividualDAO();
@@ -162,16 +116,19 @@ public enum Controlador {
 	}
 	
 	
+	//Getter de usuario actual
 	public Usuario getUsuarioActual() {
 		return usuarioActual;
 	}
 
 
+	//Comprueba si un usuario está registrado en la aplicación
 	public boolean esUsuarioRegistrado(String login) {
 		return repositorioUsuarios.findUsuario(login) != null;
 	}
 	
 	
+	//Registra un nuevo usuario en la aplicación
 	public boolean registrarUsuario(String nombre, String password, String telefono, LocalDate fechaNacimiento,
 			String saludo, String url) {
 		if (esUsuarioRegistrado(telefono)) {
@@ -185,6 +142,7 @@ public enum Controlador {
 	}
 	
 	
+	//Borra un usuario de la aplicación
 	public boolean borrarUsuario(Usuario usuario) {
 		if (!esUsuarioRegistrado(usuario.getTelefono()))
 			return false;
@@ -195,6 +153,7 @@ public enum Controlador {
 	}
 	
 	
+	//Cambia la imagen del perfil del usuario actual
 	public boolean cambiarImagenUsuario(String url) {
 		boolean res = this.usuarioActual.cambiarImagenPerfil(url);
 		if (res)
@@ -203,16 +162,19 @@ public enum Controlador {
 	}
 	
 	
+	//Comprueba si un contacto pertenece a un grupo
 	public boolean esMiembroGrupo(String contacto, String grupo) {
 		return usuarioActual.esMiembroGrupo(contacto, grupo);
 	}
 	
 	
+	//Obtiene el último mensaje intercambiado con otro usuario
 	public Mensaje getUltimoMensaje(Usuario usuario) {
 		return usuarioActual.getUltimoMensaje(usuario);
 	}
 	
 	
+	//Envía un mensaje de texto
 	public void enviarMensaje(String receptor, String texto) {
 
 		Optional<Grupo> grupo = usuarioActual.obtenerGrupo(receptor);
@@ -253,6 +215,7 @@ public enum Controlador {
 	}
 	
 	
+	//Envía un mensaje con emoticono
 	public void enviarMensaje(String receptor, int emoticono) {
 		
 		Optional<Grupo> grupo = usuarioActual.obtenerGrupo(receptor);
@@ -292,6 +255,7 @@ public enum Controlador {
 	}
 	
 	
+	//Añade un nuevo contacto individual
 	public int addContactoIndividual(String nombre, String telefono) {
 		Usuario usuario = repositorioUsuarios.findUsuario(telefono);
 
@@ -319,6 +283,7 @@ public enum Controlador {
 	}
 	
 	
+	//Activa el modo premium
 	public void activarPremium() {
 		this.usuarioActual.setPremium(true);
 		this.usuarioActual.setPrecioSuscripcion((double) Math.round(obtenerPrecioConDescuento() * 100) / 100);	// Para redondear 
@@ -326,6 +291,7 @@ public enum Controlador {
 	}
 	
 	
+	//Desactiva el modo premium
 	public void anularPremium() {
 		this.usuarioActual.setPremium(false);
 		this.usuarioActual.setPrecioSuscripcion(0);
@@ -333,12 +299,12 @@ public enum Controlador {
 	}
 	
 	
-	
+	//Comprueba si ya existe un grupo con ese nombre
 	public boolean existeGrupo(String nombre) {
 		return usuarioActual.obtenerGrupo(nombre)==null; //hacer al revés en la interfaz
 	}
 	
-	
+	//Crea un nuevo grupo
 	public void crearGrupo(String nombre, List<Contacto> lista, String imagen) {
 		if(imagen.isEmpty()) {
 			imagen="/umu/tds/apps/resources/imagenPerfil2.png";
@@ -350,16 +316,19 @@ public enum Controlador {
 	}
 	
 	
+	//Obtiene mensajes que cumplan ciertos filtros
 	public List<Mensaje> obtenerMensajesFiltrados(String emisor, String receptor, String mensaje){
 		return usuarioActual.obtenerMensajesFiltrados(emisor, receptor, mensaje);
 	}
 	
 	
+	//Obtiene todos los mensajes del usuario actual
 	public List<Mensaje> obtenerTodosMensajes(){
 		return usuarioActual.obtenerTodosMensajes();
 	}
 	
 	
+	//Modifica un grupo existente
 	public boolean modificarGrupo(List<Contacto> listaContactos, String grupo) {
 		boolean resultado=usuarioActual.modificarGrupo(listaContactos, grupo);
 		if(resultado) {

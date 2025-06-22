@@ -6,17 +6,18 @@ public class Mensaje {
 	
 	private String texto;
 	private LocalDateTime fecha;
-    //private LocalDateTime hora;
 	private int emoticono; 
 	private Usuario emisor;
 	private Usuario receptor;
-	private int id; // Este campo puede ser utilizado para identificar el mensaje si es necesario
+	private int id;
 	
-	//esto quitarlo para luego
+	
 	public Mensaje(String texto) {
 		this.texto = texto;
 		
 	}
+	
+	//CONSTRUCTOR PARA CREAR UN MENSAJE NORMAL
 	public Mensaje(String texto, Usuario emisor, Usuario receptor) {
 		this.texto = texto;
 		this.fecha = LocalDateTime.now();
@@ -34,6 +35,7 @@ public class Mensaje {
 		this.emoticono = -1;
 	}
 	
+	//CONSTRUCTOR PARA CREAR UN MENSAJE CON EMOTICONO
 	public Mensaje(int emoticono, Usuario emisor, Usuario receptor) {
 		this.texto = "emote";
 		this.fecha = LocalDateTime.now();
@@ -41,6 +43,7 @@ public class Mensaje {
 		this.emisor = emisor;
 		this.emoticono = emoticono;
 	}
+	
 	//CONSTRUCTOR PERSISTENCIA
 	public Mensaje(int emoticono, Usuario emisor, Usuario receptor, LocalDateTime fecha) {
 		this.texto = "emote";
@@ -50,7 +53,7 @@ public class Mensaje {
 		this.emoticono = emoticono;
 	}	
 	
-	
+	//getters y setters para los atributos del mensaje.
 	public String getTexto() {
 		return texto;
 	}

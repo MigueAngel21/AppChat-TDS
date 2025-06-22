@@ -13,7 +13,7 @@ import beans.Propiedad;
 
 
 
-public class TDSContactoIndividualDAO implements ContactoIndividualDAO { // falta meter los implements y las funciones
+public class TDSContactoIndividualDAO implements ContactoIndividualDAO { 
 	
 	private ServicioPersistencia servPersistencia;
 	private static TDSContactoIndividualDAO unicaInstancia = null;
@@ -24,6 +24,7 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO { // falt
 	private static final String NOMBRE = "Nombre";
 	private static final String CONTACTO = "ContactoIndividual";
 
+	// Patrón Singleton para asegurar que solo haya una instancia de TDSContactoIndividualDAO
 	public static TDSContactoIndividualDAO getUnicaInstancia() { //patron singleton
 		if (unicaInstancia == null) {
 			unicaInstancia = new TDSContactoIndividualDAO();
@@ -31,6 +32,7 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO { // falt
 		return unicaInstancia;
 	}
 
+	// Constructor privado para evitar instanciación externa
 	private TDSContactoIndividualDAO() {
 		servPersistencia = FactoriaServicioPersistencia.getInstance().getServicioPersistencia();
 		try {
@@ -41,6 +43,8 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO { // falt
 		usuarioDAO = factoriaDAO.getUsuarioDAO();	
     }
 
+	// Métodos de la interfaz ContactoIndividualDAO
+	// Registra un nuevo contacto individual en la persistencia.
 	@Override
 	public void resistrarContactoIndividual(ContactoIndividual contactoIndividual) {
 		// TODO Auto-generated method stub
@@ -49,6 +53,7 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO { // falt
 		contactoIndividual.setIdContacto(Integer.valueOf("1"+contacto.getId()));
 	}
 
+	//Elimina un contacto individual de la persistencia.
 	@Override
 	public void borrarContactoIndividual(ContactoIndividual contactoIndividual) {
 		// TODO Auto-generated method stub
@@ -59,6 +64,7 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO { // falt
 		servPersistencia.borrarEntidad(contacto);
 	}
 
+	//Recupera un contacto individual de la persistencia a partir de su id.
 	@Override
 	public ContactoIndividual recuperarContactoIndividual(int id) {
 		// TODO Auto-generated method stub
@@ -71,6 +77,7 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO { // falt
 		return entidadToContacto(contacto);
 	}
 	
+	//Convierte una Entidad de persistencia a un objeto ContactoIndividual.
 	private ContactoIndividual entidadToContacto(Entidad entidad) {
 		ContactoIndividual contacto;
 		String usuarioId=null;
@@ -91,6 +98,7 @@ public class TDSContactoIndividualDAO implements ContactoIndividualDAO { // falt
 		return contacto;
 	}
 	
+	// Convierte un objeto ContactoIndividual a una Entidad de persistencia.
 	private Entidad contactoToEntidad(ContactoIndividual contacto) {
 		Entidad entidad = new Entidad();
 		entidad.setNombre(CONTACTO);

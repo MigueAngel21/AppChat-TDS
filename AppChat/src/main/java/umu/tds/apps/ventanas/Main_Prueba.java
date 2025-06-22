@@ -21,18 +21,18 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.net.URL;
 
+//Clase principal de la interfaz de usuario que representa la ventana del chat
 public class Main_Prueba extends JFrame {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private JTextField textMensaje;
-	private boolean menuEmojiAbierto = false;
-	private Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
-	private String receptor = null;
-	private JComboBox<String> comboBox = new JComboBox<String>();
+	private boolean menuEmojiAbierto = false;// Controla si el menú de emojis está visible
+	private Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();// Usuario que ha iniciado sesión
+	private String receptor = null; // Receptor actual del mensaj
+	private JComboBox<String> comboBox = new JComboBox<String>(); // Combo box para seleccionar contacto o grupo
 
+	 // Método que actualiza el combo box con los contactos del usuario
 	private void actualizarComboBox() {
 		List<String> array = new LinkedList<String>();
 		List<Contacto> listaContactos = usuarioActual.getContactos();
@@ -41,11 +41,13 @@ public class Main_Prueba extends JFrame {
 		comboBox.setModel(new DefaultComboBoxModel<String>(array.toArray(new String[0])));
 	}
 
+	// Método que carga los mensajes de un chat al panel visual
 	protected void actualizarPanelChat(JScrollPane scroll, JPanel panelChatActual, String usuarioSeleccionado) {
 		List<Mensaje> listaMensajes = Controlador.INSTANCE.obtenerChat(usuarioSeleccionado);
 		panelChatActual.removeAll();
+		 // Añadir mensajes al panel
 		for (Mensaje mensaje : listaMensajes) {
-			if (mensaje.getEmoticono() != -1) {
+			if (mensaje.getEmoticono() != -1) {// Si es un emoji
 				if (mensaje.getEmisor().equals(usuarioActual))
 					panelChatActual.add(new BubbleText(panelChatActual, mensaje.getEmoticono(), Color.GREEN,
 							usuarioActual.getUsuario(), BubbleText.SENT, 12));
@@ -54,7 +56,7 @@ public class Main_Prueba extends JFrame {
 							BubbleText.RECEIVED, 12));
 			}
 
-			else {
+			else {// Si es texto
 				if (mensaje.getEmisor().equals(usuarioActual))
 					panelChatActual.add(new BubbleText(panelChatActual, mensaje.getTexto(), Color.GREEN,
 							usuarioActual.getUsuario(), BubbleText.SENT));
@@ -64,6 +66,7 @@ public class Main_Prueba extends JFrame {
 			}
 		}
 
+        // Refrescar panel
 		panelChatActual.revalidate();
 		panelChatActual.repaint();
 		SwingUtilities.invokeLater(() -> {
@@ -72,10 +75,12 @@ public class Main_Prueba extends JFrame {
 		});
 	};
 
+	 // Actualiza la lista de chats recientes en el panel izquierdo
 	protected void actualizarChatRecientes(DefaultListModel<Usuario> modelo, JPanel panelChatRecientes,
 			JList<Usuario> list) {
 		List<Mensaje> mensajes = usuarioActual.obtenerTodosUltimosMensajes();
 		modelo.clear();
+		// Añade usuarios involucrados en los últimos mensajes
 		for (Mensaje m : mensajes) {
 			Usuario emisor = m.getEmisor();
 			Usuario receptor = m.getReceptor();
@@ -84,12 +89,15 @@ public class Main_Prueba extends JFrame {
 			else
 				modelo.addElement(emisor);
 		}
-
+		
+		// Refrescar lista
 		list.setModel(modelo);
 		panelChatRecientes.revalidate();
 		panelChatRecientes.repaint();
 	}
 
+
+    // Constructor principal de la ventana
 	public Main_Prueba() {
 		try {
             UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
@@ -97,17 +105,22 @@ public class Main_Prueba extends JFrame {
                 | UnsupportedLookAndFeelException e) {
             e.printStackTrace();
         }
+		
+		// Configuración inicial de ventana
 		setTitle("UNICORNCHAT");
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(Main_Prueba.class.getResource("/umu/tds/apps/resources/icono app.png")));
 		setBounds(420, 160, 716, 553);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		getContentPane().setLayout(new BorderLayout(0, 0));
 		setLocationRelativeTo(null);
+		
+		 // Panel superior (barra de botones y combo box)
 		JPanel botonera = new JPanel();
 		getContentPane().add(botonera, BorderLayout.NORTH);
 
 		botonera.setLayout(new BoxLayout(botonera, BoxLayout.X_AXIS));
 
+		// Paneles principales
 		JPanel panelChatRecientes = new JPanel();
 		JPanel panelChatActual = new JPanel();
 		JPanel panelMensajes = new JPanel();
@@ -115,8 +128,12 @@ public class Main_Prueba extends JFrame {
 		JPanel panelMensajesInterno = new JPanel();
 		JScrollPane scroll = new JScrollPane(panelMensajesInterno);
 		getContentPane().add(panelChatRecientes, BorderLayout.WEST);
-		panelChatRecientes.setLayout(new BorderLayout(0, 0)); ////
+		panelChatRecientes.setLayout(new BorderLayout(0, 0)); 
+		
+		 // Actualizar combo box con contactos
 		actualizarComboBox();
+		
+		// Combo box de destinatarios
 		comboBox.addActionListener(new ActionListener() {
 
 			@Override
@@ -127,9 +144,12 @@ public class Main_Prueba extends JFrame {
 		comboBox.setEditable(false);
 		botonera.add(comboBox);
 
+		  // Lista de chats recientes
 		DefaultListModel<Usuario> modelo = new DefaultListModel<>();
 		JList<Usuario> list = new JList<Usuario>();
 		list.setCellRenderer(new RecientesCellRenderer());
+		
+		 // Botón enviar (arriba)
 		JButton btnEnviarArriba = new JButton();
 		btnEnviarArriba.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/enviar-mensaje-avionPapel.png")));
 		Main_Prueba aux = this;
@@ -153,7 +173,8 @@ public class Main_Prueba extends JFrame {
 
 		Component horizontalGlue_3 = Box.createHorizontalGlue();
 		botonera.add(horizontalGlue_3);
-
+		
+		 // Botón buscar mensaje (lupa)
 		JButton btnBuscarMensaje = new JButton("");
 		btnBuscarMensaje.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/lupa-buscar.png")));
 		btnBuscarMensaje.addActionListener(new ActionListener() {
@@ -166,6 +187,7 @@ public class Main_Prueba extends JFrame {
 			}
 		});
 		
+		// Botón para agregar nuevo teléfono a contactos
 		JButton btnAddTelefono = new JButton("");
 		btnAddTelefono.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -177,6 +199,7 @@ public class Main_Prueba extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (list.getSelectedValue() != null) {
+					// Si hay un contacto seleccionado, se pide el nombre para agregarlo
 					if (comprobarExisteContacto(list)) {
 						String telefono = list.getSelectedValue().getTelefono();
 						String nombre = JOptionPane.showInputDialog(aux, "Introduce el nombre de tu nuevo contacto " + telefono, null, JOptionPane.WARNING_MESSAGE);
@@ -209,7 +232,7 @@ public class Main_Prueba extends JFrame {
 					}
 				}
 			}
-
+			// Comprueba si el contacto seleccionado ya existe en la agenda del usuario
 			private boolean comprobarExisteContacto(JList<Usuario> list) {
 				return Controlador.INSTANCE.existeContacto(list.getSelectedValue().getTelefono()).equals(list.getSelectedValue().getTelefono());
 			}
@@ -223,6 +246,7 @@ public class Main_Prueba extends JFrame {
 		Component horizontalGlue_2 = Box.createHorizontalGlue();
 		botonera.add(horizontalGlue_2);
 
+		// Botón de contactos (grupos)
 		JButton btnContactos = new JButton("Contactos");
 		btnContactos.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/imagen-contactos.png")));
 		btnContactos.addActionListener(new ActionListener() {
@@ -244,6 +268,7 @@ public class Main_Prueba extends JFrame {
 		Component horizontalGlue_1 = Box.createHorizontalGlue();
 		botonera.add(horizontalGlue_1);
 
+		 // Botón premium
 		JButton btnPremium = new JButton("Premium");
 		btnPremium.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/icono-premium.png")));
 		botonera.add(btnPremium);
@@ -258,7 +283,8 @@ public class Main_Prueba extends JFrame {
 
 		Component horizontalGlue = Box.createHorizontalGlue();
 		botonera.add(horizontalGlue);
-
+		
+		// Animar color si es premium
 		JLabel lblNombreusuario = new JLabel(Controlador.INSTANCE.getUsuarioActual().getUsuario());
 		Color miColor = new Color(238, 202, 36);
 
@@ -275,6 +301,7 @@ public class Main_Prueba extends JFrame {
 		});
 		timer.start();
 
+		 // Imagen de usuario
 		JLabel labelImagen = new JLabel("");
 		Usuario usuarioActual = Controlador.INSTANCE.getUsuarioActual();
 		labelImagen.setIcon(new ImageIcon(Main_Prueba.class.getResource(Usuario.IMG)));//Usuario.IMG
@@ -322,6 +349,7 @@ public class Main_Prueba extends JFrame {
 			}
 		});
 
+		// Cargar chats recientes
 		actualizarChatRecientes(modelo, panelChatRecientes, list);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		list.addListSelectionListener(new ListSelectionListener() {
@@ -334,7 +362,11 @@ public class Main_Prueba extends JFrame {
 				actualizarPanelChat(scroll, panelMensajesInterno, receptor);
 			}
 		});
+		
+		// Agrega lista al panel izquierdo
 		panelChatRecientes.add(new JScrollPane(list));
+		
+		  // Configurar panel de mensajes
 		panelTxtMensaje.setBackground(Color.GREEN);
 		panelChatActual.setLayout(new BorderLayout(0, 0));
 		panelChatActual.add(panelMensajes, BorderLayout.CENTER);
@@ -346,6 +378,7 @@ public class Main_Prueba extends JFrame {
 		panelChatActual.setPreferredSize(new Dimension(400, 700));
 		panelChatActual.setBackground(Color.WHITE);
 
+		 // Contenedor de mensajes del chat
 		panelMensajesInterno.setLayout(new BoxLayout(panelMensajesInterno, BoxLayout.Y_AXIS));
 
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -366,6 +399,7 @@ public class Main_Prueba extends JFrame {
 		btnEmojis.setMaximumSize(new Dimension(40, 21));
 		panelTxtMensaje.add(btnEmojis);
 
+		  // Menú de emojis emergente
 		JPopupMenu menuEmojis = new JPopupMenu();
 		JPanel panelEmojis = new JPanel(new GridLayout(2, 4, 3, 3)); // 2 filas, 4 columnas, gap de 2px
 		panelEmojis.setBackground(Color.WHITE);
@@ -424,11 +458,13 @@ public class Main_Prueba extends JFrame {
 			}
 		}
 
+		
 		textMensaje = new JTextField();
 		textMensaje.setToolTipText("Escribe un mensaje...");
 		panelTxtMensaje.add(textMensaje);
 		textMensaje.setColumns(10);
 
+		// Botón enviar mensaje (abajo)
 		JButton btnEnviarMensaje = new JButton();
 		btnEnviarMensaje.setIcon(new ImageIcon(Main_Prueba.class.getResource("/umu/tds/apps/resources/avion-enviar-whatsapp.png")));
 		panelTxtMensaje.add(btnEnviarMensaje);

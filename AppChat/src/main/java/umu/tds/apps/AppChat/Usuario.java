@@ -23,7 +23,7 @@ public class Usuario {
 	private List<Mensaje> mensajesEnviados;
 	private List<Mensaje> mensajesRecibidos;
 	
-	public final static String IMG = "/umu/tds/apps/resources/imagenPerfil1.png";
+	public final static String IMG = "/umu/tds/apps/resources/imagenPerfil1.png"; //imagen por defecto
 
 	
 	// constructor para cuando un usuario tenga algun descuento
@@ -58,6 +58,7 @@ public class Usuario {
 
 	}
 	
+	// getters y setters
 	public String getUsuario() {
 		return usuario;
 	}
@@ -146,11 +147,13 @@ public class Usuario {
 		return id;
 	}
 	
+	// Método para obtener un contacto individual por su nombre
 	public Optional<Contacto> getContactoIndividual(String otroUsuario) {
 		return contactos.stream().filter(c -> c.getClass().equals(ContactoIndividual.class))
 				.filter(c -> c.getNombre().equals(otroUsuario)).findFirst(); 
 	}
 	
+	//Obtiene el historial de mensajes con otro usuario específico
 	public List<Mensaje> getChatMensajes (Usuario receptor){
 							// Obtenemos los mensajes enviados donde el receptor es el usuario especificado
 		return Stream.concat(this.getMensajesEnviados().stream().filter(m -> m.getReceptor().equals(receptor)),
@@ -161,20 +164,23 @@ public class Usuario {
 				.collect(Collectors.toList());
 	}
 	
+	// Añade un contacto individual a la lista de contactos del usuario.
 	public void añadirContacto(ContactoIndividual contacto) {
 		contactos.add(contacto);
 	}
-
+	
+	//Envía un mensaje a otro usuario.
 	public void enviarMensaje(Usuario receptor, Mensaje mensaje) {
 		mensajesEnviados.add(mensaje);
 		receptor.recibirMensaje(mensaje);
 	}
 	
-	
+	//Método privado para registrar un mensaje recibido.
 	private void recibirMensaje(Mensaje mensaje) {
 		mensajesRecibidos.add(mensaje);
 	}
 	
+	//Activa la suscripción premium para el usuario.
 	public void activarPremium(GestorDescuentos gestorDescuentos, double precioBase) {
 		if (!this.premium) {
 			this.premium = true;
@@ -182,7 +188,7 @@ public class Usuario {
 		}
 	}
 	
-	
+	//Envía un emoji a otro usuario.
 	public void enviarEmoji(String id, int emoji) {
 
 		Usuario usuarioReceptor = Optional.ofNullable(getContactoIndividual(id))
@@ -205,12 +211,13 @@ public class Usuario {
 		return "[" + usuario + ", " + telefono + ", " + fechaNacimiento + "]";
 	}
 	
+	//Obtiene el último mensaje intercambiado con un usuario específico.
 	public Mensaje getUltimoMensaje(Usuario usuario) {
 		List<Mensaje> listaMensajes = getChatMensajes(usuario);
 		return listaMensajes.get(listaMensajes.size() - 1);
 	}
 	
-	
+	//Cambia la imagen de perfil del usuario.
 	public boolean cambiarImagenPerfil(String url) {
 		if (!url.isEmpty()) {
 			setImagen(url);
@@ -220,7 +227,7 @@ public class Usuario {
 	}
 	
 	
-	
+	//Obtiene los últimos mensajes de todas las conversaciones.
 	public List<Mensaje> obtenerTodosUltimosMensajes() {
 		return Stream.concat(mensajesEnviados.stream(), mensajesRecibidos.stream())
 				// Creamos una clave única para cada conversación, ordenando los teléfonos
@@ -240,6 +247,7 @@ public class Usuario {
 				.sorted(Comparator.comparing(Mensaje::getFecha).reversed()).collect(Collectors.toList());
 	}
 	
+	// Filtra los mensajes según el emisor, receptor y texto del mensaje.
 	public List<Mensaje> obtenerMensajesFiltrados(String emisor, String receptor, String mensaje) {
 		List<Mensaje> listaMensajes = obtenerTodosMensajes();
 		List<Mensaje> mensajesFiltrados = listaMensajes.stream()
@@ -253,33 +261,31 @@ public class Usuario {
 		return mensajesFiltrados;
 	}
 	
-	
+	// Obtiene todos los mensajes enviados y recibidos por el usuario.
 	public List<Mensaje> obtenerTodosMensajes() {
 		return Stream.concat(mensajesEnviados.stream(), mensajesRecibidos.stream()).collect(Collectors.toList());
 	}
 	
-	
+	// Obtiene los contactos individuales del usuario.
 	public List<ContactoIndividual> getListaContactosIndividuales() {
 		List<ContactoIndividual> lContactos = contactos.stream().filter(c -> c instanceof ContactoIndividual)
 				.map(c -> (ContactoIndividual) c).collect(Collectors.toList());
 		return lContactos;
 	}
 	
-	
+	// Verifica si un grupo con el nombre dado ya existe.
 	public boolean existeGrupo(String nombreGrupo) {
 		return contactos.stream().filter(g -> g instanceof Grupo).map(g -> (Grupo) g).anyMatch(g -> g.getNombre().equals(nombreGrupo));
 	}
 	
-	
+	// Obtiene un grupo por su nombre, si existe.
 	public Optional<Grupo> obtenerGrupo(String nombreGrupo) {
 		return contactos.stream().filter(g -> g instanceof Grupo).map(g -> (Grupo) g)
 				.filter(c -> c.getNombre().equals(nombreGrupo)).findFirst();
 	}
 	
 	
-	
-	
-	
+	// Verifica si un contacto con el nombre dado ya existe y devuelve el usuario asociado.
 	public Usuario existeContactoNombre(String nombre) {
 		List<ContactoIndividual> contactos = getListaContactosIndividuales();
 		Optional<ContactoIndividual> res = contactos.stream().filter(c -> c.getNombre().equals(nombre)).findAny();
@@ -289,7 +295,7 @@ public class Usuario {
 			return null;
 	}
 	
-	
+	// Verifica si un contacto con el número de teléfono dado ya existe
 	public String existeContacto(String telefono) {
 		List<ContactoIndividual> contactos = getListaContactosIndividuales();
 		Optional<ContactoIndividual> res = contactos.stream().filter(c -> c.getUsuario().getTelefono().equals(telefono))
@@ -300,6 +306,7 @@ public class Usuario {
 			return telefono;
 	}
 	
+	//Modifica la lista de miembros de un grupo.
 	public boolean modificarGrupo(List<Contacto> listaGrupo, String grupo) {
 		Optional<Grupo> contactoGrupo = obtenerGrupo(grupo);
 		
@@ -311,12 +318,12 @@ public class Usuario {
 			return false;
 	}
 	
-	
+	// Añade un grupo a la lista de contactos del usuario.
 	public void addContactoGrupo(Grupo g) {
 		contactos.add(g);
 	}
 	
-	
+	// Verifica si un contacto es miembro de un grupo específico.
 	public boolean esMiembroGrupo(String contacto, String grupo) {		
 		Optional<Grupo> grupoSeleccionado = obtenerGrupo(grupo);
 		

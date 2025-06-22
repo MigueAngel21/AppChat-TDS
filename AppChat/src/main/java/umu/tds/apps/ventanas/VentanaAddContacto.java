@@ -31,10 +31,12 @@ public class VentanaAddContacto extends JFrame {
 	private JTextField textNombre;
 	private JTextField textTelefono;
 
+	//Constructor de la clase.
 	public VentanaAddContacto(DefaultListModel<Contacto> modelo) { //cambiar el defaultlist por Contacto
 		initialize(modelo);
 	}
 
+	//Inicializa todos los componentes gráficos de la ventana.
 	private void initialize(DefaultListModel<Contacto> modelo) {
 		try {
 			UIManager.setLookAndFeel("com.jtattoo.plaf.hifi.HiFiLookAndFeel");
@@ -42,6 +44,7 @@ public class VentanaAddContacto extends JFrame {
 				| UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
+		// Configuración básica de la ventana
 		setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		//cambiar icono de la ventana
 		this.setIconImage(Toolkit.getDefaultToolkit().getImage(VentanaAddContacto.class.getResource("/umu/tds/apps/resources/icono app.png")));
@@ -50,15 +53,17 @@ public class VentanaAddContacto extends JFrame {
 		this.setVisible(true);
 		setLocationRelativeTo(null);
 		
+		// Define el layout principal como vertical (BoxLayout)
 		getContentPane().setLayout(new BoxLayout(getContentPane(), BoxLayout.Y_AXIS));
 
+		// Panel con los campos de entrada (nombre y teléfono)
 		JPanel panelCampos = new JPanel();
 		getContentPane().add(panelCampos);
 		GridBagLayout gbl_panelCampos = new GridBagLayout();
 		gbl_panelCampos.columnWeights = new double[] { 0.0, 0.0, 0.0 };
 		gbl_panelCampos.rowWeights = new double[] { 0.0, 0.0, 0.0 };
 		panelCampos.setLayout(gbl_panelCampos);
-
+		// Icono decorativo (avatar de usuario)
 		JLabel lblAviso = new JLabel("");
 		lblAviso.setIcon(new ImageIcon(VentanaAddContacto.class.getResource("/umu/tds/apps/resources/icono-usuario-ventanaMain.png")));
 		GridBagConstraints gbc_lblAviso = new GridBagConstraints();
@@ -66,14 +71,16 @@ public class VentanaAddContacto extends JFrame {
 		gbc_lblAviso.gridx = 1;
 		gbc_lblAviso.gridy = 0;
 		panelCampos.add(lblAviso, gbc_lblAviso);
-
+		
+		// Instrucción para el usuario
 		JLabel lblTextoIntroducir = new JLabel("Introduzca el nombre del contacto y su teléfono:");
 		GridBagConstraints gbc_lblTextoIntroducir = new GridBagConstraints();
 		gbc_lblTextoIntroducir.insets = new Insets(0, 0, 5, 0);
 		gbc_lblTextoIntroducir.gridx = 2;
 		gbc_lblTextoIntroducir.gridy = 0;
 		panelCampos.add(lblTextoIntroducir, gbc_lblTextoIntroducir);
-
+		
+		// Etiqueta y campo para el nombre
 		JLabel lblNewLabel = new JLabel("Nombre:");
 		GridBagConstraints gbc_lblNewLabel = new GridBagConstraints();
 		gbc_lblNewLabel.insets = new Insets(0, 0, 5, 5);
@@ -90,7 +97,8 @@ public class VentanaAddContacto extends JFrame {
 		gbc_textNombre.gridy = 1;
 		panelCampos.add(textNombre, gbc_textNombre);
 		textNombre.setColumns(10);
-
+		
+		// Etiqueta y campo para el teléfono
 		JLabel lblNewLabel_1 = new JLabel("Teléfono:");
 		GridBagConstraints gbc_lblNewLabel_1 = new GridBagConstraints();
 		gbc_lblNewLabel_1.insets = new Insets(0, 0, 0, 5);
@@ -106,16 +114,18 @@ public class VentanaAddContacto extends JFrame {
 		gbc_textTelefono.gridy = 2;
 		panelCampos.add(textTelefono, gbc_textTelefono);
 		textTelefono.setColumns(10);
-
+		
+		// Panel para los botones Aceptar y Cancelar
 		JPanel panelBotones = new JPanel();
 		FlowLayout flowLayout = (FlowLayout) panelBotones.getLayout();
 		flowLayout.setAlignment(FlowLayout.TRAILING);
 		getContentPane().add(panelBotones);
 
+		// Botón "Aceptar" para intentar añadir el contacto
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				// Respuestas posibles del controlador al intentar añadir el contacto
 				int añadido = Controlador.INSTANCE.addContactoIndividual(textNombre.getText(), textTelefono.getText());
 
 				if (añadido == 1) {
@@ -135,6 +145,7 @@ public class VentanaAddContacto extends JFrame {
 					JOptionPane.showMessageDialog(VentanaAddContacto.this, "El nombre introducido ya existe en tu lista de contactos",
 							"Error", JOptionPane.ERROR_MESSAGE);
 				} else {
+					// Si el contacto fue añadido correctamente
 					modelo.clear();
 					List<Contacto> lista = Controlador.INSTANCE.recuperarTodosContactos();
 					lista.forEach(modelo::addElement);
@@ -146,6 +157,7 @@ public class VentanaAddContacto extends JFrame {
 		
 		panelBotones.add(btnAceptar);
 
+		// Botón "Cancelar" que simplemente cierra la ventana sin hacer cambios
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
